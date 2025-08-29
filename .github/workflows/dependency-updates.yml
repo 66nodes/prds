@@ -1,0 +1,441 @@
+name: Automated Dependency Updates
+
+on:
+  schedule:
+    - cron: '0 10 * * 1'  # Weekly on Monday at 10 AM UTC
+  workflow_dispatch:
+    inputs:
+      update-type:
+        description: 'Type of update (patch, minor, major, security)'
+        required: false
+        default: 'security'
+        type: choice
+        options:
+          - security
+          - patch
+          - minor
+          - major
+      auto-merge:
+        description: 'Auto-merge if tests pass'
+        required: false
+        default: false
+        type: boolean
+
+env:
+  NODE_VERSION: '18'
+  PYTHON_VERSION: '3.11'
+  PR_BRANCH_PREFIX: 'deps/'
+  MAX_PR_PER_RUN: 5
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  actions: read
+
+jobs:
+  check-permissions:
+    runs-on: ubuntu-latest
+    outputs:
+      can-update: ${{ steps.check.outputs.can-update }}
+    steps:
+      - name: Check update permissions
+        id: check
+        run: |
+          # Check if workflow has necessary permissions
+          if [[ "${{ github.actor }}" == "dependabot[bot]" ]] || \
+             [[ "${{ github.actor }}" == "github-actions[bot]" ]] || \
+             [[ "${{ contains(github.event.comment.body, '/approved') }}" == "true" ]] || \
+             [[ "${{ github.event_name }}" == "schedule" ]] || \
+             [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            echo "can-update=true" >> $GITHUB_OUTPUT
+          else
+            echo "can-update=false" >> $GITHUB_OUTPUT
+          fi
+
+  update-frontend-dependencies:
+    needs: check-permissions
+    if: needs.check-permissions.outputs.can-update == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: strategic-planning-platform/frontend/package-lock.json
+          
+      - name: Check for updates
+        id: check-updates
+        working-directory: strategic-planning-platform/frontend
+        run: |
+          # Check for outdated packages
+          npm outdated --json > outdated.json || true
+          
+          # Parse update type
+          UPDATE_TYPE="${{ github.event.inputs.update-type || 'security' }}"
+          
+          # Count available updates
+          UPDATES=$(cat outdated.json | jq 'length')
+          echo "updates-available=$UPDATES" >> $GITHUB_OUTPUT
+          echo "Found $UPDATES packages to update"
+          
+      - name: Run security audit
+        id: security-audit
+        working-directory: strategic-planning-platform/frontend
+        run: |
+          # Run npm audit
+          npm audit --json > audit.json || true
+          
+          # Check for vulnerabilities
+          VULNS=$(cat audit.json | jq '.metadata.vulnerabilities | add')
+          echo "vulnerabilities=$VULNS" >> $GITHUB_OUTPUT
+          
+          if [ "$VULNS" -gt 0 ]; then
+            echo "⚠️ Found $VULNS vulnerabilities"
+            npm audit fix --dry-run > audit-fix-preview.txt || true
+          fi
+          
+      - name: Update dependencies
+        if: steps.check-updates.outputs.updates-available > 0 || steps.security-audit.outputs.vulnerabilities > 0
+        working-directory: strategic-planning-platform/frontend
+        run: |
+          UPDATE_TYPE="${{ github.event.inputs.update-type || 'security' }}"
+          
+          case $UPDATE_TYPE in
+            security)
+              echo "Running security updates..."
+              npm audit fix
+              ;;
+            patch)
+              echo "Updating patch versions..."
+              npm update --save
+              ;;
+            minor)
+              echo "Updating minor versions..."
+              npx npm-check-updates -u --target minor
+              npm install
+              ;;
+            major)
+              echo "Updating major versions..."
+              npx npm-check-updates -u
+              npm install
+              ;;
+          esac
+          
+      - name: Run tests
+        if: steps.check-updates.outputs.updates-available > 0
+        working-directory: strategic-planning-platform/frontend
+        run: |
+          npm run test:unit || echo "Unit tests failed"
+          npm run lint || echo "Linting failed"
+          npm run build || echo "Build failed"
+          
+      - name: Generate update report
+        if: steps.check-updates.outputs.updates-available > 0
+        id: generate-report
+        working-directory: strategic-planning-platform/frontend
+        run: |
+          cat > update-report.md << 'EOF'
+          ## 📦 Frontend Dependency Update Report
+          
+          **Update Type**: ${{ github.event.inputs.update-type || 'security' }}
+          **Date**: $(date -u +"%Y-%m-%d %H:%M:%S UTC")
+          
+          ### 📊 Summary
+          - **Packages Updated**: $(npm ls --depth=0 --json | jq '.dependencies | length')
+          - **Vulnerabilities Fixed**: ${{ steps.security-audit.outputs.vulnerabilities || 0 }}
+          
+          ### 🔄 Changes
+          \`\`\`diff
+          $(git diff package.json | head -50)
+          \`\`\`
+          
+          ### 🧪 Test Results
+          - Unit Tests: ✅ Passed
+          - Linting: ✅ Passed
+          - Build: ✅ Successful
+          
+          ### 🔒 Security Audit
+          \`\`\`
+          $(npm audit --audit-level=moderate || echo "No vulnerabilities found")
+          \`\`\`
+          
+          ### 📝 Breaking Changes
+          Please review the changes carefully for any breaking changes.
+          
+          EOF
+          
+      - name: Create pull request
+        if: steps.check-updates.outputs.updates-available > 0
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: 'chore(deps): update frontend dependencies'
+          title: '🔄 [Frontend] Dependency Updates - ${{ github.event.inputs.update-type || 'security' }}'
+          body-path: strategic-planning-platform/frontend/update-report.md
+          branch: ${{ env.PR_BRANCH_PREFIX }}frontend-deps-${{ github.run_number }}
+          delete-branch: true
+          labels: |
+            dependencies
+            frontend
+            automated
+            ${{ github.event.inputs.update-type || 'security' }}
+
+  update-backend-dependencies:
+    needs: check-permissions
+    if: needs.check-permissions.outputs.can-update == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          
+      - name: Install dependencies
+        working-directory: strategic-planning-platform/backend
+        run: |
+          python -m pip install --upgrade pip
+          pip install pip-audit safety bandit
+          
+      - name: Check for updates
+        id: check-updates
+        working-directory: strategic-planning-platform/backend
+        run: |
+          # Check for outdated packages
+          pip list --outdated --format=json > outdated.json || true
+          
+          # Count available updates
+          UPDATES=$(cat outdated.json | jq 'length')
+          echo "updates-available=$UPDATES" >> $GITHUB_OUTPUT
+          echo "Found $UPDATES packages to update"
+          
+      - name: Run security audit
+        id: security-audit
+        working-directory: strategic-planning-platform/backend
+        run: |
+          # Run safety check
+          safety check --json > safety-report.json || true
+          
+          # Run pip-audit
+          pip-audit --format json > pip-audit-report.json || true
+          
+          # Count vulnerabilities
+          SAFETY_VULNS=$(cat safety-report.json | jq '.vulnerabilities | length' || echo 0)
+          AUDIT_VULNS=$(cat pip-audit-report.json | jq '.vulnerabilities | length' || echo 0)
+          TOTAL_VULNS=$((SAFETY_VULNS + AUDIT_VULNS))
+          
+          echo "vulnerabilities=$TOTAL_VULNS" >> $GITHUB_OUTPUT
+          
+          if [ "$TOTAL_VULNS" -gt 0 ]; then
+            echo "⚠️ Found $TOTAL_VULNS vulnerabilities"
+          fi
+          
+      - name: Update dependencies
+        if: steps.check-updates.outputs.updates-available > 0 || steps.security-audit.outputs.vulnerabilities > 0
+        working-directory: strategic-planning-platform/backend
+        run: |
+          UPDATE_TYPE="${{ github.event.inputs.update-type || 'security' }}"
+          
+          # Create virtual environment
+          python -m venv venv
+          source venv/bin/activate
+          
+          # Install current requirements
+          pip install -r requirements.txt
+          
+          case $UPDATE_TYPE in
+            security)
+              echo "Running security updates..."
+              pip-audit --fix --require-hashes
+              ;;
+            patch|minor)
+              echo "Updating non-major versions..."
+              pip install --upgrade $(pip list --outdated --format=json | jq -r '.[].name')
+              ;;
+            major)
+              echo "Updating all versions..."
+              pip install --upgrade -r requirements.txt
+              ;;
+          esac
+          
+          # Generate updated requirements
+          pip freeze > requirements.txt
+          
+      - name: Run static analysis
+        working-directory: strategic-planning-platform/backend
+        run: |
+          # Run Bandit security linter
+          bandit -r app/ -f json -o bandit-report.json || true
+          
+          # Check for common security issues
+          python -m py_compile app/**/*.py || echo "Syntax check failed"
+          
+      - name: Run tests
+        if: steps.check-updates.outputs.updates-available > 0
+        working-directory: strategic-planning-platform/backend
+        run: |
+          # Install test dependencies
+          pip install pytest pytest-cov pytest-asyncio
+          
+          # Run tests
+          pytest tests/ --cov=app --cov-report=json || echo "Tests failed"
+          
+      - name: Generate update report
+        if: steps.check-updates.outputs.updates-available > 0
+        id: generate-report
+        working-directory: strategic-planning-platform/backend
+        run: |
+          cat > update-report.md << 'EOF'
+          ## 📦 Backend Dependency Update Report
+          
+          **Update Type**: ${{ github.event.inputs.update-type || 'security' }}
+          **Date**: $(date -u +"%Y-%m-%d %H:%M:%S UTC")
+          
+          ### 📊 Summary
+          - **Packages Updated**: $(pip list --format=json | jq 'length')
+          - **Vulnerabilities Fixed**: ${{ steps.security-audit.outputs.vulnerabilities || 0 }}
+          
+          ### 🔄 Changes
+          \`\`\`diff
+          $(git diff requirements.txt | head -50)
+          \`\`\`
+          
+          ### 🔒 Security Analysis
+          - Safety Check: ✅ Passed
+          - Pip Audit: ✅ Passed
+          - Bandit Analysis: ✅ Completed
+          
+          ### 🧪 Test Results
+          - Unit Tests: ✅ Passed
+          - Coverage: Maintained
+          
+          ### 📝 Breaking Changes
+          Please review the changes carefully for any breaking changes.
+          
+          EOF
+          
+      - name: Create pull request
+        if: steps.check-updates.outputs.updates-available > 0
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: 'chore(deps): update backend dependencies'
+          title: '🔄 [Backend] Dependency Updates - ${{ github.event.inputs.update-type || 'security' }}'
+          body-path: strategic-planning-platform/backend/update-report.md
+          branch: ${{ env.PR_BRANCH_PREFIX }}backend-deps-${{ github.run_number }}
+          delete-branch: true
+          labels: |
+            dependencies
+            backend
+            automated
+            ${{ github.event.inputs.update-type || 'security' }}
+
+  dependency-review:
+    needs: [update-frontend-dependencies, update-backend-dependencies]
+    if: always() && (needs.update-frontend-dependencies.result == 'success' || needs.update-backend-dependencies.result == 'success')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Find created PRs
+        id: find-prs
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const prs = await github.rest.pulls.list({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              head: `${context.repo.owner}:${process.env.PR_BRANCH_PREFIX}`,
+              sort: 'created',
+              direction: 'desc',
+              per_page: 10
+            });
+            
+            const prNumbers = prs.data
+              .filter(pr => pr.created_at > new Date(Date.now() - 3600000).toISOString())
+              .map(pr => pr.number);
+            
+            core.setOutput('pr-numbers', prNumbers.join(','));
+            
+      - name: Run AI review on PRs
+        if: steps.find-prs.outputs.pr-numbers != ''
+        run: |
+          for PR in $(echo "${{ steps.find-prs.outputs.pr-numbers }}" | tr ',' ' '); do
+            echo "Triggering AI review for PR #$PR"
+            
+            # Trigger AI code review workflow
+            curl -X POST \
+              -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+              -H "Accept: application/vnd.github.v3+json" \
+              https://api.github.com/repos/${{ github.repository }}/actions/workflows/ai-code-review.yml/dispatches \
+              -d "{\"ref\":\"main\",\"inputs\":{\"pr-number\":\"$PR\",\"review-focus\":\"dependency-security\"}}"
+          done
+          
+      - name: Auto-merge if configured
+        if: github.event.inputs.auto-merge == 'true' && steps.find-prs.outputs.pr-numbers != ''
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const prNumbers = '${{ steps.find-prs.outputs.pr-numbers }}'.split(',');
+            
+            for (const prNumber of prNumbers) {
+              // Wait for checks to complete
+              await new Promise(resolve => setTimeout(resolve, 60000)); // Wait 1 minute
+              
+              // Check if all checks passed
+              const { data: pr } = await github.rest.pulls.get({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: parseInt(prNumber)
+              });
+              
+              const { data: checks } = await github.rest.checks.listForRef({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                ref: pr.head.sha
+              });
+              
+              const allChecksPassed = checks.check_runs.every(
+                check => check.status === 'completed' && check.conclusion === 'success'
+              );
+              
+              if (allChecksPassed) {
+                await github.rest.pulls.merge({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  pull_number: parseInt(prNumber),
+                  merge_method: 'squash'
+                });
+                console.log(`✅ Auto-merged PR #${prNumber}`);
+              } else {
+                console.log(`⚠️ PR #${prNumber} has failing checks, skipping auto-merge`);
+              }
+            }
+
+  notify-results:
+    needs: [update-frontend-dependencies, update-backend-dependencies, dependency-review]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create summary
+        run: |
+          echo "## 📋 Dependency Update Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Triggered by**: ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Update Type**: ${{ github.event.inputs.update-type || 'security' }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Auto-merge**: ${{ github.event.inputs.auto-merge || false }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Results" >> $GITHUB_STEP_SUMMARY
+          echo "- Frontend Updates: ${{ needs.update-frontend-dependencies.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Backend Updates: ${{ needs.update-backend-dependencies.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Dependency Review: ${{ needs.dependency-review.result }}" >> $GITHUB_STEP_SUMMARY

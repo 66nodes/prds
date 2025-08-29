@@ -1,0 +1,91 @@
+name: Task Management Workflow
+on:
+  push:
+    paths:
+      - '.taskmaster/tasks/*.txt'
+      - 'workflow_state.md'
+  pull_request:
+    types: [opened, synchronize]
+  workflow_dispatch:
+    inputs:
+      task_id:
+        description: 'Task ID to execute'
+        required: false
+        type: string
+      action:
+        description: 'Action to perform'
+        required: true
+        type: choice
+        options:
+          - start-task
+          - complete-subtask
+          - validate-task
+          - progress-report
+
+jobs:
+  task-executor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          
+      - name: Install Task Master
+        run: |
+          npm install -g @eyaltoledano/claude-task-master
+          
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          
+      - name: Load Current State
+        id: state
+        run: |
+          python scripts/load_state.py
+          echo "current_task=$(cat .task_state/current_task.txt)" >> $GITHUB_OUTPUT
+          echo "current_subtask=$(cat .task_state/current_subtask.txt)" >> $GITHUB_OUTPUT
+          
+      - name: Validate Dependencies
+        run: |
+          python scripts/validate_dependencies.py ${{ steps.state.outputs.current_task }}
+          
+      - name: Execute Task Action
+        run: |
+          if [ "${{ github.event.inputs.action }}" == "start-task" ]; then
+            python scripts/start_task.py ${{ github.event.inputs.task_id || steps.state.outputs.current_task }}
+          elif [ "${{ github.event.inputs.action }}" == "complete-subtask" ]; then
+            python scripts/complete_subtask.py
+          elif [ "${{ github.event.inputs.action }}" == "validate-task" ]; then
+            python scripts/validate_task.py
+          else
+            python scripts/generate_report.py
+          fi
+          
+      - name: Update State Files
+        run: |
+          python scripts/update_state.py
+          
+      - name: Commit Changes
+        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+        run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Actions"
+          git add workflow_state.md .taskmaster/tasks/*.txt
+          git diff --quiet && git diff --staged --quiet || git commit -m "task: Update state for task ${{ steps.state.outputs.current_task }}"
+          git push
+          
+      - name: Create Progress Report
+        run: |
+          python scripts/create_report.py > progress_report.md
+          
+      - name: Upload Progress Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: progress-report
+          path: progress_report.md

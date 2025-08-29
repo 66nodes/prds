@@ -1,0 +1,15 @@
+ID: {task_id}
+TITLE: {title}
+STATUS: pending
+PRIORITY: {priority}
+DEPENDENCIES: {dependencies}
+SUBTASKS:
+  - {subtask_1}
+  - {subtask_2}
+  - {subtask_3}
+DONE_CRITERIA:
+  - All subtasks completed
+  - Tests passing
+  - Documentation updated
+  - State synchronized
+NOTES: {notes}

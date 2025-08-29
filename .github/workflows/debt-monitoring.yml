@@ -1,0 +1,639 @@
+name: Technical Debt Monitoring Dashboard
+
+on:
+  schedule:
+    - cron: '0 18 * * 5'  # Friday evening weekly
+  workflow_dispatch:
+    inputs:
+      dashboard-type:
+        description: 'Type of dashboard to generate'
+        required: false
+        default: 'comprehensive'
+        type: choice
+        options:
+          - comprehensive
+          - summary
+          - trends-only
+      export-format:
+        description: 'Dashboard export format'
+        required: false
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - markdown
+          - json
+          - csv
+
+env:
+  CONFIG_PATH: '.github/config/tech-debt-config.yml'
+  DASHBOARD_DIR: 'docs/technical-debt'
+  RETENTION_MONTHS: 12
+
+permissions:
+  contents: write
+  issues: read
+  actions: read
+
+jobs:
+  collect-metrics:
+    runs-on: ubuntu-latest
+    outputs:
+      metrics-data: ${{ steps.generate.outputs.metrics-data }}
+      dashboard-title: ${{ steps.generate.outputs.dashboard-title }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install pyyaml requests matplotlib pandas seaborn
+
+      - name: Load configuration
+        id: load-config
+        run: |
+          python3 << 'EOF'
+          import yaml
+          import json
+          import os
+          
+          with open('${{ env.CONFIG_PATH }}', 'r') as f:
+              config = yaml.safe_load(f)
+          
+          config_json = json.dumps(config, separators=(',', ':'))
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+              f.write(f"config={config_json}\n")
+          EOF
+
+      - name: Download historical data
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          pattern: debt-*-report
+          path: historical-data
+          merge-multiple: true
+
+      - name: Collect GitHub issues data
+        id: collect-issues
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: 'technical-debt',
+              state: 'all',
+              per_page: 100
+            });
+            
+            const issueData = issues.data.map(issue => ({
+              number: issue.number,
+              title: issue.title,
+              state: issue.state,
+              created_at: issue.created_at,
+              closed_at: issue.closed_at,
+              labels: issue.labels.map(l => l.name),
+              assignees: issue.assignees.map(a => a.login)
+            }));
+            
+            return issueData;
+
+      - name: Generate comprehensive metrics
+        id: generate
+        env:
+          CONFIG: ${{ steps.load-config.outputs.config }}
+          ISSUES_DATA: ${{ steps.collect-issues.outputs.result }}
+          DASHBOARD_TYPE: ${{ github.event.inputs.dashboard-type || 'comprehensive' }}
+        run: |
+          python3 << 'EOF'
+          import json
+          import os
+          import yaml
+          from datetime import datetime, timedelta
+          from collections import defaultdict, Counter
+          import glob
+          
+          # Load configuration and data
+          config = json.loads(os.environ['CONFIG'])
+          issues_data = json.loads(os.environ['ISSUES_DATA'])
+          dashboard_type = os.environ['DASHBOARD_TYPE']
+          
+          # Process issues data
+          def process_issues_metrics(issues):
+              metrics = {
+                  'total_issues': len(issues),
+                  'open_issues': len([i for i in issues if i['state'] == 'open']),
+                  'closed_issues': len([i for i in issues if i['state'] == 'closed']),
+                  'categories': {},
+                  'age_distribution': {},
+                  'resolution_time': [],
+                  'monthly_trends': defaultdict(lambda: {'opened': 0, 'closed': 0})
+              }
+              
+              # Calculate category distribution
+              for issue in issues:
+                  for label in issue['labels']:
+                      if label in ['critical', 'high', 'medium', 'low']:
+                          metrics['categories'][label] = metrics['categories'].get(label, 0) + 1
+              
+              # Calculate age and resolution metrics
+              now = datetime.now()
+              for issue in issues:
+                  created = datetime.fromisoformat(issue['created_at'].replace('Z', '+00:00'))
+                  month_key = created.strftime('%Y-%m')
+                  metrics['monthly_trends'][month_key]['opened'] += 1
+                  
+                  if issue['state'] == 'closed' and issue['closed_at']:
+                      closed = datetime.fromisoformat(issue['closed_at'].replace('Z', '+00:00'))
+                      resolution_days = (closed - created).days
+                      metrics['resolution_time'].append(resolution_days)
+                      
+                      closed_month = closed.strftime('%Y-%m')
+                      metrics['monthly_trends'][closed_month]['closed'] += 1
+                  else:
+                      # Calculate age for open issues
+                      age_days = (now - created).days
+                      if age_days < 7:
+                          age_group = '< 1 week'
+                      elif age_days < 30:
+                          age_group = '1-4 weeks'
+                      elif age_days < 90:
+                          age_group = '1-3 months'
+                      else:
+                          age_group = '> 3 months'
+                      
+                      metrics['age_distribution'][age_group] = metrics['age_distribution'].get(age_group, 0) + 1
+              
+              # Calculate averages
+              if metrics['resolution_time']:
+                  metrics['avg_resolution_days'] = sum(metrics['resolution_time']) / len(metrics['resolution_time'])
+              else:
+                  metrics['avg_resolution_days'] = 0
+              
+              return metrics
+          
+          # Process historical analysis data
+          def process_historical_data():
+              historical_files = glob.glob('historical-data/*debt*.json')
+              historical_metrics = []
+              
+              for file_path in historical_files:
+                  try:
+                      with open(file_path, 'r') as f:
+                          data = json.load(f)
+                      
+                      if 'metadata' in data and 'summary' in data:
+                          historical_metrics.append({
+                              'timestamp': data['metadata'].get('timestamp'),
+                              'total_items': data['summary'].get('total_items', 0),
+                              'critical_items': data['summary'].get('category_breakdown', {}).get('critical', {}).get('count', 0),
+                              'high_items': data['summary'].get('category_breakdown', {}).get('high', {}).get('count', 0),
+                              'total_effort': data['summary'].get('total_estimated_effort', 0)
+                          })
+                  except Exception as e:
+                      print(f"Error processing {file_path}: {e}")
+              
+              return historical_metrics
+          
+          # Generate comprehensive metrics
+          issue_metrics = process_issues_metrics(issues_data)
+          historical_data = process_historical_data()
+          
+          # Calculate trends
+          def calculate_trends(historical_data):
+              if len(historical_data) < 2:
+                  return {'direction': 'insufficient_data', 'change_percentage': 0}
+              
+              # Sort by timestamp
+              sorted_data = sorted(historical_data, key=lambda x: x.get('timestamp', ''))
+              recent = sorted_data[-1]
+              previous = sorted_data[-2]
+              
+              if previous['total_items'] > 0:
+                  change_pct = ((recent['total_items'] - previous['total_items']) / previous['total_items']) * 100
+              else:
+                  change_pct = 0
+              
+              if abs(change_pct) < 5:
+                  direction = 'stable'
+              elif change_pct > 0:
+                  direction = 'increasing'
+              else:
+                  direction = 'decreasing'
+              
+              return {
+                  'direction': direction,
+                  'change_percentage': round(change_pct, 1),
+                  'recent_total': recent['total_items'],
+                  'previous_total': previous['total_items']
+              }
+          
+          trends = calculate_trends(historical_data)
+          
+          # Generate final metrics object
+          comprehensive_metrics = {
+              'metadata': {
+                  'timestamp': datetime.now().isoformat(),
+                  'dashboard_type': dashboard_type,
+                  'repository': os.environ.get('GITHUB_REPOSITORY', 'unknown'),
+                  'generated_by': 'debt-monitoring-workflow'
+              },
+              'summary': {
+                  'total_debt_issues': issue_metrics['total_issues'],
+                  'open_issues': issue_metrics['open_issues'],
+                  'closed_issues': issue_metrics['closed_issues'],
+                  'avg_resolution_days': round(issue_metrics['avg_resolution_days'], 1),
+                  'categories': issue_metrics['categories'],
+                  'age_distribution': issue_metrics['age_distribution']
+              },
+              'trends': trends,
+              'historical_data': historical_data[-6:],  # Last 6 data points
+              'monthly_activity': dict(list(issue_metrics['monthly_trends'].items())[-12:]),  # Last 12 months
+              'health_score': calculate_health_score(issue_metrics, trends),
+              'recommendations': generate_recommendations(issue_metrics, trends, config)
+          }
+          
+          def calculate_health_score(issue_metrics, trends):
+              score = 100
+              
+              # Penalty for high number of open issues
+              open_ratio = issue_metrics['open_issues'] / max(issue_metrics['total_issues'], 1)
+              score -= min(open_ratio * 50, 30)
+              
+              # Penalty for old issues
+              old_issues = issue_metrics['age_distribution'].get('> 3 months', 0)
+              score -= min(old_issues * 5, 20)
+              
+              # Penalty for increasing trends
+              if trends['direction'] == 'increasing':
+                  score -= min(abs(trends['change_percentage']), 15)
+              
+              # Penalty for slow resolution
+              if issue_metrics['avg_resolution_days'] > 30:
+                  score -= min((issue_metrics['avg_resolution_days'] - 30) / 10, 10)
+              
+              return max(round(score, 1), 0)
+          
+          def generate_recommendations(issue_metrics, trends, config):
+              recommendations = []
+              
+              # Open issues
+              if issue_metrics['open_issues'] > 20:
+                  recommendations.append("🚨 High number of open debt issues - consider increasing sprint allocation")
+              
+              # Old issues
+              old_issues = issue_metrics['age_distribution'].get('> 3 months', 0)
+              if old_issues > 5:
+                  recommendations.append(f"⏰ {old_issues} issues over 3 months old - review and prioritize")
+              
+              # Resolution time
+              if issue_metrics['avg_resolution_days'] > 30:
+                  recommendations.append("⏳ Average resolution time exceeds 30 days - investigate blockers")
+              
+              # Trends
+              if trends['direction'] == 'increasing' and abs(trends['change_percentage']) > 15:
+                  recommendations.append("📈 Debt is increasing significantly - review prevention strategies")
+              
+              # Category balance
+              critical_issues = issue_metrics['categories'].get('critical', 0)
+              if critical_issues > 0:
+                  recommendations.append(f"🔴 {critical_issues} critical issues require immediate attention")
+              
+              if not recommendations:
+                  recommendations.append("✅ Technical debt metrics are within acceptable ranges")
+              
+              return recommendations
+          
+          # Save metrics data
+          os.makedirs('metrics-output', exist_ok=True)
+          with open('metrics-output/debt-metrics.json', 'w') as f:
+              json.dump(comprehensive_metrics, f, indent=2)
+          
+          # Set outputs
+          metrics_json = json.dumps(comprehensive_metrics, separators=(',', ':'))
+          dashboard_title = f"Technical Debt Dashboard - {datetime.now().strftime('%Y-%m-%d')}"
+          
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+              f.write(f"metrics-data={metrics_json}\n")
+              f.write(f"dashboard-title={dashboard_title}\n")
+          
+          print(f"✅ Metrics generation completed")
+          print(f"Total issues: {issue_metrics['total_issues']}")
+          print(f"Health score: {comprehensive_metrics['health_score']}")
+          print(f"Trend: {trends['direction']}")
+          EOF
+
+      - name: Upload metrics
+        uses: actions/upload-artifact@v4
+        with:
+          name: debt-metrics-${{ github.run_number }}
+          path: metrics-output/
+          retention-days: 90
+
+  generate-dashboard:
+    needs: collect-metrics
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install matplotlib pandas seaborn jinja2
+
+      - name: Create dashboard directory
+        run: |
+          mkdir -p ${{ env.DASHBOARD_DIR }}
+
+      - name: Generate dashboard markdown
+        env:
+          METRICS_DATA: ${{ needs.collect-metrics.outputs.metrics-data }}
+          DASHBOARD_TITLE: ${{ needs.collect-metrics.outputs.dashboard-title }}
+          EXPORT_FORMAT: ${{ github.event.inputs.export-format || 'all' }}
+        run: |
+          python3 << 'EOF'
+          import json
+          import os
+          from datetime import datetime
+          
+          # Load metrics
+          metrics = json.loads(os.environ['METRICS_DATA'])
+          title = os.environ['DASHBOARD_TITLE']
+          export_format = os.environ['EXPORT_FORMAT']
+          
+          # Generate markdown dashboard
+          def generate_markdown_dashboard(metrics, title):
+              dashboard = f"""# {title}
+          
+          > **Generated**: {datetime.now().strftime('%Y-%m-%d %H:%M:%S UTC')}
+          > **Repository**: {metrics['metadata']['repository']}
+          > **Health Score**: {metrics['health_score']}/100
+          
+          ## 📊 Executive Summary
+          
+          | Metric | Value | Status |
+          |--------|--------|---------|
+          | Total Debt Issues | {metrics['summary']['total_debt_issues']} | {'🟢' if metrics['summary']['total_debt_issues'] < 20 else '🟡' if metrics['summary']['total_debt_issues'] < 50 else '🔴'} |
+          | Open Issues | {metrics['summary']['open_issues']} | {'🟢' if metrics['summary']['open_issues'] < 10 else '🟡' if metrics['summary']['open_issues'] < 25 else '🔴'} |
+          | Avg Resolution Time | {metrics['summary']['avg_resolution_days']} days | {'🟢' if metrics['summary']['avg_resolution_days'] < 14 else '🟡' if metrics['summary']['avg_resolution_days'] < 30 else '🔴'} |
+          | Trend Direction | {metrics['trends']['direction'].title()} | {'🟢' if metrics['trends']['direction'] == 'decreasing' else '🟡' if metrics['trends']['direction'] == 'stable' else '🔴'} |
+          
+          ## 🎯 Health Score: {metrics['health_score']}/100
+          
+          """
+          
+              # Health score interpretation
+              if metrics['health_score'] >= 80:
+                  dashboard += "🟢 **Excellent** - Technical debt is well managed\n\n"
+              elif metrics['health_score'] >= 60:
+                  dashboard += "🟡 **Good** - Debt levels are manageable with room for improvement\n\n"
+              elif metrics['health_score'] >= 40:
+                  dashboard += "🟠 **Needs Attention** - Debt levels require active management\n\n"
+              else:
+                  dashboard += "🔴 **Critical** - Immediate action required to address technical debt\n\n"
+          
+              # Category breakdown
+              dashboard += "## 📈 Debt Category Breakdown\n\n"
+              categories = metrics['summary']['categories']
+              if categories:
+                  for category, count in categories.items():
+                      emoji = {'critical': '🔴', 'high': '🟠', 'medium': '🟡', 'low': '🟢'}.get(category, '⚪')
+                      dashboard += f"- {emoji} **{category.title()}**: {count} issues\n"
+              else:
+                  dashboard += "No categorized debt issues found.\n"
+              dashboard += "\n"
+          
+              # Age distribution
+              dashboard += "## ⏳ Issue Age Distribution\n\n"
+              age_dist = metrics['summary']['age_distribution']
+              if age_dist:
+                  for age_group, count in age_dist.items():
+                      dashboard += f"- **{age_group}**: {count} issues\n"
+              else:
+                  dashboard += "No open issues to analyze.\n"
+              dashboard += "\n"
+          
+              # Trends
+              dashboard += "## 📊 Trends\n\n"
+              trend = metrics['trends']
+              if trend['direction'] != 'insufficient_data':
+                  change_emoji = '📈' if trend['change_percentage'] > 0 else '📉' if trend['change_percentage'] < 0 else '➡️'
+                  dashboard += f"{change_emoji} **Trend**: {trend['direction'].title()} ({trend['change_percentage']:+.1f}%)\n\n"
+                  
+                  if trend['direction'] == 'increasing':
+                      dashboard += "⚠️ **Action Required**: Debt is increasing. Consider:\n"
+                      dashboard += "- Increasing sprint debt allocation\n"
+                      dashboard += "- Reviewing prevention strategies\n"
+                      dashboard += "- Analyzing root causes\n\n"
+              else:
+                  dashboard += "Insufficient historical data for trend analysis.\n\n"
+          
+              # Recommendations
+              dashboard += "## 💡 Recommendations\n\n"
+              for recommendation in metrics['recommendations']:
+                  dashboard += f"- {recommendation}\n"
+              dashboard += "\n"
+          
+              # Historical data
+              if metrics['historical_data']:
+                  dashboard += "## 📋 Historical Data\n\n"
+                  dashboard += "| Date | Total Items | Critical | High | Total Effort |\n"
+                  dashboard += "|------|-------------|----------|------|-------------|\n"
+                  
+                  for data_point in metrics['historical_data']:
+                      date = data_point.get('timestamp', 'N/A')[:10] if data_point.get('timestamp') else 'N/A'
+                      total = data_point.get('total_items', 0)
+                      critical = data_point.get('critical_items', 0)
+                      high = data_point.get('high_items', 0)
+                      effort = data_point.get('total_effort', 0)
+                      dashboard += f"| {date} | {total} | {critical} | {high} | {effort:.1f} |\n"
+                  dashboard += "\n"
+          
+              # Footer
+              dashboard += "---\n"
+              dashboard += f"*Dashboard generated automatically on {datetime.now().strftime('%Y-%m-%d %H:%M:%S UTC')}*\n"
+              dashboard += f"*Next update: Weekly (Fridays)*\n"
+              
+              return dashboard
+          
+          # Generate dashboard content
+          markdown_content = generate_markdown_dashboard(metrics, title)
+          
+          # Save markdown dashboard
+          timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+          dashboard_file = f"${{ env.DASHBOARD_DIR }}/debt-dashboard-{timestamp}.md"
+          
+          with open(dashboard_file, 'w') as f:
+              f.write(markdown_content)
+          
+          # Also create/update the latest dashboard
+          latest_file = f"${{ env.DASHBOARD_DIR }}/README.md"
+          with open(latest_file, 'w') as f:
+              f.write(markdown_content)
+          
+          # Generate JSON export if requested
+          if export_format in ['all', 'json']:
+              json_file = f"${{ env.DASHBOARD_DIR }}/debt-metrics-{timestamp}.json"
+              with open(json_file, 'w') as f:
+                  json.dump(metrics, f, indent=2)
+          
+          # Generate CSV export if requested
+          if export_format in ['all', 'csv']:
+              import csv
+              csv_file = f"${{ env.DASHBOARD_DIR }}/debt-summary-{timestamp}.csv"
+              
+              with open(csv_file, 'w', newline='') as f:
+                  writer = csv.writer(f)
+                  writer.writerow(['Metric', 'Value'])
+                  writer.writerow(['Total Issues', metrics['summary']['total_debt_issues']])
+                  writer.writerow(['Open Issues', metrics['summary']['open_issues']])
+                  writer.writerow(['Closed Issues', metrics['summary']['closed_issues']])
+                  writer.writerow(['Avg Resolution Days', metrics['summary']['avg_resolution_days']])
+                  writer.writerow(['Health Score', metrics['health_score']])
+                  writer.writerow(['Trend Direction', metrics['trends']['direction']])
+                  writer.writerow(['Trend Change %', metrics['trends']['change_percentage']])
+          
+          print(f"✅ Dashboard generated: {dashboard_file}")
+          print(f"✅ Latest dashboard updated: {latest_file}")
+          EOF
+
+      - name: Clean up old dashboard versions
+        run: |
+          # Keep only the last 4 versioned dashboards
+          cd ${{ env.DASHBOARD_DIR }}
+          ls -t debt-dashboard-*.md | tail -n +5 | xargs rm -f || true
+          ls -t debt-metrics-*.json | tail -n +5 | xargs rm -f || true
+          ls -t debt-summary-*.csv | tail -n +5 | xargs rm -f || true
+
+      - name: Commit dashboard updates
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add ${{ env.DASHBOARD_DIR }}/
+          
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "📊 Update technical debt dashboard - $(date -u +%Y-%m-%d)"
+            git push
+            echo "✅ Dashboard committed and pushed"
+          fi
+
+      - name: Create dashboard summary issue
+        if: github.event.inputs.dashboard-type == 'summary' || contains(needs.collect-metrics.outputs.metrics-data, '"health_score": 4') || contains(needs.collect-metrics.outputs.metrics-data, '"health_score": 3')
+        uses: actions/github-script@v7
+        env:
+          METRICS_DATA: ${{ needs.collect-metrics.outputs.metrics-data }}
+        with:
+          script: |
+            const metrics = JSON.parse(process.env.METRICS_DATA);
+            
+            // Only create issue if health score is low or manually requested
+            const shouldCreateIssue = metrics.health_score < 50 || 
+                                     '${{ github.event.inputs.dashboard-type }}' === 'summary';
+            
+            if (!shouldCreateIssue) {
+              console.log('Health score is acceptable, skipping issue creation');
+              return;
+            }
+            
+            const title = `📊 Technical Debt Dashboard Summary - ${new Date().toISOString().split('T')[0]}`;
+            
+            const body = `
+            ## Technical Debt Health Report
+            
+            **Health Score**: ${metrics.health_score}/100 ${metrics.health_score < 50 ? '🔴' : metrics.health_score < 70 ? '🟡' : '🟢'}
+            **Total Issues**: ${metrics.summary.total_debt_issues}
+            **Open Issues**: ${metrics.summary.open_issues}
+            **Trend**: ${metrics.trends.direction} (${metrics.trends.change_percentage:+.1f}%)
+            
+            ### Key Recommendations
+            ${metrics.recommendations.map(rec => `- ${rec}`).join('\n')}
+            
+            ### Quick Actions
+            - [ ] Review critical and high priority debt items
+            - [ ] Adjust sprint debt allocation if needed
+            - [ ] Address issues older than 3 months
+            - [ ] Update prevention strategies if debt is increasing
+            
+            ---
+            📋 [View Full Dashboard](./${{ env.DASHBOARD_DIR }}/README.md)
+            `;
+            
+            // Check for existing dashboard issue
+            const existingIssues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: 'technical-debt,dashboard',
+              state: 'open'
+            });
+            
+            const existingIssue = existingIssues.data.find(issue => 
+              issue.title.includes('Dashboard Summary')
+            );
+            
+            if (existingIssue) {
+              // Update existing issue
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existingIssue.number,
+                body: `## Updated Dashboard Summary\n${body}`
+              });
+              console.log(`Updated existing dashboard issue #${existingIssue.number}`);
+            } else {
+              // Create new issue
+              const issue = await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: title,
+                body: body,
+                labels: ['technical-debt', 'dashboard', 'automated']
+              });
+              console.log(`Created new dashboard issue #${issue.data.number}`);
+            }
+
+  workflow-summary:
+    needs: [collect-metrics, generate-dashboard]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create workflow summary
+        env:
+          METRICS_DATA: ${{ needs.collect-metrics.outputs.metrics-data }}
+        run: |
+          echo "## 📊 Technical Debt Monitoring Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Dashboard Type**: ${{ github.event.inputs.dashboard-type || 'comprehensive' }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Export Format**: ${{ github.event.inputs.export-format || 'all' }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Generated**: $(date -u)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Results" >> $GITHUB_STEP_SUMMARY
+          echo "- 📈 Metrics Collection: ${{ needs.collect-metrics.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- 📋 Dashboard Generation: ${{ needs.generate-dashboard.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          # Parse metrics data for summary if available
+          if [ -n "$METRICS_DATA" ]; then
+            echo "### Key Metrics" >> $GITHUB_STEP_SUMMARY
+            echo '```json' >> $GITHUB_STEP_SUMMARY
+            echo "$METRICS_DATA" | jq '.summary + {health_score: .health_score, trend: .trends.direction}' >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "📋 **Dashboard Location**: \`docs/technical-debt/README.md\`" >> $GITHUB_STEP_SUMMARY

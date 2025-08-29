@@ -22,5 +22,17 @@
     "title": "Prds/Readme",
     "content_preview": "# AI-Powered Strategic Planning Platform\n\nAn enterprise-grade web application that transforms high-level project ideas into comprehensive strategic planning documents through AI-driven conversational ...",
     "timestamp": "2025-08-29T10:34:28.251824"
+  },
+  {
+    "file_path": "/home/jgrewal/projects/website/prds/strategic-planning-platform/.github/config/code-reviewer-prompt.md",
+    "title": "Config/Code Reviewer Prompt",
+    "content_preview": "# AI Code Reviewer Prompt\n\nYou are an expert code reviewer with extensive experience in modern software development practices. Your role is to provide comprehensive, actionable feedback that helps dev...",
+    "timestamp": "2025-08-29T11:43:06.725275"
+  },
+  {
+    "file_path": "/home/jgrewal/projects/website/prds/strategic-planning-platform/.github/README.md",
+    "title": ".Github/Readme",
+    "content_preview": "# GitHub Actions Workflows Documentation\n\nThis directory contains comprehensive GitHub Actions workflows that provide AI-powered development automation, quality assurance, and technical debt managemen...",
+    "timestamp": "2025-08-29T11:45:04.859740"
   }
 ]

@@ -540,3 +540,6 @@ This guide positions Claude as the strategic technical partner for building an e
 
 The platform's success depends on consistent application of these patterns, continuous monitoring of quality metrics, and iterative improvement based on user feedback and performance data.
 
+## Task Master AI Instructions
+**Import Task Master's development workflow commands and guidelines, treat as if import is in the main CLAUDE.md file.**
+@./.taskmaster/CLAUDE.md

@@ -159,3 +159,12 @@ test-artifacts/
 
 # Database configs
 database.yml
+
+dev-debug.log
+# Dependency directories
+.vscode
+# OS specific
+
+# Task files
+# tasks.json
+# tasks/ 
