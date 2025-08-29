@@ -1,0 +1,114 @@
+# Docker Compose Override for Development Environment
+# This file extends docker-compose.yml for local development
+
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      target: development
+    environment:
+      - NODE_ENV=development
+      - NITRO_HOST=0.0.0.0
+      - API_BASE_URL=http://localhost:8000
+      - WEBSOCKET_URL=ws://localhost:8001
+      - HMR_PORT=24678
+    ports:
+      - "3000:3000"
+      - "24678:24678"  # HMR port
+    volumes:
+      - ./frontend:/app:cached
+      - ./shared:/app/shared:cached
+      - frontend_node_modules:/app/node_modules
+      - frontend_nuxt:/app/.nuxt
+    command: ["pnpm", "dev", "--host", "0.0.0.0"]
+
+  backend:
+    build:
+      target: development
+    environment:
+      - FASTAPI_ENV=development
+      - PYTHONPATH=/app
+      - WATCHFILES_FORCE_POLLING=true
+    ports:
+      - "8000:8000"
+      - "8001:8001"
+      - "5678:5678"  # Debugger port
+    volumes:
+      - ./backend:/app:cached
+      - ./shared:/app/shared:cached
+      - backend_venv:/app/.venv
+    command: ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+
+  postgres:
+    environment:
+      - POSTGRES_PASSWORD=dev_password_123
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./database/postgres/dev-data:/var/lib/postgresql/data
+
+  redis:
+    environment:
+      - REDIS_PASSWORD=dev_redis_123
+    ports:
+      - "6379:6379"
+
+  neo4j:
+    environment:
+      - NEO4J_AUTH=neo4j/dev_neo4j_123
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+
+  # Development tools
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: strategic-planning-mailhog
+    ports:
+      - "1025:1025"  # SMTP
+      - "8025:8025"  # Web UI
+    networks:
+      - strategic-planning-network
+    profiles:
+      - dev-tools
+
+  # Database admin tools
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: strategic-planning-pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@strategic-planning.local
+      - PGADMIN_DEFAULT_PASSWORD=admin123
+      - PGADMIN_CONFIG_SERVER_MODE=False
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    networks:
+      - strategic-planning-network
+    profiles:
+      - dev-tools
+
+  # Redis admin
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: strategic-planning-redis-commander
+    environment:
+      - REDIS_HOSTS=local:redis:6379:0:dev_redis_123
+    ports:
+      - "8081:8081"
+    depends_on:
+      - redis
+    networks:
+      - strategic-planning-network
+    profiles:
+      - dev-tools
+
+volumes:
+  frontend_node_modules:
+    name: strategic-planning-frontend-node-modules
+  frontend_nuxt:
+    name: strategic-planning-frontend-nuxt
+  backend_venv:
+    name: strategic-planning-backend-venv
