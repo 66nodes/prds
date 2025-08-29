@@ -1,0 +1,93 @@
+{
+	"meta": {
+		"generatedAt": "2025-08-29T16:25:09.090Z",
+		"tasksAnalyzed": 10,
+		"totalTasks": 10,
+		"analysisCount": 10,
+		"thresholdScore": 5,
+		"projectName": "Taskmaster",
+		"usedResearch": false
+	},
+	"complexityAnalysis": [
+		{
+			"taskId": 1,
+			"taskTitle": "Setup Project Repository",
+			"complexityScore": 8,
+			"recommendedSubtasks": 6,
+			"expansionPrompt": "Break down each infrastructure component setup with environment-specific configurations",
+			"reasoning": "High complexity due to multiple technology stack components, containerization requirements, and CI/CD integration. Each implementation detail represents a distinct technical challenge requiring specialized configuration."
+		},
+		{
+			"taskId": 2,
+			"taskTitle": "Implement Authentication System",
+			"complexityScore": 9,
+			"recommendedSubtasks": 6,
+			"expansionPrompt": "Expand security implementation with token rotation, role permission matrix, and session expiration policies",
+			"reasoning": "Security-critical component requiring precise implementation of JWT standards, role-based access control, and secure credential management across multiple integrated systems."
+		},
+		{
+			"taskId": 3,
+			"taskTitle": "Develop Dashboard UI",
+			"complexityScore": 7,
+			"recommendedSubtasks": 6,
+			"expansionPrompt": "Detail UI component specifications with accessibility requirements and performance optimization strategies",
+			"reasoning": "Balanced complexity with multiple UI components requiring responsive design patterns and API integration, but benefits from established frontend frameworks."
+		},
+		{
+			"taskId": 4,
+			"taskTitle": "Implement Phase 0: Project Invitation",
+			"complexityScore": 8,
+			"recommendedSubtasks": 6,
+			"expansionPrompt": "Expand NER implementation with domain-specific entity dictionaries and similarity search algorithm selection",
+			"reasoning": "High complexity due to real-time processing requirements, ML integration, and validation logic dependencies requiring precise threshold implementation."
+		},
+		{
+			"taskId": 5,
+			"taskTitle": "Implement Phase 1: Objective Clarification",
+			"complexityScore": 8,
+			"recommendedSubtasks": 6,
+			"expansionPrompt": "Detail question generation algorithms with domain-specific rule sets and validation integration points",
+			"reasoning": "Complex workflow requiring intelligent content generation, state management, and integration with multiple validation systems across different implementation layers."
+		},
+		{
+			"taskId": 6,
+			"taskTitle": "Build GraphRAG Validation Pipeline",
+			"complexityScore": 9,
+			"recommendedSubtasks": 6,
+			"expansionPrompt": "Expand validation layers with detailed confidence scoring algorithms and caching strategies",
+			"reasoning": "High complexity due to multiple validation layers, performance constraints, and integration with different database technologies requiring sophisticated orchestration."
+		},
+		{
+			"taskId": 7,
+			"taskTitle": "Implement Phase 2: Objective Drafting",
+			"complexityScore": 9,
+			"recommendedSubtasks": 6,
+			"expansionPrompt": "Detail multi-model integration patterns and version control implementation for generated content",
+			"reasoning": "Very high complexity from combining multiple LLMs, maintaining content quality metrics, and implementing collaborative workflow requirements."
+		},
+		{
+			"taskId": 8,
+			"taskTitle": "Develop Section Co-Creation System",
+			"complexityScore": 8,
+			"recommendedSubtasks": 6,
+			"expansionPrompt": "Expand section validation rules and dependency management implementation details",
+			"reasoning": "Moderate complexity with state management challenges across multiple document sections requiring both UI and backend validation components."
+		},
+		{
+			"taskId": 9,
+			"taskTitle": "Implement Document Generation",
+			"complexityScore": 7,
+			"recommendedSubtasks": 6,
+			"expansionPrompt": "Detail template engine requirements for different document formats and version control integration",
+			"reasoning": "Medium complexity with format-specific implementation requirements and integration with document management workflows."
+		},
+		{
+			"taskId": 10,
+			"taskTitle": "Setup Real-time Collaboration",
+			"complexityScore": 8,
+			"recommendedSubtasks": 6,
+			"expansionPrompt": "Expand conflict resolution strategies and user presence implementation details",
+			"reasoning": "High complexity due to real-time synchronization requirements, state management challenges, and integration with multiple backend services."
+		}
+	]
+}

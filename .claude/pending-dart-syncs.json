@@ -34,5 +34,11 @@
     "title": ".Github/Readme",
     "content_preview": "# GitHub Actions Workflows Documentation\n\nThis directory contains comprehensive GitHub Actions workflows that provide AI-powered development automation, quality assurance, and technical debt managemen...",
     "timestamp": "2025-08-29T11:45:04.859740"
+  },
+  {
+    "file_path": "/home/jgrewal/projects/website/prds/docs/PRD.md",
+    "title": "Prd",
+    "content_preview": "# Product Requirements Document: AI-Powered Strategic Planning Platform\n\n## Executive Summary\n\nThe **AI-Powered Strategic Planning Platform** is a groundbreaking enterprise solution that transforms we...",
+    "timestamp": "2025-08-29T15:02:10.842372"
   }
 ]
