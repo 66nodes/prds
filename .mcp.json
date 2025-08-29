@@ -1,88 +1,12 @@
 {
-        "mcpServers": {
-                "claude-flow": {
-                        "type": "stdio",
-                        "command": "npx",
-                        "args": [
-                                "claude-flow@alpha",
-                                "mcp",
-                                "start"
-                        ]
-                },
-                "ruv-swarm": {
-                        "type": "stdio",
-                        "command": "npx",
-                        "args": [
-                                "ruv-swarm@latest",
-                                "mcp",
-                                "start"
-                        ]
-                },
-    "context-7": {
-      "type": "http",
-      "url": "https://server.smithery.ai/mcp/context-7",
-      "headers": {
-        "X-API-Key": "833c8051-c17c-490c-88f3-88524363cc96"
-      }
-    },
-    "firecrawl-web-scraping-server": {
-      "type": "http",
-      "url": "https://server.smithery.ai/mcp/firecrawl",
-      "headers": {
-        "X-API-Key": "833c8051-c17c-490c-88f3-88524363cc96"
-      }
-    },
-    "sequentialthinking": {
-      "command": "docker",
-      "args": [
-        "run",
-        "--rm",
-        "-i",
-        "mcp/sequentialthinking"
-      ]
-    },
-    "task-master-ai": {
+  "mcpServers": {
+    "brave-search": {
+      "type": "stdio",
       "command": "npx",
       "args": [
-        "-y",
-        "--package=task-master-ai",
-        "task-master-ai"
+        "@modelcontextprotocol/server-brave-search"
       ],
-      "env": {
-        "ANTHROPIC_API_KEY": "y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",
-        "PERPLEXITY_API_KEY": "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",
-        "OPENAI_API_KEY": "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",
-        "GOOGLE_API_KEY": "AIzaSyAWBQG35zJlVKv6wVqf3-OA1nWa5d0T_OA",
-        "XAI_API_KEY": "xai-dESDEEG4SnCFrfI0mwqEQlkQkwuXrgmb6alkZOUiLCs7Ja2qawY8zIEVZFWLdDZcVkMuDUnKJMuR2Pqe",
-        "OPENROUTER_API_KEY": "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",
-        "MISTRAL_API_KEY": "p9PchDppLPFC3y2NeDaCgoXp2D6lwgM5",
-        "AZURE_OPENAI_API_KEY": "7VBaZKHYfytcCusYXJB5xnZJSVSSUqQiwGQutcjb8PHoUqAIT2QxJQQJ99BFACYeBjFXJ3w3AAABACOGWKUU",
-        "OLLAMA_API_KEY": "OLLAMA_API_KEY_HERE",
-        "MODEL": "claude-3-7-sonnet-20250219",
-        "PERPLEXITY_MODEL": "sonar-pro",
-        "TEMPERATURE": 0.2,
-        "DEFAULT_PRIORITY": "medium"
-      }
-    },
-    "playwright-mcp-server": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@smithery/cli@latest",
-        "run",
-        "@executeautomation/playwright-mcp-server",
-        "--key",
-        "833c8051-c17c-490c-88f3-88524363cc96",
-        "--profile",
-        "cheap-cephalopod-Ty4S78"
-      ]
-    },
-    "exa-search": {
-      "type": "http",
-      "url": "https://server.smithery.ai/mcp/exa",
-      "headers": {
-        "X-API-Key": "833c8051-c17c-490c-88f3-88524363cc96"
-      }
+      "env": {}
     }
   }
 }
