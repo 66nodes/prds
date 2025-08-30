@@ -1,0 +1,1272 @@
+openapi: 3.0.3
+info:
+  title: Strategic Planning Platform API
+  description: |
+    AI-Powered Strategic Planning Platform with GraphRAG validation.
+    
+    ## Features
+    
+    * **4-Phase PRD Creation Workflow**: From concept to comprehensive document
+    * **GraphRAG Validation**: <2% hallucination rate through three-tier validation
+    * **PydanticAI Agents**: Intelligent PRD processing and task generation
+    * **GitHub Integration**: Automated project setup and task management
+    * **Enterprise Security**: JWT auth, RBAC, and comprehensive audit logging
+    
+    ## Performance Targets
+    
+    * API Response Time: <200ms P95
+    * Document Generation: <60 seconds
+    * Concurrent Users: 100+ with stable performance
+    * Uptime: 99.9% SLA
+  version: 1.0.0
+  contact:
+    name: Strategic Planning Platform Team
+    email: support@strategicplanning.ai
+  license:
+    name: Proprietary
+
+servers:
+  - url: http://localhost:8000
+    description: Development server
+  - url: https://api.strategicplanning.ai
+    description: Production server
+
+security:
+  - BearerAuth: []
+
+paths:
+  /health:
+    get:
+      tags:
+        - Health
+      summary: Health check endpoint
+      description: Comprehensive health check for all system components
+      operationId: healthCheck
+      security: []
+      responses:
+        '200':
+          description: System is healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+        '503':
+          description: System is unhealthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+
+  /register:
+    post:
+      tags:
+        - Authentication
+      summary: Register new user account (alias)
+      description: Create a new user account with email and password
+      operationId: registerUserAlias
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegister'
+      responses:
+        '200':
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+        '400':
+          description: Registration failed - invalid input or email already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/v1/auth/register:
+    post:
+      tags:
+        - Authentication
+      summary: Register new user account
+      description: Create a new user account with email and password
+      operationId: registerUser
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegister'
+      responses:
+        '200':
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+        '400':
+          description: Registration failed - invalid input or email already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /login:
+    post:
+      tags:
+        - Authentication
+      summary: User login (alias)
+      description: Authenticate user and return JWT tokens
+      operationId: loginUserAlias
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLogin'
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/v1/auth/login:
+    post:
+      tags:
+        - Authentication
+      summary: User login
+      description: Authenticate user and return JWT tokens
+      operationId: loginUser
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLogin'
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/v1/auth/me:
+    get:
+      tags:
+        - Authentication
+      summary: Get current user info
+      description: Retrieve current authenticated user information
+      operationId: getCurrentUser
+      responses:
+        '200':
+          description: User information retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/v1/prd/generate:
+    post:
+      tags:
+        - PRD Generation
+      summary: Generate complete PRD
+      description: Generate a comprehensive PRD using PydanticAI agent with GraphRAG validation
+      operationId: generatePRD
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PRDGenerationRequest'
+      responses:
+        '200':
+          description: PRD generation started successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PRDGenerationResponse'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Generation failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/v1/prd/phase0/initiate:
+    post:
+      tags:
+        - PRD Generation
+      summary: Phase 0 - Project Invitation
+      description: Process initial project description and generate clarification questions
+      operationId: initiatePhase0
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Phase0Request'
+      responses:
+        '200':
+          description: Phase 0 completed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Phase0Response'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/v1/prd/phase1/clarify:
+    post:
+      tags:
+        - PRD Generation
+      summary: Phase 1 - Objective Clarification
+      description: Process clarification answers and validate with GraphRAG
+      operationId: clarifyPhase1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Phase1Request'
+      responses:
+        '200':
+          description: Phase 1 completed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Phase1Response'
+
+  /api/v1/validation/validate-content:
+    post:
+      tags:
+        - GraphRAG Validation
+      summary: Validate content
+      description: Validate content using GraphRAG three-tier validation system
+      operationId: validateContent
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidationRequest'
+      responses:
+        '200':
+          description: Validation completed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationResponse'
+        '400':
+          description: Invalid content
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/v1/dashboard/metrics:
+    get:
+      tags:
+        - Dashboard & Analytics
+      summary: Get dashboard metrics
+      description: Retrieve key dashboard metrics and KPIs
+      operationId: getDashboardMetrics
+      responses:
+        '200':
+          description: Metrics retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DashboardMetrics'
+
+  /api/v1/dashboard/prds:
+    get:
+      tags:
+        - Dashboard & Analytics
+      summary: Get PRDs list
+      description: Get paginated list of PRDs with filtering and sorting
+      operationId: getPRDsList
+      parameters:
+        - name: page
+          in: query
+          description: Page number
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: page_size
+          in: query
+          description: Page size
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+        - name: status
+          in: query
+          description: Filter by status
+          schema:
+            type: string
+            enum: [active, completed, draft, archived]
+      responses:
+        '200':
+          description: PRDs list retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PRDListResponse'
+
+  /refresh:
+    post:
+      tags:
+        - Authentication
+      summary: Refresh access token (alias)
+      operationId: refreshTokenAlias
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                refresh_token:
+                  type: string
+      responses:
+        '200':
+          description: Token refreshed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+
+  /me:
+    get:
+      tags:
+        - Authentication
+      summary: Get current user info (alias)
+      operationId: getCurrentUserAlias
+      responses:
+        '200':
+          description: User information retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+  /logout:
+    post:
+      tags:
+        - Authentication  
+      summary: Logout user (alias)
+      operationId: logoutUserAlias
+      responses:
+        '200':
+          description: Logged out successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /metrics:
+    get:
+      tags:
+        - Dashboard & Analytics
+      summary: Get dashboard metrics (alias)
+      operationId: getDashboardMetricsAlias
+      responses:
+        '200':
+          description: Metrics retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DashboardMetrics'
+
+  /prds:
+    get:
+      tags:
+        - Dashboard & Analytics
+      summary: Get PRDs list (alias)
+      operationId: getPRDsListAlias
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: page_size
+          in: query
+          schema:
+            type: integer
+            default: 20
+      responses:
+        '200':
+          description: PRDs list retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PRDListResponse'
+
+  /quality-trends:
+    get:
+      tags:
+        - Dashboard & Analytics
+      summary: Get quality trends (alias)
+      operationId: getQualityTrendsAlias
+      responses:
+        '200':
+          description: Quality trends retrieved
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/QualityTrend'
+
+  /validation-insights:
+    get:
+      tags:
+        - Dashboard & Analytics
+      summary: Get validation insights (alias)
+      operationId: getValidationInsightsAlias
+      responses:
+        '200':
+          description: Validation insights retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationInsights'
+
+  /dashboard:
+    get:
+      tags:
+        - Dashboard & Analytics
+      summary: Get complete dashboard (alias)
+      operationId: getCompleteDashboardAlias
+      responses:
+        '200':
+          description: Complete dashboard data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DashboardData'
+
+  /phase0/initiate:
+    post:
+      tags:
+        - PRD Generation
+      summary: Phase 0 initiation (alias)
+      operationId: initiatePhase0Alias
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Phase0Request'
+      responses:
+        '200':
+          description: Phase 0 completed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Phase0Response'
+
+  /phase1/clarify:
+    post:
+      tags:
+        - PRD Generation
+      summary: Phase 1 clarification (alias)
+      operationId: clarifyPhase1Alias
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Phase1Request'
+      responses:
+        '200':
+          description: Phase 1 completed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Phase1Response'
+
+  /phase2/draft:
+    post:
+      tags:
+        - PRD Generation
+      summary: Phase 2 drafting (alias)
+      operationId: draftPhase2Alias
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Phase 2 completed successfully
+
+  /generate:
+    post:
+      tags:
+        - PRD Generation
+      summary: Generate PRD (alias)
+      operationId: generatePRDAlias
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PRDGenerationRequest'
+      responses:
+        '200':
+          description: PRD generation started successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PRDGenerationResponse'
+
+  /validate-content:
+    post:
+      tags:
+        - GraphRAG Validation
+      summary: Validate content (alias)
+      operationId: validateContentAlias
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ValidationRequest'
+      responses:
+        '200':
+          description: Validation completed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationResponse'
+
+  /validate-batch:
+    post:
+      tags:
+        - GraphRAG Validation
+      summary: Validate content batch (alias)
+      operationId: validateBatchAlias
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          description: Batch validation completed
+
+  /confidence-score/{prd_id}:
+    get:
+      tags:
+        - GraphRAG Validation
+      summary: Get confidence score (alias)
+      operationId: getConfidenceScoreAlias
+      parameters:
+        - name: prd_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Confidence score retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  confidence:
+                    type: number
+
+  /validation-stats:
+    get:
+      tags:
+        - GraphRAG Validation
+      summary: Get validation statistics (alias)
+      operationId: getValidationStatsAlias
+      responses:
+        '200':
+          description: Validation statistics retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    ErrorResponse:
+      type: object
+      required:
+        - error
+        - status_code
+        - timestamp
+      properties:
+        error:
+          type: string
+          description: Error message
+        status_code:
+          type: integer
+          description: HTTP status code
+        timestamp:
+          type: string
+          format: date-time
+          description: Error timestamp
+        path:
+          type: string
+          description: Request path
+        request_id:
+          type: string
+          description: Request correlation ID
+
+    HealthResponse:
+      type: object
+      required:
+        - status
+        - timestamp
+        - version
+        - components
+      properties:
+        status:
+          type: string
+          enum: [healthy, degraded, unhealthy]
+          description: Overall system status
+        timestamp:
+          type: string
+          format: date-time
+          description: Health check timestamp
+        version:
+          type: string
+          description: API version
+        components:
+          type: object
+          properties:
+            neo4j:
+              $ref: '#/components/schemas/ComponentHealth'
+            graphrag:
+              $ref: '#/components/schemas/ComponentHealth'
+            redis:
+              $ref: '#/components/schemas/ComponentHealth'
+            api:
+              $ref: '#/components/schemas/ComponentHealth'
+
+    ComponentHealth:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          enum: [healthy, degraded, unhealthy]
+          description: Component status
+        response_time_ms:
+          type: number
+          description: Component response time in milliseconds
+        error:
+          type: string
+          description: Error message if unhealthy
+
+    UserRegister:
+      type: object
+      required:
+        - email
+        - password
+        - full_name
+      properties:
+        email:
+          type: string
+          format: email
+          description: User email address
+        password:
+          type: string
+          minLength: 8
+          description: User password
+        full_name:
+          type: string
+          minLength: 2
+          maxLength: 100
+          description: User full name
+        company:
+          type: string
+          maxLength: 100
+          description: Company name
+
+    UserLogin:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          description: User email address
+        password:
+          type: string
+          minLength: 8
+          description: User password
+
+    TokenResponse:
+      type: object
+      required:
+        - access_token
+        - refresh_token
+        - token_type
+        - expires_in
+        - user
+      properties:
+        access_token:
+          type: string
+          description: JWT access token
+        refresh_token:
+          type: string
+          description: JWT refresh token
+        token_type:
+          type: string
+          default: bearer
+          description: Token type
+        expires_in:
+          type: integer
+          description: Token expiration in seconds
+        user:
+          $ref: '#/components/schemas/User'
+
+    User:
+      type: object
+      required:
+        - id
+        - email
+        - full_name
+        - role
+        - is_active
+        - created_at
+      properties:
+        id:
+          type: string
+          description: User ID
+        email:
+          type: string
+          format: email
+          description: User email
+        full_name:
+          type: string
+          description: User full name
+        company:
+          type: string
+          description: Company name
+        role:
+          type: string
+          default: user
+          description: User role
+        is_active:
+          type: boolean
+          default: true
+          description: User active status
+        created_at:
+          type: string
+          format: date-time
+          description: Account creation date
+
+    PRDGenerationRequest:
+      type: object
+      required:
+        - title
+        - description
+        - user_id
+      properties:
+        title:
+          type: string
+          minLength: 10
+          maxLength: 200
+          description: PRD title
+        description:
+          type: string
+          minLength: 100
+          description: Detailed feature description
+        business_context:
+          type: string
+          description: Business justification and impact
+        target_audience:
+          type: string
+          description: Primary users and stakeholders
+        success_criteria:
+          type: array
+          items:
+            type: string
+          description: Measurable success metrics
+        constraints:
+          type: array
+          items:
+            type: string
+          description: Technical or business limitations
+        priority:
+          type: string
+          enum: [low, medium, high, critical]
+          default: medium
+          description: Priority level
+        user_id:
+          type: string
+          description: User identifier
+
+    PRDGenerationResponse:
+      type: object
+      required:
+        - prd_id
+        - title
+        - status
+        - quality_score
+        - sections_count
+        - validation_summary
+      properties:
+        prd_id:
+          type: string
+          description: Generated PRD ID
+        title:
+          type: string
+          description: PRD title
+        status:
+          type: string
+          description: Generation status
+        quality_score:
+          type: number
+          minimum: 0
+          maximum: 10
+          description: Overall quality score
+        sections_count:
+          type: integer
+          description: Number of sections generated
+        validation_summary:
+          type: object
+          description: Validation results summary
+        estimated_completion_time:
+          type: string
+          description: Estimated completion time
+
+    Phase0Request:
+      type: object
+      required:
+        - initial_description
+        - user_id
+      properties:
+        initial_description:
+          type: string
+          minLength: 50
+          maxLength: 2000
+          description: Project concept description
+        user_id:
+          type: string
+          description: User identifier
+        context:
+          type: object
+          description: Additional context
+
+    Phase0Response:
+      type: object
+      required:
+        - prd_id
+        - questions
+      properties:
+        prd_id:
+          type: string
+          description: Generated PRD session ID
+        questions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClarificationQuestion'
+          description: Clarification questions
+        similar_projects:
+          type: array
+          items:
+            type: object
+          description: Similar existing projects
+        concepts:
+          type: array
+          items:
+            type: string
+          description: Extracted concepts
+
+    ClarificationQuestion:
+      type: object
+      required:
+        - id
+        - question
+        - category
+        - required
+      properties:
+        id:
+          type: string
+          description: Question ID
+        question:
+          type: string
+          description: Clarification question text
+        category:
+          type: string
+          description: Question category
+        required:
+          type: boolean
+          default: true
+          description: Is this question required?
+        help_text:
+          type: string
+          description: Help text for the question
+
+    Phase1Request:
+      type: object
+      required:
+        - prd_id
+        - answers
+      properties:
+        prd_id:
+          type: string
+          description: PRD session ID
+        answers:
+          type: object
+          additionalProperties:
+            type: string
+          description: Answers to clarification questions
+
+    Phase1Response:
+      type: object
+      required:
+        - prd_id
+        - validations
+        - ready_for_phase2
+        - overall_confidence
+      properties:
+        prd_id:
+          type: string
+          description: PRD session ID
+        validations:
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationSummary'
+          description: Answer validations
+        ready_for_phase2:
+          type: boolean
+          description: Ready to proceed to next phase
+        overall_confidence:
+          type: number
+          minimum: 0
+          maximum: 1
+          description: Overall validation confidence
+
+    ValidationSummary:
+      type: object
+      required:
+        - question_id
+        - answer
+        - confidence
+      properties:
+        question_id:
+          type: string
+          description: Question ID
+        answer:
+          type: string
+          description: User answer
+        confidence:
+          type: number
+          minimum: 0
+          maximum: 1
+          description: Validation confidence
+        suggestions:
+          type: array
+          items:
+            type: string
+          description: Improvement suggestions
+
+    ValidationRequest:
+      type: object
+      required:
+        - content
+      properties:
+        content:
+          type: string
+          minLength: 10
+          maxLength: 5000
+          description: Content to validate
+        context:
+          type: object
+          description: Validation context
+        section_type:
+          type: string
+          description: Type of content section
+        project_id:
+          type: string
+          description: Associated project ID
+
+    ValidationResponse:
+      type: object
+      required:
+        - validation_id
+        - confidence
+        - passes_threshold
+        - entity_validation
+        - community_validation
+        - global_validation
+        - requires_human_review
+        - timestamp
+      properties:
+        validation_id:
+          type: string
+          description: Validation result ID
+        confidence:
+          type: number
+          minimum: 0
+          maximum: 1
+          description: Overall confidence score
+        passes_threshold:
+          type: boolean
+          description: Meets validation threshold
+        entity_validation:
+          type: object
+          description: Entity-level validation results
+        community_validation:
+          type: object
+          description: Community-level validation results
+        global_validation:
+          type: object
+          description: Global-level validation results
+        corrections:
+          type: array
+          items:
+            type: string
+          description: Suggested corrections
+        requires_human_review:
+          type: boolean
+          description: Requires manual review
+        timestamp:
+          type: string
+          format: date-time
+          description: Validation timestamp
+
+    DashboardMetrics:
+      type: object
+      required:
+        - active_prds
+        - completed_prds
+        - average_quality_score
+        - time_saved_hours
+        - total_users
+        - validation_accuracy
+      properties:
+        active_prds:
+          type: integer
+          description: Number of active PRDs
+        completed_prds:
+          type: integer
+          description: Number of completed PRDs
+        average_quality_score:
+          type: number
+          description: Average quality score
+        time_saved_hours:
+          type: number
+          description: Estimated time saved in hours
+        total_users:
+          type: integer
+          description: Total number of users
+        validation_accuracy:
+          type: number
+          description: GraphRAG validation accuracy
+
+    PRDListResponse:
+      type: object
+      required:
+        - prds
+        - total_count
+        - page
+        - page_size
+        - has_more
+      properties:
+        prds:
+          type: array
+          items:
+            $ref: '#/components/schemas/PRDSummary'
+          description: List of PRDs
+        total_count:
+          type: integer
+          description: Total number of PRDs
+        page:
+          type: integer
+          description: Current page
+        page_size:
+          type: integer
+          description: Page size
+        has_more:
+          type: boolean
+          description: More pages available
+
+    PRDSummary:
+      type: object
+      required:
+        - id
+        - title
+        - status
+        - quality_score
+        - created_at
+        - created_by
+        - sections_count
+        - last_updated
+      properties:
+        id:
+          type: string
+          description: PRD ID
+        title:
+          type: string
+          description: PRD title
+        status:
+          type: string
+          description: PRD status
+        quality_score:
+          type: number
+          description: Quality score
+        created_at:
+          type: string
+          format: date-time
+          description: Creation date
+        created_by:
+          type: string
+          description: Creator name
+        sections_count:
+          type: integer
+          description: Number of sections
+        last_updated:
+          type: string
+          format: date-time
+          description: Last update date
+
+    QualityTrend:
+      type: object
+      required:
+        - date
+        - average_score
+        - prd_count
+        - validation_accuracy
+      properties:
+        date:
+          type: string
+          description: Date
+        average_score:
+          type: number
+          description: Average quality score
+        prd_count:
+          type: integer
+          description: Number of PRDs created
+        validation_accuracy:
+          type: number
+          description: Validation accuracy
+
+    ValidationInsights:
+      type: object
+      required:
+        - total_validations
+        - average_confidence
+        - hallucination_rate
+        - entity_accuracy
+        - community_accuracy
+        - global_accuracy
+      properties:
+        total_validations:
+          type: integer
+          description: Total validations performed
+        average_confidence:
+          type: number
+          description: Average confidence score
+        hallucination_rate:
+          type: number
+          description: Detected hallucination rate
+        entity_accuracy:
+          type: number
+          description: Entity validation accuracy
+        community_accuracy:
+          type: number
+          description: Community validation accuracy
+        global_accuracy:
+          type: number
+          description: Global validation accuracy
+
+    DashboardData:
+      type: object
+      required:
+        - metrics
+        - recent_prds
+        - quality_trends
+        - validation_insights
+        - top_users
+      properties:
+        metrics:
+          $ref: '#/components/schemas/DashboardMetrics'
+        recent_prds:
+          type: array
+          items:
+            $ref: '#/components/schemas/PRDSummary'
+        quality_trends:
+          type: array
+          items:
+            $ref: '#/components/schemas/QualityTrend'
+        validation_insights:
+          $ref: '#/components/schemas/ValidationInsights'
+        top_users:
+          type: array
+          items:
+            type: object
+
+tags:
+  - name: Health
+    description: System health and status endpoints
+  - name: Authentication
+    description: User authentication and authorization
+  - name: PRD Generation
+    description: PRD creation and management endpoints
+  - name: GraphRAG Validation
+    description: Content validation using GraphRAG
+  - name: Dashboard & Analytics
+    description: Dashboard metrics and analytics
