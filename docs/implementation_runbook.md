@@ -162,6 +162,7 @@ pydantic==2.5.3
 python-jose[cryptography]==3.3.0
 passlib[bcrypt]==1.7.4
 python-multipart==0.0.6
+supabase==2.3.0  # Supabase Python client
 neo4j==5.16.0
 redis==5.0.1
 celery==5.3.4
@@ -179,10 +180,12 @@ httpx==0.26.0
 pip install -r backend/requirements.txt
 ```
 
-### Step 1.4: Setup Neo4j Database
+### Step 1.4: Setup Supabase and Neo4j Databases
 
 ```bash
-# Docker compose for Neo4j
+# Create infrastructure directory and Docker compose file
+mkdir -p infrastructure/docker
+cd infrastructure/docker
 ```
 
 ```yaml
@@ -190,6 +193,102 @@ pip install -r backend/requirements.txt
 version: '3.8'
 
 services:
+  # Supabase Services (Self-hosted stack)
+  supabase-db:
+    image: supabase/postgres:15.1.0.117
+    container_name: supabase-db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_HOST: /var/run/postgresql
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: your-super-secret-password
+      JWT_SECRET: your-super-secret-jwt-token
+      JWT_EXP: 3600
+    volumes:
+      - supabase_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: pg_isready -U postgres -h localhost
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  supabase-auth:
+    image: supabase/gotrue:v2.132.3
+    container_name: supabase-auth
+    depends_on:
+      - supabase-db
+    ports:
+      - "9999:9999"
+    environment:
+      GOTRUE_API_HOST: 0.0.0.0
+      GOTRUE_API_PORT: 9999
+      API_EXTERNAL_URL: http://localhost:9999
+      GOTRUE_DB_DRIVER: postgres
+      GOTRUE_DB_DATABASE_URL: postgres://postgres:your-super-secret-password@supabase-db:5432/postgres?search_path=auth
+      GOTRUE_JWT_SECRET: your-super-secret-jwt-token
+      GOTRUE_JWT_EXP: 3600
+      GOTRUE_SITE_URL: http://localhost:3000
+      GOTRUE_MAILER_AUTOCONFIRM: true
+      GOTRUE_EXTERNAL_EMAIL_ENABLED: false
+
+  supabase-realtime:
+    image: supabase/realtime:v2.27.5
+    container_name: supabase-realtime
+    depends_on:
+      - supabase-db
+    ports:
+      - "4000:4000"
+    environment:
+      DB_HOST: supabase-db
+      DB_PORT: 5432
+      DB_NAME: postgres
+      DB_USER: postgres
+      DB_PASSWORD: your-super-secret-password
+      DB_SSL: "false"
+      PORT: 4000
+      JWT_SECRET: your-super-secret-jwt-token
+      REPLICATION_MODE: RLS
+      REPLICATION_POLL_INTERVAL: 100
+      SECURE_CHANNELS: "true"
+      SLOT_NAME: supabase_realtime_rls
+      TEMPORARY_SLOT: "true"
+
+  supabase-storage:
+    image: supabase/storage-api:v0.43.11
+    container_name: supabase-storage
+    depends_on:
+      - supabase-db
+    ports:
+      - "5000:5000"
+    environment:
+      ANON_KEY: your-anon-key
+      SERVICE_KEY: your-service-key
+      PROJECT_REF: local
+      POSTGREST_URL: http://supabase-postgrest:3000
+      PGRST_JWT_SECRET: your-super-secret-jwt-token
+      DATABASE_URL: postgres://postgres:your-super-secret-password@supabase-db:5432/postgres
+      FILE_SIZE_LIMIT: 52428800
+      STORAGE_BACKEND: file
+      FILE_STORAGE_BACKEND_PATH: /var/lib/storage
+    volumes:
+      - supabase_storage_data:/var/lib/storage
+
+  supabase-postgrest:
+    image: postgrest/postgrest:v11.2.2
+    container_name: supabase-postgrest
+    depends_on:
+      - supabase-db
+    ports:
+      - "3000:3000"
+    environment:
+      PGRST_DB_URI: postgres://postgres:your-super-secret-password@supabase-db:5432/postgres
+      PGRST_DB_SCHEMAS: public,storage,auth
+      PGRST_DB_ANON_ROLE: anon
+      PGRST_JWT_SECRET: your-super-secret-jwt-token
+
+  # Neo4j for GraphRAG
   neo4j:
     image: neo4j:5.15-enterprise
     container_name: strategic-planning-neo4j
@@ -207,6 +306,7 @@ services:
       - neo4j_data:/data
       - neo4j_logs:/logs
 
+  # Redis for caching and queues
   redis:
     image: redis:7-alpine
     container_name: strategic-planning-redis
@@ -216,6 +316,8 @@ services:
       - redis_data:/data
 
 volumes:
+  supabase_db_data:
+  supabase_storage_data:
   neo4j_data:
   neo4j_logs:
   redis_data:
@@ -239,12 +341,12 @@ import uvicorn
 
 from api.endpoints import auth, prd, dashboard
 from core.config import settings
-from core.database import init_neo4j
+from core.database import init_databases
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup
-    await init_neo4j()
+    await init_databases()
     yield
     # Shutdown
     # Clean up resources
@@ -273,11 +375,12 @@ if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
 ```
 
-### Step 2.2: Neo4j Connection and Schema
+### Step 2.2: Supabase and Neo4j Database Connections
 
 ```python
 # backend/core/database.py
 from neo4j import AsyncGraphDatabase
+from supabase import create_client, Client
 from typing import Optional
 import os
 from dotenv import load_dotenv
@@ -310,10 +413,33 @@ class Neo4jConnection:
         if self.driver:
             await self.driver.close()
 
-db = Neo4jConnection()
+class SupabaseConnection:
+    def __init__(self):
+        self.client: Optional[Client] = None
+    
+    async def init(self):
+        # Initialize Supabase client
+        supabase_url = os.getenv("SUPABASE_URL", "http://localhost:3000")
+        supabase_key = os.getenv("SUPABASE_ANON_KEY", "your-anon-key")
+        self.client = create_client(supabase_url, supabase_key)
+    
+    def get_client(self) -> Client:
+        return self.client
+
+# Database connections
+neo4j_db = Neo4jConnection()
+supabase_db = SupabaseConnection()
+
+async def init_databases():
+    """Initialize both Neo4j and Supabase connections"""
+    await neo4j_db.init()
+    await supabase_db.init()
+
+# Legacy alias for Neo4j
+db = neo4j_db
 
 async def init_neo4j():
-    await db.init()
+    await neo4j_db.init()
 ```
 
 ### Step 2.3: GraphRAG Service Implementation
@@ -399,6 +525,7 @@ from typing import Dict, List
 from pydantic import BaseModel
 from services.graphrag.graphrag_service import GraphRAGService
 from services.llm.llm_service import LLMService
+from core.database import supabase_db
 
 router = APIRouter()
 
@@ -428,8 +555,17 @@ async def initiate_prd(input: PRDPhase0Input):
         similar_projects
     )
     
-    # Create PRD session
+    # Create PRD session in Supabase
     prd_id = await create_prd_session(input.user_id, input.initial_description)
+    
+    # Store in Supabase for user session management
+    supabase_client = supabase_db.get_client()
+    await supabase_client.table('prd_sessions').insert({
+        'id': prd_id,
+        'user_id': input.user_id,
+        'initial_description': input.initial_description,
+        'status': 'phase0_complete'
+    }).execute()
     
     return {
         "prd_id": prd_id,
@@ -452,8 +588,16 @@ async def clarify_objectives(input: PRDPhase1Input):
             "confidence": validation['confidence']
         })
     
-    # Store validated answers
+    # Store validated answers in Supabase
     await store_phase1_answers(input.prd_id, input.answers, validations)
+    
+    # Update PRD session status in Supabase
+    supabase_client = supabase_db.get_client()
+    await supabase_client.table('prd_sessions').update({
+        'phase1_answers': input.answers,
+        'validations': validations,
+        'status': 'phase1_complete'
+    }).eq('id', input.prd_id).execute()
     
     return {
         "prd_id": input.prd_id,
@@ -464,7 +608,76 @@ async def clarify_objectives(input: PRDPhase1Input):
 
 ## Phase 3: Frontend Implementation (Day 8-12)
 
-### Step 3.1: Authentication Components
+### Step 3.1: Supabase Authentication Integration
+
+First, configure Nuxt.js to use Supabase authentication:
+
+```bash
+# Install Supabase client for Nuxt.js
+npm install @supabase/supabase-js @nuxtjs/supabase
+```
+
+```typescript
+// frontend/nuxt.config.ts - Add Supabase module
+export default defineNuxtConfig({
+  modules: [
+    '@nuxt/ui',
+    '@nuxtjs/tailwindcss',
+    '@pinia/nuxt',
+    '@vueuse/nuxt',
+    '@nuxtjs/google-fonts',
+    '@nuxtjs/supabase'  // Add Supabase module
+  ],
+  supabase: {
+    url: process.env.SUPABASE_URL,
+    key: process.env.SUPABASE_ANON_KEY,
+    redirectOptions: {
+      login: '/auth/login',
+      callback: '/auth/callback',
+      exclude: ['/auth/*']
+    }
+  },
+  // ... rest of config
+})
+```
+
+```typescript
+// frontend/composables/useSupabaseAuth.ts
+export const useSupabaseAuth = () => {
+  const supabase = useSupabaseClient()
+  const user = useSupabaseUser()
+
+  const signIn = async (email: string, password: string) => {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    })
+    return { data, error }
+  }
+
+  const signUp = async (email: string, password: string) => {
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+    })
+    return { data, error }
+  }
+
+  const signOut = async () => {
+    const { error } = await supabase.auth.signOut()
+    return { error }
+  }
+
+  return {
+    user,
+    signIn,
+    signUp,
+    signOut,
+  }
+}
+```
+
+### Step 3.2: Authentication Components
 
 ```vue
 <!-- frontend/components/auth/LoginForm.vue -->
@@ -523,15 +736,18 @@ const state = reactive({
 
 const loading = ref(false)
 
+const { signIn } = useSupabaseAuth()
+
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   loading.value = true
   try {
-    const { data } = await $fetch('/api/auth/login', {
-      method: 'POST',
-      body: event.data
-    })
+    const { data, error } = await signIn(event.data.email, event.data.password)
     
-    // Store token and redirect
+    if (error) {
+      throw error
+    }
+    
+    // Redirect to dashboard on successful login
     await navigateTo('/dashboard')
   } catch (error) {
     console.error('Login failed:', error)
@@ -542,7 +758,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 </script>
 ```
 
-### Step 3.2: PRD Creation Workflow Components
+### Step 3.3: PRD Creation Workflow Components
 
 ```vue
 <!-- frontend/components/prd/Phase0.vue -->
@@ -627,7 +843,7 @@ async function handleSubmit() {
 </script>
 ```
 
-### Step 3.3: Dashboard Implementation
+### Step 3.4: Dashboard Implementation
 
 ```vue
 <!-- frontend/pages/dashboard.vue -->
@@ -701,8 +917,21 @@ async function handleSubmit() {
 </template>
 
 <script setup lang="ts">
-const { data: metrics } = await useFetch('/api/dashboard/metrics')
-const { data: prds, pending: loading } = await useFetch('/api/dashboard/prds')
+// Use Supabase for dashboard data with authentication
+const user = useSupabaseUser()
+const supabase = useSupabaseClient()
+
+const { data: metrics } = await useLazyAsyncData('dashboard-metrics', async () => {
+  if (!user.value) return null
+  const { data } = await supabase.from('dashboard_metrics').select('*').eq('user_id', user.value.id).single()
+  return data
+})
+
+const { data: prds, pending: loading } = await useLazyAsyncData('user-prds', async () => {
+  if (!user.value) return []
+  const { data } = await supabase.from('prd_sessions').select('*').eq('user_id', user.value.id).order('created_at', { ascending: false })
+  return data
+})
 
 const columns = [
   { key: 'title', label: 'Title' },

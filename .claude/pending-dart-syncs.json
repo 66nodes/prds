@@ -40,5 +40,11 @@
     "title": "Prd",
     "content_preview": "# Product Requirements Document: AI-Powered Strategic Planning Platform\n\n## Executive Summary\n\nThe **AI-Powered Strategic Planning Platform** is a groundbreaking enterprise solution that transforms we...",
     "timestamp": "2025-08-29T15:02:10.842372"
+  },
+  {
+    "file_path": "docs/git-instructions.md",
+    "title": "Git Instructions",
+    "content_preview": "# GitHub Actions Integration Guide\n\n## Overview\n\nThis document provides comprehensive instructions for setting up and using GitHub Actions workflows for the AI-Powered Strategic Planning Platform. The...",
+    "timestamp": "2025-08-30T21:35:55.063574"
   }
 ]

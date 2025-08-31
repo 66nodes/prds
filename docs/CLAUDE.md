@@ -18,7 +18,7 @@ This guide optimizes Claude's capabilities for the AI-Powered Strategic Planning
 │             Nuxt.js 4 Frontend                       │
 │  ┌────────────┬────────────┬────────────────────┐  │
 │  │    Auth    │  Dashboard  │  PRD Workflow UI   │  │
-│  │  (JWT/RBAC)│  (Metrics)  │  (Conversational)  │  │
+│  │(Supabase)  │  (Metrics)  │  (Conversational)  │  │
 │  └────────────┴────────────┴────────────────────┘  │
 └─────────────────────────┬───────────────────────────┘
                           │ HTTPS/REST API
@@ -44,6 +44,7 @@ This guide optimizes Claude's capabilities for the AI-Powered Strategic Planning
 - GraphRAG validation logic implementation
 - Nuxt.js 4 component development with TypeScript
 - Design system implementation (ink/indigo theme)
+- Supabase authentication and real-time integration
 - Hallucination prevention strategies
 - Performance optimization and monitoring
 
@@ -211,8 +212,8 @@ Provide:
 ```
 Create FastAPI endpoint for planning platform:
 Function: [specific capability]
-Authentication: JWT with RBAC
-Integration: Neo4j + LlamaIndex + OpenRouter
+Authentication: Supabase Auth with RLS
+Integration: Supabase + Neo4j + LlamaIndex + OpenRouter
 
 Requirements:
 - Async/await patterns
@@ -221,6 +222,7 @@ Requirements:
 - Circuit breaker pattern
 - OpenTelemetry tracing
 - GraphRAG validation hooks
+- Supabase client integration
 
 Include tests and error handling.
 ```
@@ -400,19 +402,19 @@ Response format:
 
 ### Authentication & Authorization
 
-**JWT/RBAC Implementation:**
+**Supabase Auth Implementation:**
 ```
 Implement authentication for platform:
-Frontend: Nuxt.js auth module
-Backend: FastAPI + JWT
-Roles: Admin, Project Manager, Contributor, Viewer
+Frontend: Nuxt.js with Supabase client
+Backend: FastAPI + Supabase Auth
+Roles: Admin, Project Manager, Contributor, Viewer (via RLS)
 
 Requirements:
-- Secure token storage
-- Refresh token rotation
+- Supabase session management
+- Row-level security (RLS) policies
 - Role-based route guards
-- API endpoint protection
-- Session timeout handling
+- API endpoint protection with Supabase Auth verification
+- Session timeout handling via Supabase
 ```
 
 ### GraphRAG Security
@@ -515,7 +517,7 @@ Include cost projections and timeline.
    - Performance monitoring
 
 4. **Security Standards**
-   - JWT authentication required
+   - Supabase authentication required
    - Rate limiting on all endpoints
    - Input validation at all layers
    - Encryption at rest and in transit

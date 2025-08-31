@@ -697,6 +697,8 @@ Agent Assignments:
 
 - @./.taskmaster/CLAUDE.md
 
+See @README for project overview and @package.json for available npm commands for this project.
+
 ## Conclusion
 
 This enhanced guide establishes Claude as the strategic technical partner within a sophisticated multi-agent ecosystem for building an enterprise-grade AI-powered strategic planning platform. The Context Manager ensures coherent coordination across all specialized agents while maintaining project context and quality standards.

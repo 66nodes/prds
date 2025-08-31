@@ -1,0 +1,67 @@
+{
+  "LOG": false,
+  "OPENAI_API_KEY": "",
+  "OPENAI_BASE_URL": "",
+  "OPENAI_MODEL": "",
+  "Providers": [
+    {
+      "name": "openrouter",
+      "api_base_url": "https://openrouter.ai/api/v1/chat/completions",
+      "api_key": "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",
+      "models": [
+        "qwen/qwen3-coder:free",
+        "deepseek/deepseek-chat-v3.1:free",
+        "google/gemini-2.5-pro-preview",
+        "qwen/qwen3-30b-a3b-thinking-2507",
+        "moonshotai/kimi-k2:free",
+        "qwen/qwen3-coder",
+        "deepseek/deepseek-chat-v3.1"
+      ]
+    },
+    {
+      "name": "deepseek",
+      "api_base_url": "https://api.deepseek.com/chat/completions",
+      "api_key": "sk-d7a46c1e11384ae287cca7585f2d5760",
+      "models": ["deepseek-chat", "deepseek-reasoner"],
+      "transformer": {
+        "use": ["deepseek"],
+        "deepseek-chat": {
+          "use": ["tooluse"]
+        }
+      }
+    },
+    {
+      "name": "ollama",
+      "api_base_url": "http://localhost:11434/v1/chat/completions",
+      "api_key": "ollama",
+      "models": ["codeqwen:7b"]
+    },
+    {
+      "name": "dashscope",
+      "api_base_url": "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions",
+      "api_key": "sk-549a6ce268584621b46190045a0153b5",
+      "models": ["qwen3-coder-plus"],
+      "transformer": {
+        "use": [
+          [
+            "maxtoken",
+            {
+              "max_tokens": 65536
+            }
+          ],
+          "enhancetool"
+        ]
+      }
+    }
+
+  ],
+  "Router": {
+    "default": "openrouter,qwen/qwen3-coder",
+    "background": "openrouter,deepseek/deepseek-chat-v3.1:free",
+    "think": "openrouter,deepseek/deepseek-chat-v3.1",
+    "longContext": "openrouter,qwen/qwen3-coder",
+    "longContextThreshold": 60000,
+    "webSearch": "gemini,gemini-2.5-flash"
+  }
+}
+

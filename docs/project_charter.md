@@ -40,7 +40,7 @@ Based on enterprise AI best practices showing MVPs should be delivered in 4-8 we
 - **Single Document Type**: Project Requirements Document (PRD) generation only
 - **Simplified AI Workflow**: 3-phase process (Concept → Clarification → Generation)
 - **Basic GraphRAG Integration**: Entity and community validation (not full global validation)
-- **Essential Authentication**: JWT-based login with basic RBAC (Admin, User roles only)
+- **Essential Authentication**: Supabase Auth with RLS (Admin, User roles only)
 - **Standard Export**: PDF and Word document generation
 
 #### Technical Foundation

@@ -100,9 +100,10 @@ Strategic planning tools market growing at **14.2% CAGR** with increasing demand
 - **1 UX Designer**: Design system evolution
 
 ### Infrastructure
-- **Neo4j AuraDB Enterprise**: $5k/mo (scaling)
+- **Supabase (Docker Self-Hosted)**: Database, Auth, Real-time, Storage
+- **Neo4j AuraDB Enterprise**: $5k/mo (GraphRAG scaling)
 - **OpenRouter API**: $2k/mo (LLM costs)
-- **AWS/GCP Infrastructure**: $8k/mo (compute/storage)
+- **AWS/GCP Infrastructure**: $6k/mo (compute/storage - reduced with Supabase)
 - **Monitoring Suite**: $1k/mo (Datadog/New Relic)
 
 ### Budget Allocation
