@@ -46,5 +46,11 @@
     "title": "Git Instructions",
     "content_preview": "# GitHub Actions Integration Guide\n\n## Overview\n\nThis document provides comprehensive instructions for setting up and using GitHub Actions workflows for the AI-Powered Strategic Planning Platform. The...",
     "timestamp": "2025-08-30T21:35:55.063574"
+  },
+  {
+    "file_path": "/home/jgrewal/projects/website/prds/docs/review_findings.md",
+    "title": "Review Findings",
+    "content_preview": "# Project Review Findings: AI-Powered Strategic Planning Platform\n\n## Executive Summary\n\nThis document presents findings from a comprehensive architectural review of the AI-Powered Strategic Planning ...",
+    "timestamp": "2025-08-30T22:11:58.902003"
   }
 ]
