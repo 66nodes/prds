@@ -1,16 +1,24 @@
 {
   "validation_info": {
-    "start_time": "2025-09-01 13:17:51.630483",
+    "start_time": "2025-09-01 13:20:53.555228",
     "system_version": "2.2.0",
     "validation_type": "end_to_end",
-    "end_time": "2025-09-01 13:17:52.298641",
-    "total_duration_seconds": 0.6681632995605469
+    "end_time": "2025-09-01 13:20:54.208521",
+    "total_duration_seconds": 0.653296709060669
   },
   "component_validations": {
     "context_manager": {
-      "component_healthy": false,
-      "error": "[Errno 2] No such file or directory: '/home/jgrewal/projects/website/prds/.claude/logs/orchestrator.log'",
-      "validation_passed": false
+      "component_healthy": true,
+      "configuration_loaded": true,
+      "agents_loaded": true,
+      "agents_count": 5,
+      "dependency_graph_valid": true,
+      "workflow_execution": {
+        "completed": true,
+        "execution_time_seconds": 0.0021393299102783203,
+        "agents_executed": 5
+      },
+      "validation_passed": true
     },
     "monitoring": {
       "component_healthy": true,
@@ -39,27 +47,27 @@
   },
   "performance_metrics": {
     "workflow_execution": {
-      "execution_time_seconds": 0.0021257400512695312,
+      "execution_time_seconds": 0.0019783973693847656,
       "performance_acceptable": true,
-      "agents_per_second": 2352.1220278151636
+      "agents_per_second": 2527.298144131116
     },
     "agent_coordination": {
-      "coordination_time_seconds": 0.1003868579864502,
-      "parallel_efficiency": 49.807316418598134,
+      "coordination_time_seconds": 0.10026407241821289,
+      "parallel_efficiency": 49.868311543784394,
       "all_agents_completed": true
     },
     "cache_performance": {
-      "operations_per_second": 85068.53260318426,
-      "average_operation_time_ms": 0.011755228042602539,
+      "operations_per_second": 171897.70491803277,
+      "average_operation_time_ms": 0.005817413330078125,
       "performance_acceptable": true
     },
     "monitoring_overhead": {
-      "overhead_per_update_ms": 0.008368492126464844,
+      "overhead_per_update_ms": 0.007700920104980468,
       "overhead_acceptable": true
     },
     "memory_usage": {
-      "rss_mb": 29.02734375,
-      "vms_mb": 36.26171875,
+      "rss_mb": 28.75,
+      "vms_mb": 36.04296875,
       "memory_acceptable": true
     }
   },
@@ -67,25 +75,25 @@
     "component_health": {
       "threshold": "All components healthy",
       "status": "failed",
-      "healthy_components": "2/4"
+      "healthy_components": "3/4"
     },
     "performance_targets": {
       "workflow_execution_time": {
         "threshold": 30.0,
         "unit": "seconds",
-        "actual": 0.0021257400512695312,
+        "actual": 0.0019783973693847656,
         "passed": true
       },
       "cache_hit_rate": {
         "threshold": 0.7,
         "unit": "percentage",
-        "actual": 85068.53260318426,
+        "actual": 171897.70491803277,
         "passed": true
       },
       "memory_usage": {
         "threshold": 500.0,
         "unit": "MB",
-        "actual": 29.02734375,
+        "actual": 28.75,
         "passed": true
       }
     },
