@@ -455,3 +455,6 @@ async function enhancedPRDGeneration(requirement: string) {
 7. **Better Context Management** - Strategies for handling large contexts
 8. **More Specific Anti-Patterns** - Clear "never do this" examples
 
+## Task Master AI Instructions
+**Import Task Master's development workflow commands and guidelines, treat as if import is in the main CLAUDE.md file.**
+@./.taskmaster/CLAUDE.md

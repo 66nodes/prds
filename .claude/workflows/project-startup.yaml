@@ -2,15 +2,210 @@
 name: project-startup
 description: Full-context setup and orchestration for launching an AI-powered strategic planning project.
 entry_point: context-manager
+version: "1.0.0"
+priority: high
+
+metadata:
+  project: "AI-Powered Strategic Planning Platform"
+  tech_stack: ["nuxt-4", "fastapi", "neo4j", "graphrag"]
+  phase: "mvp-development"
+  complexity: high
 
 steps:
   - id: initialize_context
+    name: "Context Manager Initialization"
     description: Launch multi-agent setup and document analysis
-    run: .claude/agents/context-manager.yaml
-
-  - id: announce_context_ready
     agent: context-manager
+    timeout: 300s
     inputs:
       task: >
-        Provide a summary of available docs, architecture patterns, and initialized agents.
-        Confirm readiness for feature planning and multi-agent workflows.
+        Initialize project context for the AI-powered strategic planning platform.
+        Analyze project structure, documentation, and prepare multi-agent coordination.
+        Current phase: MVP Development. Architecture: Nuxt.js 4 + FastAPI + Neo4j GraphRAG.
+    outputs:
+      - project_state
+      - agent_registry
+      - coordination_matrix
+
+  - id: discover_docs
+    name: "Documentation Discovery & Analysis"
+    description: Comprehensive analysis of docs/ folder to extract project context
+    agent: documentation-librarian
+    dependencies: [initialize_context]
+    timeout: 180s
+    inputs:
+      path: "./docs"
+      include_files: true
+      analysis_depth: comprehensive
+      focus_areas:
+        - "PRD.md (master document)"
+        - "005-TRD.md (technical architecture)"
+        - "006-Rag-Stratety.md (GraphRAG strategy)"
+        - "008-ui-ux-requirements.md (frontend specs)"
+        - "review_findings.md (known issues)"
+    outputs:
+      - document_index
+      - architecture_patterns
+      - business_requirements
+
+  - id: scan_for_hallucination_risks
+    name: "Hallucination Risk Assessment"
+    description: Run hallucination-trace-agent to flag semantic inconsistencies in docs
+    agent: hallucination-trace-agent
+    dependencies: [discover_docs]
+    timeout: 120s
+    inputs:
+      folder: "./docs"
+      threshold: 0.02
+      validation_mode: comprehensive
+      focus_documents:
+        - "PRD.md"
+        - "005-TRD.md"
+        - "006-Rag-Stratety.md"
+    outputs:
+      - risk_assessment
+      - validation_scores
+      - recommendations
+
+  - id: extract_architecture
+    name: "Architecture Pattern Extraction"
+    description: Extract architecture assumptions and system design elements
+    agent: docs-architect
+    dependencies: [discover_docs]
+    timeout: 240s
+    inputs:
+      files:
+        - "./docs/004-FRD.md"
+        - "./docs/005-TRD.md" 
+        - "./docs/Strategic-Planning-document.md"
+        - "./docs/006-Rag-Stratety.md"
+        - "./docs/010-FrontEnd-to-Orchestration.md"
+      analysis_type: "technical_architecture"
+      output_format: "structured_summary"
+    outputs:
+      - architecture_summary
+      - integration_patterns
+      - performance_requirements
+
+  - id: create_context_summary
+    name: "Project Context Documentation"
+    description: Generate comprehensive README.md and enhanced CLAUDE.md for docs/ folder
+    agent: draft-agent
+    dependencies: [discover_docs, extract_architecture]
+    timeout: 180s
+    inputs:
+      task: >
+        Create enhanced documentation for the ./docs folder:
+        1. Update README.md with current project status and navigation guide
+        2. Enhance CLAUDE.md with agent integration patterns and optimization context
+        3. List what each file contains, its purpose, and usage patterns
+        4. Structure output using token-efficient formatting
+        5. Include architecture decisions and integration points
+      context_sources:
+        - document_index
+        - architecture_summary
+        - business_requirements
+    outputs:
+      - enhanced_readme
+      - agent_context_guide
+      - navigation_patterns
+
+  - id: initialize_agent_coordination
+    name: "Agent Coordination Setup"
+    description: Configure initial activation graph and agent dependencies
+    agent: ai-workflow-designer  
+    dependencies: [initialize_context, extract_architecture]
+    timeout: 150s
+    inputs:
+      source_path: "./docs"
+      agent_registry: "agent_registry"
+      coordination_patterns:
+        - "graphrag_implementation"
+        - "fullstack_development"
+        - "performance_optimization"
+        - "quality_assurance"
+      workflow_types:
+        - "sequential"
+        - "parallel"
+        - "hierarchical"
+    outputs:
+      - coordination_graph
+      - agent_activation_rules
+      - workflow_templates
+
+  - id: launch_dev_workflow
+    name: "Development Workflow Initialization"
+    description: Initialize Task Master integration and fullstack development patterns
+    agent: task-orchestrator
+    dependencies: [initialize_agent_coordination]
+    timeout: 120s
+    inputs:
+      workflow: fullstack-init
+      project_type: "enterprise_ai_platform"
+      tech_stack: ["nuxt-4", "fastapi", "neo4j", "graphrag"]
+      development_phase: "mvp"
+      quality_gates:
+        - "graphrag_validation"
+        - "performance_testing"
+        - "security_audit"
+    outputs:
+      - development_workflow
+      - task_templates
+      - quality_checkpoints
+
+  - id: announce_readiness
+    name: "System Readiness Confirmation"
+    description: Provide comprehensive summary of initialized system
+    agent: context-manager
+    dependencies: [create_context_summary, launch_dev_workflow]
+    timeout: 60s
+    inputs:
+      task: >
+        Provide a comprehensive summary of the initialized AI-powered strategic planning platform:
+        
+        1. **Documentation Summary**: Available docs, architecture patterns, and key decisions
+        2. **Agent Ecosystem**: Initialized agents and their coordination patterns
+        3. **Development Readiness**: Task Master integration and workflow templates
+        4. **Architecture Overview**: Technical stack, performance targets, and integration points
+        5. **Next Steps**: Recommended workflows for feature planning and development
+        
+        Format as a structured executive summary with actionable next steps.
+        Include any critical issues or gaps that need immediate attention.
+    outputs:
+      - readiness_summary
+      - next_steps
+      - system_status
+
+validation:
+  success_criteria:
+    - project_context_initialized: true
+    - documentation_analyzed: true
+    - agents_coordinated: true
+    - workflows_ready: true
+    - hallucination_risks_assessed: true
+  performance_targets:
+    - total_execution_time: "<20 minutes"
+    - context_accuracy: ">95%"
+    - agent_coordination_success: ">90%"
+  
+error_handling:
+  retry_policy:
+    max_retries: 2
+    backoff_strategy: "exponential"
+  fallback_actions:
+    - continue_with_warnings
+    - manual_intervention_required
+  notification_channels:
+    - agent_logs
+    - system_dashboard
+
+monitoring:
+  metrics:
+    - execution_time
+    - success_rate
+    - context_quality
+    - agent_performance
+  logging:
+    level: "info"
+    include_context: true
+    agent_interactions: true

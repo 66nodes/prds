@@ -2,232 +2,573 @@
   "master": {
     "tasks": [
       {
-        "id": 12,
-        "title": "Initialize Project Repository and Environment",
-        "description": "Set up the foundational codebase, Docker Compose files, and environment configuration for frontend, backend, and database services.",
-        "details": "Create GitHub repository. Scaffold Nuxt.js 4 frontend, FastAPI backend, Neo4j and PostgreSQL containers. Configure environment variables for local, staging, and production. Integrate Supabase for authentication and secrets management.",
-        "testStrategy": "Verify all containers start successfully. Confirm environment variables load correctly. Run health checks for each service endpoint.",
+        "id": 29,
+        "title": "Initialize Monorepo and Tooling",
+        "description": "Set up a monorepo using pnpm workspaces for frontend and backend, configure ESLint, Prettier, and SonarQube for code quality enforcement.",
+        "details": "Use pnpm v8+ for workspace management. Configure ESLint (latest) with TypeScript strict mode, Prettier for formatting, and SonarQube for continuous code quality. Ensure both Nuxt.js and FastAPI projects are included. Add Husky for pre-commit hooks.",
+        "testStrategy": "Verify linting, formatting, and SonarQube analysis run on commit and CI. Ensure monorepo structure supports both frontend and backend builds.",
         "priority": "high",
         "dependencies": [],
         "status": "pending",
-        "subtasks": []
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Initialize pnpm Workspace Structure",
+            "description": "Set up the root directory for the monorepo, create pnpm-workspace.yaml, and establish 'apps' and 'packages' folders for frontend and backend projects.",
+            "dependencies": [],
+            "details": "Ensure pnpm v8+ is installed. Create the workspace file and directories to support both Nuxt.js and FastAPI projects.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Add Nuxt.js Frontend Project",
+            "description": "Bootstrap a Nuxt.js 4 project within the monorepo under the 'apps' directory, ensuring integration with pnpm workspace.",
+            "dependencies": [
+              "29.1"
+            ],
+            "details": "Use Nuxt.js 4 (latest stable) with Vue 3. Confirm workspace recognition and prepare for TypeScript strict mode configuration.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Add FastAPI Backend Project",
+            "description": "Initialize a FastAPI backend project in the monorepo under the 'apps' directory, ensuring compatibility with pnpm workspace structure.",
+            "dependencies": [
+              "29.1"
+            ],
+            "details": "Set up FastAPI v0.110+ with Python 3.11+. Ensure project is properly isolated and recognized by pnpm workspace.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Configure ESLint with TypeScript Strict Mode",
+            "description": "Install and configure the latest ESLint for both frontend and backend, enabling TypeScript strict mode for Nuxt.js.",
+            "dependencies": [
+              "29.2",
+              "29.3"
+            ],
+            "details": "Set up ESLint configs in each project. For Nuxt.js, enforce strict TypeScript rules in tsconfig and ESLint settings.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "Set Up Prettier for Code Formatting",
+            "description": "Install and configure Prettier in the monorepo for consistent code formatting across all projects.",
+            "dependencies": [
+              "29.2",
+              "29.3"
+            ],
+            "details": "Create shared Prettier configuration at the root. Ensure Prettier runs in both Nuxt.js and FastAPI projects.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 6,
+            "title": "Integrate SonarQube for Continuous Code Quality",
+            "description": "Set up SonarQube analysis for both frontend and backend, integrating with CI/CD pipelines for automated code quality checks.",
+            "dependencies": [
+              "29.4",
+              "29.5"
+            ],
+            "details": "Configure SonarQube projects and CI scripts to analyze code on commit and during CI runs. Validate integration for both Nuxt.js and FastAPI.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 7,
+            "title": "Configure Husky Pre-commit Hooks",
+            "description": "Install and set up Husky to enforce linting and formatting checks before commits in the monorepo.",
+            "dependencies": [
+              "29.4",
+              "29.5"
+            ],
+            "details": "Add Husky hooks to run ESLint and Prettier on staged files. Ensure hooks are active for both frontend and backend code.",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
       },
       {
-        "id": 13,
-        "title": "Implement Authentication and RBAC",
-        "description": "Develop user authentication using Supabase Auth, JWT sessions, and role-based access control (RBAC) for all platform endpoints.",
-        "details": "Integrate Supabase Auth SDK in Nuxt.js frontend and FastAPI backend. Define roles (Viewer, Editor, Admin) and enforce RBAC in API endpoints. Implement SSO and multi-factor authentication support.",
-        "testStrategy": "Unit test login, registration, and role assignment. Attempt unauthorized actions and verify access is denied. Validate JWT expiry and refresh logic.",
+        "id": 30,
+        "title": "Configure Nuxt.js 4 Frontend with TypeScript",
+        "description": "Bootstrap Nuxt.js 4 project with Vue 3 Composition API and strict TypeScript configuration.",
+        "details": "Use Nuxt.js 4 (latest stable) with Vue 3. Enable TypeScript strict mode in tsconfig. Integrate Pinia v3+ for state management. Set up Tailwind CSS v3+ with custom ink/indigo theme. Install Nuxt UI and Reka UI libraries.",
+        "testStrategy": "Run type checks, build the project, and verify UI components render correctly. Confirm theme customization applies globally.",
         "priority": "high",
         "dependencies": [
-          12
+          29
         ],
         "status": "pending",
         "subtasks": []
       },
       {
-        "id": 14,
-        "title": "Design and Build Project Concept Intake UI",
-        "description": "Create a responsive Nuxt.js UI for users to submit high-level project concepts, with auto-classification and similar project retrieval.",
-        "details": "Develop input form (100–2000 chars), auto-classification logic, and semantic search for similar projects using Milvus embeddings. Ensure WCAG 2.1 AA compliance.",
-        "testStrategy": "UI/UX tests for input validation, accessibility, and responsiveness. Validate classification accuracy and semantic match results.",
+        "id": 31,
+        "title": "Set Up FastAPI Backend with Async Patterns",
+        "description": "Initialize FastAPI backend with async support and modular architecture for microservices.",
+        "details": "Use FastAPI v0.110+ with Python 3.11+. Structure code for microservices. Configure uvicorn for async server. Set up basic health check endpoints. Use Pydantic v2+ for data validation.",
+        "testStrategy": "Run unit tests for endpoints using Pytest. Validate async behavior and health check responses.",
         "priority": "high",
         "dependencies": [
-          12,
-          13
+          29
         ],
         "status": "pending",
         "subtasks": []
       },
       {
-        "id": 15,
-        "title": "Implement Entity Extraction and Knowledge Graph Construction",
-        "description": "Parse project concepts into entities and relationships, then build a Neo4j knowledge graph with confidence scoring and provenance tracking.",
-        "details": "Use PydanticAI agent to extract requirements, goals, risks, stakeholders. Store nodes and edges in Neo4j. Assign confidence scores and metadata for auditability.",
-        "testStrategy": "Integration tests for entity extraction accuracy. Validate graph structure and confidence scores. Confirm provenance metadata is stored.",
+        "id": 32,
+        "title": "Implement JWT Authentication with RBAC",
+        "description": "Develop secure authentication system with JWT, role-based access control, email verification, password reset, and session management.",
+        "details": "Use PyJWT v2+ for token handling. Implement RBAC using FastAPI dependencies. Integrate email verification via SendGrid API. Add password reset workflow. Enforce session timeouts and multi-factor authentication using TOTP (PyOTP).",
+        "testStrategy": "Write unit and integration tests for all authentication flows. Perform security audits using OWASP ZAP.",
         "priority": "high",
         "dependencies": [
-          14
+          31
         ],
         "status": "pending",
         "subtasks": []
       },
       {
-        "id": 16,
-        "title": "Develop AI-Driven Clarification Workflow",
-        "description": "Automatically identify gaps in project input and generate clarifying questions, collecting user responses to enrich planning accuracy.",
-        "details": "Implement FastAPI endpoint to detect graph gaps and generate 3–5 context-aware questions. Store user responses in project metadata.",
-        "testStrategy": "Unit test question generation logic. Validate provenance links to graph gaps. Confirm user responses update project context.",
-        "priority": "high",
-        "dependencies": [
-          15
-        ],
-        "status": "pending",
-        "subtasks": []
-      },
-      {
-        "id": 17,
-        "title": "Integrate GraphRAG Validation Pipeline",
-        "description": "Validate AI-generated content against the knowledge graph using entity, community, and global validation layers, scoring each section.",
-        "details": "Implement GraphRAG agent using Microsoft GraphRAG + LlamaIndex. Calculate confidence scores per section. Flag and auto-correct low-confidence content.",
-        "testStrategy": "Unit and integration tests for validation accuracy. Simulate hallucinated content and verify correction loop. Confirm provenance and scoring.",
-        "priority": "high",
-        "dependencies": [
-          15,
-          16
-        ],
-        "status": "pending",
-        "subtasks": []
-      },
-      {
-        "id": 18,
-        "title": "Automate PRD Document Generation",
-        "description": "Generate comprehensive PRDs with validated sections, confidence scores, and traceable sources using orchestrated AI agents.",
-        "details": "Implement Draft Agent for initial content, Judge Agent for critique, and Orchestrator for workflow management. Store PRD documents in PostgreSQL with section-level metadata.",
-        "testStrategy": "End-to-end tests for PRD generation. Validate section structure, scoring, and traceability. Confirm low-confidence sections trigger correction or review.",
-        "priority": "high",
-        "dependencies": [
-          17
-        ],
-        "status": "pending",
-        "subtasks": []
-      },
-      {
-        "id": 19,
-        "title": "Implement Work Breakdown Structure (WBS) Generation",
-        "description": "Decompose validated requirements into atomic tasks, map dependencies, estimate effort, and identify the critical path.",
-        "details": "Use PydanticAI agent to break requirements into 1–2 day tasks. Build dependency DAG in Neo4j. Estimate effort using complexity and historical data. Output JSON schema for tasks.",
-        "testStrategy": "Unit test decomposition logic. Validate dependency mapping and effort estimation. Confirm critical path calculation and output formatting.",
-        "priority": "high",
-        "dependencies": [
-          18
-        ],
-        "status": "pending",
-        "subtasks": []
-      },
-      {
-        "id": 20,
-        "title": "Develop GitHub Integration Layer",
-        "description": "Enable automatic creation of GitHub repositories, issues, milestones, and project boards from WBS tasks and PRDs.",
-        "details": "Implement FastAPI endpoints for GitHub OAuth, repo creation, issue/milestone mapping, and webhook tracking. Use GitHub REST and GraphQL APIs.",
-        "testStrategy": "Integration tests for repo and issue creation. Validate milestone and label mapping. Confirm webhook events update project status.",
-        "priority": "high",
-        "dependencies": [
-          19
-        ],
-        "status": "pending",
-        "subtasks": []
-      },
-      {
-        "id": 21,
-        "title": "Build Export and Sharing Functionality",
-        "description": "Support export of PRDs and WBS in PDF, DOCX, Markdown, JSON formats, and secure sharing with permission controls.",
-        "details": "Implement export service using S3/MinIO for file storage. Generate zipped bundles with embedded traceability. Enforce view/edit permissions on shared links.",
-        "testStrategy": "Unit and integration tests for export formats. Validate permission enforcement and traceability data in exports.",
+        "id": 33,
+        "title": "Integrate Pinia State Management with Persistence",
+        "description": "Configure Pinia for global state management in Nuxt.js with persistent storage.",
+        "details": "Use Pinia v3+ with @pinia/plugin-persistedstate. Store session and user data securely in localStorage. Ensure reactivity and state hydration on reload.",
+        "testStrategy": "Test state persistence across reloads and session changes. Validate security of stored data.",
         "priority": "medium",
         "dependencies": [
-          18,
-          19
+          30
         ],
         "status": "pending",
         "subtasks": []
       },
       {
-        "id": 22,
-        "title": "Implement Quality Assurance Dashboard",
-        "description": "Create a dashboard to display PRD quality metrics, section scores, and trigger feedback or manual review workflows.",
-        "details": "Develop Nuxt.js dashboard UI. Aggregate metrics from PostgreSQL. Implement feedback loop for low-scoring sections. Integrate with audit log for reviewer actions.",
-        "testStrategy": "UI tests for metric display and feedback triggers. Validate reviewer actions are logged and update document status.",
+        "id": 34,
+        "title": "Design GraphRAG Validation Pipeline",
+        "description": "Architect and implement three-tier GraphRAG validation pipeline for entity, community, and global context checks.",
+        "details": "Use Microsoft GraphRAG framework with LlamaIndex v0.10+. Integrate Neo4j Enterprise 5.15+ for knowledge graph. Implement entity-level, pattern-based, and global validation modules. Add confidence scoring (min 80%).",
+        "testStrategy": "Create unit tests for each validation tier. Simulate hallucination scenarios and verify <2% hallucination rate.",
+        "priority": "high",
+        "dependencies": [
+          31
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Define Validation Pipeline Architecture",
+            "description": "Design the overall architecture for the three-tier GraphRAG validation pipeline, specifying the flow between entity, community, and global validation modules.",
+            "dependencies": [],
+            "details": "Document the architectural diagram, data flow, and integration points between Microsoft GraphRAG, LlamaIndex, and Neo4j. Ensure modularity for each validation tier.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Implement Entity-Level Validation Module",
+            "description": "Develop the entity-level validation component to check the accuracy and consistency of individual entities within the knowledge graph.",
+            "dependencies": [
+              "34.1"
+            ],
+            "details": "Use LlamaIndex to extract and validate entities from text chunks. Integrate with Neo4j to cross-check entity existence and attributes. Output validation results with confidence scores.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Develop Community-Level (Pattern-Based) Validation Module",
+            "description": "Create the community-level validation module to detect and validate patterns and relationships among groups of entities.",
+            "dependencies": [
+              "34.1",
+              "34.2"
+            ],
+            "details": "Implement pattern recognition logic using graph traversal and pattern matching in Neo4j. Validate relationship consistency and detect anomalies within communities.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Build Global Context Validation Module",
+            "description": "Construct the global validation module to assess the overall coherence and correctness of the knowledge graph in response to queries.",
+            "dependencies": [
+              "34.1",
+              "34.3"
+            ],
+            "details": "Aggregate results from entity and community modules. Apply global reasoning to ensure the generated output aligns with the entire graph context and domain logic.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "Integrate Confidence Scoring Mechanism",
+            "description": "Implement a confidence scoring system across all validation tiers, enforcing a minimum threshold of 80%.",
+            "dependencies": [
+              "34.2",
+              "34.3",
+              "34.4"
+            ],
+            "details": "Design scoring algorithms that combine entity, pattern, and global validation outputs. Ensure scores are explainable and configurable.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 6,
+            "title": "Add Hallucination Detection and Mitigation",
+            "description": "Develop mechanisms to detect and mitigate hallucinations in LLM-generated outputs, targeting a hallucination rate below 2%.",
+            "dependencies": [
+              "34.2",
+              "34.3",
+              "34.4",
+              "34.5"
+            ],
+            "details": "Implement checks for unsupported or fabricated entities, relationships, and facts. Integrate with validation modules to flag and correct hallucinations.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 7,
+            "title": "Integrate and Orchestrate Validation Pipeline",
+            "description": "Combine all validation modules into a unified, orchestrated pipeline with clear data flow and error handling.",
+            "dependencies": [
+              "34.2",
+              "34.3",
+              "34.4",
+              "34.5",
+              "34.6"
+            ],
+            "details": "Use workflow orchestration tools or custom logic to manage execution order, data passing, and exception handling across validation tiers.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 8,
+            "title": "Design and Implement Testing Strategy",
+            "description": "Develop comprehensive unit and integration tests for each validation tier, including simulation of hallucination scenarios.",
+            "dependencies": [
+              "34.7"
+            ],
+            "details": "Create test cases for entity, community, and global validation. Simulate edge cases and measure hallucination rates, ensuring compliance with quality targets.",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 35,
+        "title": "Integrate Neo4j Enterprise Graph Database",
+        "description": "Set up Neo4j Enterprise 5.15+ for dynamic knowledge graph management and GraphRAG operations.",
+        "details": "Deploy Neo4j using Docker or managed cloud. Use neo4j-driver v5+ for Python integration. Define schema for entities, relationships, and validation metadata. Enable ACID compliance and backup routines.",
+        "testStrategy": "Run integration tests for CRUD operations. Validate schema integrity and backup/restore processes.",
+        "priority": "high",
+        "dependencies": [
+          34
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 36,
+        "title": "Implement OpenRouter LLM Integration",
+        "description": "Connect backend to OpenRouter for multi-model LLM support and fallback strategies.",
+        "details": "Use OpenRouter API v2+. Configure model selection logic for reliability. Implement fallback to secondary models on low confidence. Log all LLM interactions for audit.",
+        "testStrategy": "Test LLM calls with various models. Simulate fallback scenarios and verify correct routing.",
+        "priority": "high",
+        "dependencies": [
+          31
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 37,
+        "title": "Develop Conversational Planning Interface",
+        "description": "Build frontend conversational UI for project input, multi-turn dialogue, and context preservation.",
+        "details": "Use Nuxt UI and Reka UI chat components. Integrate WebSocket for real-time updates. Implement context tracking and human-in-the-loop validation prompts. Store conversation state in Pinia.",
+        "testStrategy": "Perform end-to-end tests for conversation flow, context retention, and validation triggers.",
+        "priority": "high",
+        "dependencies": [
+          33,
+          36
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 38,
+        "title": "Implement Human-in-the-Loop Validation",
+        "description": "Enable manual validation checkpoints in AI-driven workflows for critical decisions.",
+        "details": "Add UI prompts for user validation at key workflow stages. Backend stores validation events and user feedback. Integrate with GraphRAG pipeline for override logic.",
+        "testStrategy": "Test validation triggers and feedback storage. Simulate override scenarios and audit logs.",
+        "priority": "high",
+        "dependencies": [
+          37,
+          34
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 39,
+        "title": "Develop Document Generation Engine",
+        "description": "Create backend service for PRD generation, WBS automation, resource estimation, and dependency mapping.",
+        "details": "Use FastAPI endpoints for document generation. Integrate LlamaIndex for structured output. Implement export to PDF (WeasyPrint), Word (python-docx), and JSON. Automate WBS and resource calculations.",
+        "testStrategy": "Validate output formats and accuracy. Write unit tests for WBS and estimation logic.",
+        "priority": "high",
+        "dependencies": [
+          36,
+          34
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 40,
+        "title": "Implement Real-time Collaboration via WebSocket",
+        "description": "Enable multi-user simultaneous editing, conflict resolution, and live updates using WebSocket.",
+        "details": "Use socket.io v4+ for frontend, FastAPI WebSocket for backend. Implement operational transform for conflict resolution. Track user presence and editing states.",
+        "testStrategy": "Simulate concurrent edits, verify conflict resolution, and test update propagation latency (<200ms).",
+        "priority": "high",
+        "dependencies": [
+          37,
+          31
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 41,
+        "title": "Add Version Control and Change Tracking",
+        "description": "Implement document versioning, change history, and rollback capabilities for collaborative planning.",
+        "details": "Store versions in backend with timestamp and user metadata. Provide UI for viewing history and restoring previous versions. Use diff algorithms for change visualization.",
+        "testStrategy": "Test version creation, rollback, and diff rendering. Validate audit logs for compliance.",
         "priority": "medium",
         "dependencies": [
-          18
+          40
         ],
         "status": "pending",
         "subtasks": []
       },
       {
-        "id": 23,
-        "title": "Develop Monitoring and Observability Stack",
-        "description": "Instrument backend and frontend for logging, metrics, and tracing using Prometheus, Grafana, Logfire, and OpenTelemetry.",
-        "details": "Configure Prometheus for API and validation metrics. Set up Grafana dashboards. Integrate Logfire for structured logs and OpenTelemetry for distributed tracing.",
-        "testStrategy": "Simulate load and error scenarios. Validate metrics and logs appear in dashboards. Confirm tracing across services.",
+        "id": 42,
+        "title": "Build Comment and Annotation System",
+        "description": "Enable inline comments and annotations on planning documents for collaborative feedback.",
+        "details": "Use Nuxt UI annotation components. Store comments in backend with document and user references. Support threaded replies and notifications.",
+        "testStrategy": "Test comment creation, threading, and notification delivery. Validate data integrity and permissions.",
         "priority": "medium",
         "dependencies": [
-          12,
-          18,
-          19
+          40
         ],
         "status": "pending",
         "subtasks": []
       },
       {
-        "id": 24,
-        "title": "Implement Audit Logging and Compliance Features",
-        "description": "Track all user actions, document changes, and validation events for compliance and auditability.",
-        "details": "Store audit logs in Supabase. Log provenance for all document edits and validation outcomes. Support privacy controls and encrypted export logs.",
-        "testStrategy": "Unit test audit log entries for all actions. Validate privacy controls and encrypted exports. Confirm audit trail completeness.",
+        "id": 43,
+        "title": "Implement Dynamic Knowledge Graph Updates",
+        "description": "Enable real-time updates to Neo4j knowledge graph from user and agent actions.",
+        "details": "Expose FastAPI endpoints for graph mutations. Use event-driven updates via Redis message queue. Ensure consistency and ACID compliance.",
+        "testStrategy": "Test graph updates under concurrent load. Validate event processing and data consistency.",
+        "priority": "high",
+        "dependencies": [
+          35,
+          40
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 44,
+        "title": "Integrate Redis Message Queue for Async Processing",
+        "description": "Set up Redis for message queuing and async task orchestration in backend.",
+        "details": "Deploy Redis v7+ with FastAPI integration via aioredis. Use for async GraphRAG validation, agent orchestration, and notification delivery.",
+        "testStrategy": "Test queue throughput, task processing, and failure recovery. Monitor latency and reliability.",
+        "priority": "high",
+        "dependencies": [
+          31
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 45,
+        "title": "Implement Multi-Tier Caching Strategy",
+        "description": "Design and deploy multi-tier caching for performance optimization across backend and frontend.",
+        "details": "Use Redis for backend caching, browser localStorage for frontend. Cache LLM responses, validation results, and frequently accessed graph data. Set cache invalidation policies.",
+        "testStrategy": "Benchmark cache hit rates and response times. Test cache invalidation and data freshness.",
         "priority": "medium",
         "dependencies": [
-          13,
-          18,
-          22
+          44,
+          33
         ],
         "status": "pending",
         "subtasks": []
       },
       {
-        "id": 25,
-        "title": "Integrate Hybrid RAG Retrieval System",
-        "description": "Combine Milvus vector store and Neo4j graph database for hybrid semantic and relational retrieval, with query routing and context aggregation.",
-        "details": "Implement document preprocessing and embedding generation. Configure Milvus for semantic search. Build query router to select Milvus, Neo4j, or both. Aggregate context for LLM answer generation.",
-        "testStrategy": "Integration tests for semantic and graph retrieval. Validate query routing logic and context aggregation. Confirm LLM answers use combined context.",
+        "id": 46,
+        "title": "Develop Multi-Agent Orchestration System",
+        "description": "Implement orchestration for 107 specialized agents with context-aware selection and parallel processing.",
+        "details": "Use Python asyncio for parallel agent execution. Define agent registry and selection logic. Integrate with GraphRAG pipeline for validation. Log agent actions for QA.",
+        "testStrategy": "Test agent selection, parallel execution, and QA validation. Simulate complex planning scenarios.",
+        "priority": "high",
+        "dependencies": [
+          44,
+          34
+        ],
+        "status": "pending",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Define Agent Registry",
+            "description": "Design and implement a registry to catalog all 107 specialized agents, including metadata such as capabilities, roles, and interfaces.",
+            "dependencies": [],
+            "details": "Establish a data structure (e.g., Python class or database) to store agent information. Ensure extensibility for future agents and compatibility with orchestration logic.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Implement Context-Aware Agent Selection Logic",
+            "description": "Develop logic to dynamically select appropriate agents based on task context, input parameters, and agent capabilities.",
+            "dependencies": [
+              "46.1"
+            ],
+            "details": "Utilize context analysis and rule-based or ML-driven selection algorithms. Integrate with the agent registry to retrieve agent metadata for decision-making.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Develop Asyncio-Based Parallel Agent Execution",
+            "description": "Enable concurrent execution of selected agents using Python asyncio, ensuring efficient resource utilization and scalability.",
+            "dependencies": [
+              "46.1",
+              "46.2"
+            ],
+            "details": "Implement asynchronous task scheduling, manage agent lifecycle, and handle inter-agent communication. Optimize for high throughput and low latency.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "Integrate GraphRAG Pipeline for Validation",
+            "description": "Connect the orchestration system to the GraphRAG pipeline to validate agent outputs and ensure quality control.",
+            "dependencies": [
+              "46.3"
+            ],
+            "details": "Define validation checkpoints, pass agent results to GraphRAG, and process feedback for iterative improvement. Ensure seamless data flow between orchestration and validation modules.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 5,
+            "title": "Implement Agent Action Logging for QA",
+            "description": "Design and implement comprehensive logging of agent actions, decisions, and outcomes to support quality assurance and traceability.",
+            "dependencies": [
+              "46.3",
+              "46.4"
+            ],
+            "details": "Capture logs at each orchestration step, store in a centralized system, and enable querying for audit and debugging purposes.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 6,
+            "title": "Develop Error Handling and Recovery Mechanisms",
+            "description": "Implement robust error detection, handling, and recovery strategies to maintain system reliability during agent orchestration.",
+            "dependencies": [
+              "46.3",
+              "46.4",
+              "46.5"
+            ],
+            "details": "Detect agent failures, log errors, retry failed tasks, and escalate unresolved issues. Ensure graceful degradation and minimal impact on overall workflow.",
+            "status": "pending",
+            "testStrategy": ""
+          },
+          {
+            "id": 7,
+            "title": "Simulate and Test Complex Scenarios",
+            "description": "Design and execute tests simulating complex, enterprise-scale scenarios to validate orchestration logic, scalability, and robustness.",
+            "dependencies": [
+              "46.1",
+              "46.2",
+              "46.3",
+              "46.4",
+              "46.5",
+              "46.6"
+            ],
+            "details": "Create test cases covering edge conditions, high concurrency, and context-driven agent selection. Analyze results and refine orchestration components as needed.",
+            "status": "pending",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 47,
+        "title": "Implement Risk Assessment and Historical Analysis",
+        "description": "Add modules for risk scoring and lessons learned based on historical project data.",
+        "details": "Integrate Neo4j for historical project queries. Use pattern recognition to suggest risks and templates. Display risk scores in UI with actionable insights.",
+        "testStrategy": "Test risk detection accuracy and template suggestions. Validate historical queries and UI rendering.",
         "priority": "medium",
         "dependencies": [
-          15,
-          17
+          43,
+          37
         ],
         "status": "pending",
         "subtasks": []
       },
       {
-        "id": 26,
-        "title": "Implement Persona-Tailored Prompting and Multi-Agent Drafting",
-        "description": "Adapt generated content tone, structure, and depth per user persona. Orchestrate multi-agent drafting pipeline (Draft → Judge → Revise → Approve).",
-        "details": "Define persona profiles and prompt templates. Implement agent orchestration logic in FastAPI. Store agent decisions and revisions in document metadata.",
-        "testStrategy": "Unit test persona adaptation logic. Validate agent pipeline execution and revision tracking. Confirm final output matches persona requirements.",
+        "id": 48,
+        "title": "Integrate Enterprise APIs and SSO",
+        "description": "Connect platform to enterprise project management tools and identity providers for SSO.",
+        "details": "Use FastAPI for REST API integration. Implement OAuth2/OIDC for SSO (e.g., Azure AD, Okta). Map external workflows to internal data models. Ensure audit logging and compliance.",
+        "testStrategy": "Test API connectivity, SSO login flows, and audit log generation. Validate data mapping and permissions.",
+        "priority": "high",
+        "dependencies": [
+          32,
+          31
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 49,
+        "title": "Implement Audit Logging and Compliance Reporting",
+        "description": "Add comprehensive audit logging and reporting for all critical actions and compliance events.",
+        "details": "Log all authentication, validation, document, and agent actions. Store logs securely with retention policies. Generate compliance reports for SOC 2 and regulatory needs.",
+        "testStrategy": "Test log generation, retention, and report accuracy. Perform mock compliance audits.",
+        "priority": "high",
+        "dependencies": [
+          48
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 50,
+        "title": "Develop Custom Workflow Templates and Policies",
+        "description": "Enable organizations to define custom planning workflows and enforce policy constraints.",
+        "details": "Provide UI for workflow template creation. Store templates in backend with policy metadata. Enforce policies during planning and validation stages.",
+        "testStrategy": "Test template creation, policy enforcement, and workflow execution. Validate UI and backend integration.",
         "priority": "medium",
         "dependencies": [
-          18,
-          22
+          37,
+          48
         ],
         "status": "pending",
         "subtasks": []
       },
       {
-        "id": 27,
-        "title": "Implement Temporal Knowledge Graph Querying",
-        "description": "Enable time-constrained queries on the knowledge graph to answer project questions about trends, risks, and historical context.",
-        "details": "Extend Neo4j schema to include temporal attributes. Implement query endpoints for time-based analysis. Visualize trends in frontend dashboard.",
-        "testStrategy": "Unit and integration tests for temporal queries. Validate frontend visualization accuracy and backend query performance.",
-        "priority": "low",
+        "id": 51,
+        "title": "Implement Automated Testing and Quality Gates",
+        "description": "Set up Jest (frontend), Pytest (backend), and Playwright (e2e) for automated testing and CI/CD quality gates.",
+        "details": "Configure Jest v29+ for Nuxt.js, Pytest v8+ for FastAPI, Playwright v1.40+ for end-to-end tests. Integrate with CI/CD pipelines (GitHub Actions). Enforce 90%+ unit test and 80%+ integration test coverage.",
+        "testStrategy": "Monitor test coverage, run tests on CI, and validate quality gate enforcement. Review test reports for coverage and failures.",
+        "priority": "high",
         "dependencies": [
-          15,
-          23
-        ],
-        "status": "pending",
-        "subtasks": []
-      },
-      {
-        "id": 28,
-        "title": "Finalize Deployment, CI/CD, and Rollback Strategy",
-        "description": "Configure CI/CD pipelines, deployment scripts, and rollback mechanisms for all environments (Dev, Staging, Prod).",
-        "details": "Set up GitHub Actions for build/test/deploy. Use Terraform for infra provisioning. Implement version-tagged Docker images and backup/restore scripts.",
-        "testStrategy": "Run CI/CD pipeline for all environments. Simulate rollback and restore from backups. Validate deployment health checks.",
-        "priority": "medium",
-        "dependencies": [
-          12,
-          23,
-          24
+          29,
+          30,
+          31
         ],
         "status": "pending",
         "subtasks": []
@@ -235,7 +576,7 @@
     ],
     "metadata": {
       "created": "2025-08-29T16:22:54.269Z",
-      "updated": "2025-09-01T16:07:29.427Z",
+      "updated": "2025-09-01T21:01:26.804Z",
       "description": "Tasks for master context"
     }
   }
