@@ -1,0 +1,237 @@
+---
+# Orchestration Monitoring Configuration
+# Real-time monitoring for AI multi-agent system
+
+thresholds:
+  # Quality Gates - Critical for enterprise requirements
+  hallucination_rate_max: 0.02     # 2% maximum hallucination rate
+  error_rate_max: 0.10             # 10% maximum system error rate
+  response_time_max: 30.0          # 30 seconds maximum response time
+  memory_usage_max: 0.80           # 80% maximum memory usage
+  success_rate_min: 0.90           # 90% minimum success rate
+  
+  # Performance Targets
+  api_response_time_max: 0.200     # 200ms API response time
+  concurrent_users_max: 100        # 100 concurrent users
+  token_usage_daily_max: 1000000   # 1M tokens per day
+  cost_daily_max: 50.0             # $50 daily cost limit
+  
+  # Agent-specific thresholds
+  agent_error_rate_max: 0.15       # 15% per-agent error rate
+  agent_timeout: 60.0              # 60 seconds agent timeout
+  agent_retry_max: 3               # Maximum 3 retries per agent
+
+alerts:
+  enabled: true
+  notification_channels:
+    email: false                   # Email notifications disabled
+    slack: false                   # Slack notifications disabled
+    webhook: false                 # Webhook notifications disabled
+    log_only: true                 # Log-only alerts enabled
+  
+  severity_levels:
+    critical:
+      notify_immediately: true
+      escalation_time: 300         # 5 minutes
+      auto_recovery: false
+    high:
+      notify_immediately: true
+      escalation_time: 900         # 15 minutes
+      auto_recovery: true
+    medium:
+      notify_immediately: false
+      escalation_time: 1800        # 30 minutes
+      auto_recovery: true
+    low:
+      notify_immediately: false
+      escalation_time: 3600        # 1 hour
+      auto_recovery: true
+
+metrics:
+  collection_interval: 30          # 30 seconds between collections
+  retention_days: 30               # Keep metrics for 30 days
+  aggregation_window: 300          # 5 minutes aggregation window
+  
+  # Data export settings
+  export_formats: ["json", "csv"]
+  export_schedule: "daily"
+  export_location: ".claude/exports"
+  
+  # Performance monitoring
+  enable_profiling: true
+  profile_slow_operations: true
+  profile_threshold: 5.0           # Profile operations > 5 seconds
+
+dashboard:
+  enabled: true
+  port: 8080
+  refresh_interval: 5              # 5 seconds dashboard refresh
+  max_chart_points: 100            # Maximum points on charts
+  
+  # Dashboard sections
+  sections:
+    - name: "System Overview"
+      enabled: true
+      widgets: ["status", "uptime", "throughput"]
+    
+    - name: "Quality Metrics"
+      enabled: true
+      widgets: ["hallucination_rate", "quality_score", "compliance"]
+    
+    - name: "Agent Performance"
+      enabled: true
+      widgets: ["agent_status", "execution_times", "error_rates"]
+    
+    - name: "Resource Usage"
+      enabled: true
+      widgets: ["token_usage", "cost_tracking", "memory_cpu"]
+    
+    - name: "Alerts & Issues"
+      enabled: true
+      widgets: ["active_alerts", "recent_incidents", "trends"]
+
+# Agent-specific monitoring configuration
+agent_monitoring:
+  hallucination-trace-agent:
+    monitor_validation_accuracy: true
+    track_false_positives: true
+    graph_traversal_metrics: true
+    
+  documentation-librarian:
+    track_document_processing: true
+    monitor_indexing_speed: true
+    measure_content_quality: true
+    
+  draft-agent:
+    monitor_generation_quality: true
+    track_coherence_scores: true
+    measure_creativity_vs_accuracy: true
+    
+  docs-architect:
+    track_architecture_analysis: true
+    monitor_pattern_detection: true
+    measure_recommendation_quality: true
+    
+  task-orchestrator:
+    monitor_coordination_efficiency: true
+    track_parallel_optimization: true
+    measure_dependency_resolution: true
+
+# GraphRAG-specific monitoring
+graphrag_monitoring:
+  neo4j_metrics:
+    query_performance: true
+    graph_traversal_time: true
+    memory_usage: true
+    connection_pool_health: true
+    
+  validation_pipeline:
+    entity_validation_rate: true
+    community_validation_rate: true
+    global_validation_rate: true
+    confidence_score_distribution: true
+    
+  knowledge_graph:
+    node_count: true
+    relationship_count: true
+    graph_density: true
+    update_frequency: true
+
+# Integration monitoring  
+integration_monitoring:
+  task_master:
+    workflow_completion_rate: true
+    task_dependency_resolution: true
+    parallel_execution_efficiency: true
+    
+  llm_providers:
+    openrouter_health: true
+    model_response_times: true
+    token_usage_by_model: true
+    cost_per_operation: true
+    
+  database_health:
+    postgresql_connections: true
+    neo4j_cluster_status: true
+    redis_cache_hit_rate: true
+    backup_status: true
+
+# Automated responses
+automation:
+  auto_scaling:
+    enabled: true
+    scale_up_threshold: 0.8        # Scale up at 80% resource usage
+    scale_down_threshold: 0.3      # Scale down at 30% resource usage
+    cooldown_period: 300           # 5 minutes between scaling actions
+    
+  auto_recovery:
+    enabled: true
+    restart_failed_agents: true
+    clear_cache_on_errors: true
+    fallback_to_simpler_models: true
+    
+  maintenance:
+    auto_cleanup_logs: true
+    log_rotation_days: 7
+    metrics_compression: true
+    alert_cleanup_days: 30
+
+# Security monitoring
+security:
+  monitor_api_access: true
+  track_authentication_failures: true
+  detect_unusual_patterns: true
+  log_sensitive_operations: true
+  
+  rate_limiting:
+    enabled: true
+    requests_per_minute: 60
+    burst_capacity: 10
+    
+  audit_logging:
+    enabled: true
+    log_all_operations: false
+    log_critical_operations: true
+    retention_days: 90
+
+# Custom monitoring rules
+custom_rules:
+  - name: "High Token Usage Alert"
+    condition: "hourly_token_usage > 10000"
+    severity: "medium"
+    action: "notify_admin"
+    
+  - name: "GraphRAG Validation Failure"
+    condition: "validation_failure_rate > 0.05"
+    severity: "critical"
+    action: "escalate_immediately"
+    
+  - name: "Agent Cascade Failure"
+    condition: "failed_agents > 3 AND timespan < 300"
+    severity: "critical"
+    action: "emergency_shutdown"
+    
+  - name: "Performance Degradation"
+    condition: "avg_response_time > 45 AND duration > 600"
+    severity: "high"
+    action: "auto_optimize"
+
+# Reporting configuration
+reporting:
+  daily_reports: true
+  weekly_summaries: true
+  monthly_analysis: true
+  
+  report_sections:
+    - "Executive Summary"
+    - "Quality Metrics"
+    - "Performance Analysis"
+    - "Cost Analysis"
+    - "Incident Summary"
+    - "Recommendations"
+  
+  distribution:
+    email_recipients: []
+    slack_channels: []
+    file_exports: true
+    api_webhooks: []

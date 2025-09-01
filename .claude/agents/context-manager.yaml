@@ -1,0 +1,33 @@
+name: context-manager
+description: Orchestrates multi-agent workflows for AI planning platform
+model: opus
+
+plan:
+  - id: initialize_project
+    agent: documentation-librarian
+    inputs:
+      path: ./docs
+
+  - id: validate_context
+    agent: hallucination-trace-agent
+    inputs:
+      folder: ./docs
+      threshold: 0.02
+
+  - id: create_claude_readme
+    agent: draft-agent
+    inputs:
+      task: Generate README.md + CLAUDE.md summaries for @docs folder
+
+  - id: summarize_architecture
+    agent: docs-architect
+    inputs:
+      files:
+        - ./docs/004-FRD.md
+        - ./docs/005-TRD.md
+        - ./docs/Strategic-Planning-document.md
+
+  - id: launch_dev_workflow
+    agent: task-orchestrator
+    inputs:
+      workflow: fullstack-init

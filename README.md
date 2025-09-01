@@ -53,9 +53,35 @@ docs/                  # Documentation
 └── RAG_strategy.md
 ```
 
+## 🤖 AI Agent Ecosystem
+
+This platform leverages a sophisticated **multi-agent AI system** with **100+ specialized agents** coordinating through intelligent orchestration patterns to deliver enterprise-grade strategic planning capabilities.
+
+### Agent Architecture Overview
+
+| **Category** | **Count** | **Focus Areas** | **Primary Models** |
+|-------------|-----------|------------------|-------------------|
+| **Core Orchestration** | 4 agents | Task management, workflow coordination | Opus (75%) |
+| **Technical Development** | 21 agents | AI/ML, backend, frontend, full-stack | Sonnet (60%), Opus (40%) |
+| **Infrastructure & DevOps** | 11 agents | Cloud, Kubernetes, deployment | Opus (90%) |
+| **Data & Database** | 6 agents | Neo4j, PostgreSQL, GraphRAG | Sonnet (70%) |
+| **Design & UX** | 8 agents | Figma, component design, accessibility | Sonnet (100%) |
+| **Security & Quality** | 6 agents | Auditing, testing, security reviews | Opus (80%) |
+| **Content & Documentation** | 13 agents | SEO, content creation, technical writing | Haiku (70%) |
+| **Business & Analytics** | 8 agents | Metrics, analytics, reporting | Haiku (80%) |
+| **Language Specialists** | 14 agents | Python, Go, Rust, TypeScript, Java, etc. | Sonnet (85%) |
+| **Specialized Domains** | 11 agents | Unity, Flutter, WordPress, mobile development | Sonnet (60%) |
+
+### Intelligent Coordination System
+- **Context Manager**: Orchestrates 83+ agents in hub-and-spoke architecture
+- **Task Orchestrator**: Manages complex workflows with parallel execution
+- **GraphRAG Integration**: <2% hallucination rate through multi-level validation
+- **Quality Assurance**: >90% success rate with automated validation gates
+- **MCP Integration**: Model Context Protocol for seamless tool orchestration
+
 ## 🎯 Key Features
 
-### AI-Powered PRD Creation
+### AI Agent-Coordinated Planning
 - **Phase 0**: Project concept capture with similarity matching
 - **Phase 1**: Objective clarification through dynamic questioning
 - **Phase 2**: SMART objective generation and refinement

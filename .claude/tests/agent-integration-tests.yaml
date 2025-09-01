@@ -1,0 +1,94 @@
+# Agent Integration Test Suite
+version: 1.0.0
+
+test_suites:
+  draft_judge_integration:
+    description: Test iterative refinement loop
+    setup:
+      - Create test requirements
+      - Initialize mock GraphRAG
+    tests:
+      - name: basic_iteration
+        steps:
+          - Draft agent generates content
+          - Judge agent evaluates
+          - Verify feedback structure
+          - Draft agent incorporates feedback
+          - Judge agent approves
+        assertions:
+          - Iterations <= 3
+          - Final quality > 0.90
+          - No infinite loops
+          
+      - name: edge_case_handling
+        scenarios:
+          - Conflicting requirements
+          - Impossible constraints
+          - Timeout scenarios
+          - GraphRAG unavailable
+          
+  librarian_integration:
+    description: Document management pipeline
+    tests:
+      - name: full_lifecycle
+        steps:
+          - Store draft document
+          - Update to review status
+          - Publish with versioning
+          - Archive after expiry
+        assertions:
+          - All versions retrievable
+          - Metadata preserved
+          - Compliance maintained
+          
+  knowledge_engineer_validation:
+    description: Knowledge graph construction
+    tests:
+      - name: entity_extraction
+        input: Sample documents
+        assertions:
+          - Entity coverage > 85%
+          - Relationship accuracy > 90%
+          - No orphaned nodes
+          
+      - name: evolution_learning
+        steps:
+          - Provide training data
+          - Execute learning cycle
+          - Validate improvements
+        assertions:
+          - Quality metrics improve
+          - No regression in accuracy
+          - Performance maintained
+
+  workflow_designer_optimization:
+    description: Workflow creation and optimization
+    tests:
+      - name: pattern_selection
+        scenarios:
+          - Simple sequential task
+          - Complex parallel execution
+          - Conditional branching
+          - Error recovery paths
+        assertions:
+          - Appropriate pattern selected
+          - Optimization applied
+          - Constraints respected
+          
+performance_benchmarks:
+  latency:
+    draft_agent: <1000ms
+    judge_agent: <2000ms
+    librarian: <500ms
+    knowledge_engineer: <5000ms
+    workflow_designer: <3000ms
+    
+  accuracy:
+    judge_evaluation: >0.90
+    knowledge_extraction: >0.85
+    workflow_optimization: >0.80
+    
+  scalability:
+    concurrent_requests: 100
+    document_volume: 10000
+    graph_size: 1M_nodes

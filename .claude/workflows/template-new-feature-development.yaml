@@ -1,0 +1,91 @@
+# New Feature Development Workflow
+name: new_feature_development
+version: 1.0.0
+description: End-to-end feature development from requirements to deployment
+
+inputs:
+  requirements:
+    type: document
+    required: true
+  technology_stack:
+    type: array
+    required: true
+  deployment_target:
+    type: string
+    default: kubernetes
+
+stages:
+  - id: requirements_analysis
+    agents:
+      - context-manager
+      - business-analyst
+    outputs: [refined_requirements, acceptance_criteria]
+    
+  - id: technical_design
+    agents:
+      - backend-architect
+      - database-admin
+      - ui-designer
+    parallel: true
+    outputs: [api_spec, database_schema, ui_mockups]
+    
+  - id: task_breakdown
+    agents:
+      - task-orchestrator
+      - wbs-structuring-agent
+    inputs: [refined_requirements, technical_design]
+    outputs: [task_list, dependencies, estimates]
+    
+  - id: development
+    parallel: true
+    branches:
+      - name: backend
+        agents: [backend-developer, database-admin]
+        outputs: [api_implementation, database_setup]
+      - name: frontend
+        agents: [frontend-developer, ui-designer]
+        outputs: [ui_implementation]
+      - name: testing
+        agents: [test-automator]
+        outputs: [test_suite]
+        
+  - id: integration
+    agents:
+      - fullstack-developer
+      - devops-troubleshooter
+    inputs: [api_implementation, ui_implementation]
+    outputs: [integrated_application]
+    
+  - id: quality_assurance
+    parallel: true
+    agents:
+      - code-reviewer
+      - security-auditor
+      - performance-engineer
+    inputs: [integrated_application, test_suite]
+    outputs: [qa_report, security_report, performance_metrics]
+    
+  - id: deployment_preparation
+    agents:
+      - deployment-engineer
+      - terraform-specialist
+    inputs: [integrated_application, deployment_target]
+    outputs: [deployment_package, infrastructure_config]
+    
+  - id: production_deployment
+    agents:
+      - deployment-engineer
+      - incident-responder
+    inputs: [deployment_package, infrastructure_config]
+    outputs: [deployment_status, monitoring_setup]
+
+success_criteria:
+  - All tests passing
+  - Security audit passed
+  - Performance within SLA
+  - Deployment successful
+
+rollback:
+  trigger: deployment_failure
+  agents: [incident-responder, deployment-engineer]
+  actions: [restore_previous, notify_team]

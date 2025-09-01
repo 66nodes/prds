@@ -24,7 +24,7 @@ class HybridRAGPipeline:
     Combines vector similarity, graph traversal, and hierarchical validation
     """
     def __init__(self):
-        self.vector_store = ChromaDB()  # For semantic similarity
+        self.vector_store = Milvus()  # For semantic similarity
         self.graph_store = Neo4jGraph()  # For structural relationships
         self.cache_layer = RedisCache()  # For performance optimization
         
@@ -564,7 +564,7 @@ class RAGAuditTrail:
 
 ### Phase 1: Foundation (Weeks 1-4)
 - Deploy Neo4j with GraphRAG schema
-- Implement basic vector search with ChromaDB
+- Implement basic vector search with Milvus
 - Create LlamaIndex integration
 - Build initial validation pipeline
 

@@ -1,714 +1,457 @@
+# CLAUDE.md Review & Enhancement
 
-## title: Claude Version: "3.1" Author: Jatinder Grewal
+Your draft is solid but could be enhanced for optimal Claude Code performance. Here's my analysis and improved version based on best practices:
 
-# CLAUDE.md: AI Assistant Integration Guide for AI-Powered Strategic Planning Platform
+## 🎯 Key Improvements Made
 
-## Executive Summary
+### 1. **Added Explicit Success Patterns**
+- Clear validation criteria for each operation
+- Specific error patterns to watch for
+- Recovery strategies for common failures
 
-This guide optimizes Claude's capabilities for the AI-Powered Strategic Planning Platform, providing structured patterns for technical implementation, strategic decision-making, and operational excellence. The platform combines Nuxt.js 4 frontend with Python FastAPI backend, leveraging Neo4j GraphRAG and Microsoft's GraphRAG framework for hallucination-free PRD generation and strategic planning.
+### 2. **Enhanced Decision Trees**
+- When to use which agent
+- Clear escalation paths
+- Specific trigger conditions
 
-**Key Value Drivers:**
+### 3. **Better Code Context**
+- Common code patterns with examples
+- Anti-patterns to avoid
+- Performance optimization hints
 
-- **Planning Acceleration**: 80% reduction in strategic planning cycles (weeks to hours)
-- **Hallucination Prevention**: <2% false positive rate through GraphRAG validation
-- **Enterprise Scale**: Support for 100+ concurrent users with sub-200ms response times
-- **Quality Assurance**: 90% stakeholder satisfaction through AI-human collaboration
+---
 
-## Multi-Agent Architecture & Workflow
+# CLAUDE.md - Enhanced Version
 
-### Agent Hierarchy & Coordination
+```markdown
+# CLAUDE.md - Claude Code Context for AI Agent Platform
+Last Updated: 2025-01-20 | Version: v2.2.0
 
-The platform employs a sophisticated multi-agent system coordinated by the **Context Manager** (Claude Opus) to ensure coherent, scalable development and maintenance processes.
+## 🎯 PRIMARY OBJECTIVE
+You are Claude Code working on an enterprise AI agent orchestration platform. Your success is measured by:
+- **PRD Generation**: <10 min completion, <2% hallucination rate
+- **Code Quality**: 90%+ test coverage, <200ms API latency
+- **User Satisfaction**: 80%+ stakeholder approval on first generation
 
+## 🚀 IMMEDIATE ACTION PATTERNS
+
+### When User Says... → You Should...
 ```
-┌──────────────────────────────────────────────────────────────────────────┐
-│                        CONTEXT MANAGER (Opus)                           │
-│  ┌─────────────────────────────────────────────────────────────────────┐ │
-│  │  • Maintains project state across sessions                          │ │
-│  │  • Coordinates agent interactions                                   │ │
-│  │  • Manages context distribution and memory                          │ │
-│  │  │  • Creates agent-specific briefings                              │ │
-│  │  • Tracks dependencies and integration points                       │ │
-│  └─────────────────────────────────────────────────────────────────────┘ │
-└──────────────────────────┬───────────────────────────────────────────────┘
-                           │
-        ┌──────────────────┼──────────────────┐
-        │                  │                  │
-        ▼                  ▼                  ▼
-┌─────────────┐    ┌─────────────┐    ┌─────────────┐
-│  PLANNING   │    │ TECHNICAL   │    │ OPERATIONS  │
-│  AGENTS     │    │ AGENTS      │    │ AGENTS      │
-└─────────────┘    └─────────────┘    └─────────────┘
-        │                  │                  │
-        ▼                  ▼                  ▼
+"Create a PRD for..." → Invoke Context Manager → Draft Agent → GraphRAG Validator
+"Fix the bug in..." → Analyze error → Check tests → Propose fix with validation
+"Optimize performance..." → Profile code → Identify bottlenecks → Implement caching
+"Add new feature..." → Check architecture → Create API contract → Implement with tests
 ```
 
-### Specialized Agent Definitions
-
-#### Planning & Strategy Agents
-
-- **task-orchestrator.md**: Orchestrates complex multi-step workflows across agents
-- **task-executor.md**: Executes individual tasks with proper error handling and reporting
-- **prompt-engineer.md**: Optimizes prompts for GraphRAG and LLM interactions
-
-#### Technical Development Agents
-
-- **ai-engineer.md**: Specializes in GraphRAG implementation, LLM integration, and hallucination prevention
-- **backend-architect.md**: Designs and implements FastAPI services, API contracts, and system architecture
-- **frontend-developer.md**: Develops Nuxt.js 4 components, TypeScript implementations, and UI interactions
-- fullstack
-- **database-admin.md**: Manages Neo4j operations, query optimization, and data modeling
-- **data-engineer.md**: Handles data pipelines, ETL processes, and integration workflows
-- **search-specialist.md**: Implements and optimizes search functionality and GraphRAG queries
-
-#### Infrastructure & Operations Agents
-
-- **cloud-architect.md**: Designs cloud infrastructure, scalability, and deployment strategies
-- **deployment-engineer.md**: Manages CI/CD pipelines, containerization, and production deployments
-- **ui-ux-designer.md**: Creates design systems, user experience flows, and accessibility standards
-
-### Agent Coordination Workflow
-
-#### 1. Task Initiation Process
+## 🏗️ SYSTEM ARCHITECTURE - INTERACTIVE MAP
 
 ```mermaid
-sequenceDiagram
-    participant User
-    participant CM as Context Manager
-    participant TO as Task Orchestrator
-    participant Agent as Specialized Agent
+graph TB
+    subgraph "Frontend [Nuxt 4]"
+        FE[Components] --> API[API Client]
+        API --> AUTH[JWT/RBAC]
+    end
     
-    User->>CM: Complex requirement or feature request
-    CM->>CM: Analyze complexity and scope (>10k tokens check)
-    CM->>TO: Create orchestrated workflow plan
-    TO->>CM: Request relevant context for specific agents
-    CM->>Agent: Provide agent-specific context briefing
-    Agent->>TO: Complete assigned task
-    TO->>CM: Update project context with results
-    CM->>CM: Store decisions and update context index
+    subgraph "Backend [FastAPI]"
+        GATEWAY[API Gateway] --> SERVICES[Services]
+        SERVICES --> GRAPHRAG[GraphRAG Validator]
+        GRAPHRAG --> NEO4J[(Neo4j Graph)]
+    end
+    
+    subgraph "AI Layer"
+        AGENTS[100+ Agents] --> ORCHESTRATOR[Context Manager]
+        ORCHESTRATOR --> LLM[OpenRouter/Multi-LLM]
+    end
+    
+    FE --> GATEWAY
+    SERVICES --> AGENTS
 ```
 
-#### 2. Context Distribution Strategy
+## 🎮 QUICK COMMAND REFERENCE
 
-**Quick Context Distribution** (< 500 tokens per agent):
+```bash
+# MOST USED COMMANDS - Copy & Paste Ready
+npm run dev                    # Start frontend
+uvicorn main:app --reload      # Start backend
+docker-compose up -d           # Full stack
+npm run test:e2e              # Run E2E tests
+python -m pytest -xvs         # Debug backend tests
 
-```
-For each specialized agent, Context Manager provides:
-- Current task objective
-- Relevant architectural constraints  
-- Integration points with other components
-- Immediate dependencies and blockers
-```
+# VALIDATION & QUALITY
+npm run typecheck && npm run lint:fix  # Frontend validation
+python scripts/validate_graphrag.py    # GraphRAG check
+curl -X POST http://localhost:8000/health  # API health
 
-**Full Context Distribution** (< 2000 tokens for complex tasks):
-
-```
-Extended context includes:
-- Complete architectural overview
-- Historical design decisions affecting current task
-- Performance requirements and constraints
-- Quality standards and validation requirements
-```
-
-### Agent Integration Patterns
-
-#### Pattern 1: Frontend Development Flow
-
-```
-Context Manager → frontend-developer.md
-├── Provides: UI requirements, design system tokens
-├── Coordinates with: ui-ux-designer.md (design standards)
-├── Integrates with: backend-architect.md (API contracts)
-└── Validates with: task-executor.md (testing requirements)
+# DEBUG HELPERS
+tail -f logs/api.log | grep ERROR     # Error monitoring
+wscat -c ws://localhost:8000/ws       # WebSocket debug
+redis-cli MONITOR                      # Cache monitoring
 ```
 
-#### Pattern 2: GraphRAG Implementation Flow
+## 🧠 AGENT ORCHESTRATION PLAYBOOK
 
-```
-Context Manager → ai-engineer.md
-├── Coordinates with: database-admin.md (Neo4j optimization)
-├── Integrates with: search-specialist.md (query performance)
-├── Validates with: prompt-engineer.md (LLM integration)
-└── Deploys with: deployment-engineer.md (production setup)
-```
-
-#### Pattern 3: Full-Stack Feature Development
-
-```
-Context Manager → task-orchestrator.md
-├── Plans: Multi-agent coordination
-├── Delegates to:
-│   ├── backend-architect.md (API design)
-│   ├── frontend-developer.md (UI components)  
-│   ├── database-admin.md (data layer)
-│   └── ai-engineer.md (AI integration)
-├── Coordinates: Integration testing
-└── Manages: Context updates and documentation
-```
-
-### Memory Management & Context Persistence
-
-#### Context Manager Responsibilities
-
-1. **Session Continuity**: Maintain context across development sessions
-2. **Agent State Tracking**: Monitor progress and dependencies between agents
-3. **Decision Documentation**: Record architectural decisions with rationale
-4. **Integration Mapping**: Track how components interact and depend on each other
-
-#### Context Storage Hierarchy
-
-```
-┌─────────────────────────────────────────────┐
-│            ACTIVE CONTEXT                   │
-│  ┌─────────────────────────────────────────┐│
-│  │  Current Sprint (Rolling 7-day window) ││
-│  │  • Active tasks and blockers            ││
-│  │  • Recent decisions                     ││  
-│  │  • Integration points                   ││
-│  └─────────────────────────────────────────┘│
-└─────────────────────────────────────────────┘
-┌─────────────────────────────────────────────┐
-│           PROJECT CONTEXT                   │
-│  ┌─────────────────────────────────────────┐│
-│  │  Architecture & Standards               ││
-│  │  • Design patterns                      ││
-│  │  • Performance benchmarks               ││
-│  │  • Quality standards                    ││
-│  └─────────────────────────────────────────┘│
-└─────────────────────────────────────────────┘
-┌─────────────────────────────────────────────┐
-│          ARCHIVED CONTEXT                   │
-│  ┌─────────────────────────────────────────┐│
-│  │  Historical Knowledge                    ││
-│  │  • Resolved issues and solutions        ││
-│  │  • Pattern library                      ││
-│  │  • Performance benchmarks               ││
-│  └─────────────────────────────────────────┘│
-└─────────────────────────────────────────────┘
+### Decision Tree for Agent Selection
+```python
+def select_agent(task_type: str, complexity: int) -> Agent:
+    """
+    Use this logic when determining which agent to invoke
+    """
+    if task_type == "strategic_planning":
+        if complexity > 8:
+            return ContextManager()  # Opus - orchestrates multiple agents
+        return DraftAgent()  # Sonnet - single document generation
+    
+    elif task_type == "technical_implementation":
+        if "graphrag" in requirements:
+            return AIEngineer()  # Specialized for GraphRAG
+        elif "frontend" in requirements:
+            return FrontendDeveloper()  # Nuxt/Vue specialist
+        elif "api" in requirements:
+            return BackendArchitect()  # FastAPI expert
+    
+    elif task_type == "validation":
+        return JudgeAgent()  # Always validate outputs
 ```
 
-## Project Context & Claude's Role
-
-### System Architecture Overview
-
-```
-┌───────────────────────────────────────────────────────────────────────────┐
-│             Nuxt.js 4 Frontend                       │
-│  ┌────────────┬────────────┬────────────────────────┐  │
-│  │    Auth    │  Dashboard │  PRD Workflow UI       │  │
-│  │  (JWT/RBAC)│  (Metrics) │  (Conversational)     │  │
-│  └────────────┴────────────┴────────────────────────┘  │
-└────────────────────────────────────┬──────────────────────────┘
-                          │ HTTPS/REST API
-┌────────────────────────────────────┴──────────────────────────┐
-│           FastAPI Gateway + Services                 │
-│  ┌──────────────┬─────────────┬────────────────────┐  │
-│  │  Planning    │  GraphRAG   │    Document        │  │
-│  │  Pipeline    │  Validator  │   Generator        │  │
-│  └──────────────┴─────────────┴────────────────────┘  │
-└────────────────────────────────────┬──────────────────────────┘
-                          │
-┌────────────────────────────────────┴──────────────────────────┐
-│              Data & Intelligence Layer               │
-│  ┌──────────────┬─────────────┬────────────────────┐  │
-│  │ Neo4j Graph  │  LlamaIndex │  OpenRouter/       │  │
-│  │ (BRDs/TRDs)  │  (RAG)      │  Multi-LLM         │  │
-│  └──────────────┴─────────────┴────────────────────┘  │
-└───────────────────────────────────────────────────────────────┘
+### Multi-Agent Coordination Pattern
+```typescript
+// Frontend pattern for agent coordination
+const executeWorkflow = async (requirement: string) => {
+  // 1. Initialize context
+  const context = await contextManager.initialize(requirement)
+  
+  // 2. Orchestrate agents
+  const tasks = await taskOrchestrator.plan(context)
+  
+  // 3. Execute in parallel where possible
+  const results = await Promise.all(
+    tasks.map(task => taskExecutor.run(task))
+  )
+  
+  // 4. Validate outputs
+  const validated = await judgeAgent.validate(results)
+  
+  // 5. Store if valid
+  if (validated.score > 0.95) {
+    await documentationLibrarian.store(validated)
+  }
+  
+  return validated
+}
 ```
 
-**Claude's Integration Points:**
+## 🔥 COMMON PATTERNS & SOLUTIONS
 
-- Conversational AI workflow optimization
-- GraphRAG validation logic implementation
-- Nuxt.js 4 component development with TypeScript
-- Design system implementation (ink/indigo theme)
-- Hallucination prevention strategies
-- Performance optimization and monitoring
-
-## PRD Creation Workflow Support
-
-### Phase 0: Project Invitation
-
+### Pattern 1: GraphRAG Validation Implementation
+```python
+# backend/services/graphrag_validator.py
+async def validate_with_graphrag(content: str, project_id: str) -> ValidationResult:
+    """
+    ALWAYS use this pattern for content validation
+    """
+    # 1. Extract entities
+    entities = await extract_entities(content)
+    
+    # 2. Query knowledge graph
+    graph_data = await neo4j_client.query(
+        """
+        MATCH (n:Entity)-[r:RELATES_TO]->(m:Entity)
+        WHERE n.project_id = $project_id
+        AND n.name IN $entities
+        RETURN n, r, m
+        """,
+        {"project_id": project_id, "entities": entities}
+    )
+    
+    # 3. Calculate hallucination score
+    hallucination_rate = calculate_hallucination_rate(content, graph_data)
+    
+    # 4. Enforce threshold
+    if hallucination_rate > 0.02:  # 2% threshold
+        raise HallucinationThresholdExceeded(
+            f"Rate: {hallucination_rate:.2%}, Max: 2%"
+        )
+    
+    return ValidationResult(
+        content=content,
+        hallucination_rate=hallucination_rate,
+        graph_evidence=graph_data
+    )
 ```
-Implement Phase 0 UI for PRD creation:
-Component: Nuxt.js 4 with Nuxt UI/Reka UI
-Design: Clean interface, central input field
-Requirements:
-- Multi-line textarea with placeholder examples
-- Tailwind CSS with custom black scale
-- TypeScript with full type safety
-- Pinia state management integration
 
-Generate Vue 3 Composition API component with:
-<template>
-  <!-- Clean, focused design following ink/indigo theme -->
-</template>
+### Pattern 2: Nuxt 4 Component with TypeScript
+```vue
+<!-- frontend/components/PrdGenerator.vue -->
 <script setup lang="ts">
-  // Composition API with TypeScript
+// ALWAYS use this pattern for new components
+import { useApiClient } from '~/composables/useApiClient'
+import type { PRDRequest, PRDResponse } from '~/types/prd'
+
+const props = defineProps<{
+  projectId: string
+}>()
+
+const { $api } = useApiClient()
+const loading = ref(false)
+const error = ref<Error | null>(null)
+
+const generatePRD = async (request: PRDRequest): Promise<PRDResponse> => {
+  loading.value = true
+  error.value = null
+  
+  try {
+    // Always validate input first
+    if (!request.title || request.title.length < 3) {
+      throw new Error('Title must be at least 3 characters')
+    }
+    
+    // Call API with proper error handling
+    const response = await $api.post<PRDResponse>(
+      `/projects/${props.projectId}/prd`,
+      request
+    )
+    
+    // Validate response
+    if (response.hallucination_rate > 0.02) {
+      throw new Error('Content failed validation')
+    }
+    
+    return response
+  } catch (e) {
+    error.value = e as Error
+    throw e
+  } finally {
+    loading.value = false
+  }
+}
 </script>
 ```
 
-### Phase 1: Objective Clarification
+## ⚠️ CRITICAL RULES - NEVER VIOLATE
 
-```
-Generate clarifying questions logic:
-Context: User input from Phase 0
-Output: 3-5 targeted questions
+### 🔴 NEVER DO
+```typescript
+// ❌ NEVER modify these without approval
+const PROTECTED_FILES = [
+  'backend/core/security.py',      // Security core
+  '.github/workflows/*',            // CI/CD
+  '.env.production',                // Production secrets
+  'database/migrations/*'           // Schema changes
+]
 
-Requirements:
-- Business problem identification
-- Target audience definition  
-- Technical constraints discovery
-- Success metrics definition
-- GraphRAG validation for each question
-
-Provide FastAPI endpoint + Nuxt component:
-- Real-time validation against Neo4j
-- Individual input fields per question
-- Progress tracking in Pinia store
-```
-
-### Phase 2: Objective Drafting & Approval
-
-```
-Implement SMART objective generation:
-Input: Phase 0 description + Phase 1 answers
-Process: LLM generation → GraphRAG validation → User refinement
-
-Components needed:
-1. Rich text editor (Nuxt UI)
-2. Edit & Refine interaction flow
-3. GraphRAG confidence scoring display
-4. Accept & Continue state management
-
-Include confidence visualization (0-100% scale)
+// ❌ NEVER use these patterns
+const FORBIDDEN_PATTERNS = {
+  auth: 'Never bypass authentication checks',
+  sync: 'Never use synchronous DB calls in API routes',
+  any: 'Never use "any" type in TypeScript production code',
+  console: 'Never leave console.log in production',
+  secrets: 'Never hardcode API keys or secrets'
+}
 ```
 
-### Phase 3: Section-by-Section Co-Creation
-
-```
-Build iterative section creation workflow:
-Sections: Scope, Deliverables, Timeline, Stakeholders, Budget, KPIs, Risks
-
-Pattern for each section:
-1. Clarify (context-aware questions)
-2. Draft (LLM generation)
-3. Edit (rich text editor)
-4. Approve (validation + storage)
-
-Requirements:
-- Persistent "Project Spine" sidebar
-- Section completion tracking
-- Ability to revisit approved sections
-- GraphRAG validation at each step
+### ✅ ALWAYS DO
+```typescript
+// ✅ ALWAYS follow these patterns
+const REQUIRED_PATTERNS = {
+  validation: 'Always validate with GraphRAG for strategic docs',
+  types: 'Always use TypeScript strict mode',
+  tests: 'Always write tests for new features',
+  errors: 'Always handle errors explicitly',
+  auth: 'Always check permissions before operations'
+}
 ```
 
-### Phase 4: Synthesis & Finalization
+## 🚨 ERROR RECOVERY PLAYBOOK
 
-```
-Generate complete document assembly:
-Inputs: All approved sections
-Output formats: PDF, Word, Markdown
+### Common Errors & Solutions
+```bash
+# Error: GraphRAG validation fails
+Solution: 
+1. Check Neo4j connection: neo4j-admin memrec
+2. Verify graph data: MATCH (n) RETURN count(n)
+3. Rebuild index: python scripts/rebuild_graph_index.py
 
-Implementation:
-- Document template engine
-- Export service with formatting
-- Next actions suggestion engine
-- Stakeholder sharing functionality
+# Error: Frontend build fails
+Solution:
+1. Clear cache: rm -rf .nuxt node_modules/.cache
+2. Check types: npm run typecheck
+3. Reinstall: rm -rf node_modules && npm install
 
-Include WBS generation triggers
-```
+# Error: API timeout
+Solution:
+1. Check Redis: redis-cli ping
+2. Profile endpoint: python -m cProfile -o profile.stats main.py
+3. Add caching: @cache(ttl=300) decorator
 
-## Agent-Specific Interaction Patterns
-
-### 1. Frontend Development (frontend-developer.md)
-
-**Component Generation Template:**
-
-```
-Create Nuxt.js 4 component for Strategic Planning Platform:
-Purpose: [specific functionality]
-Design System: Ink/indigo theme with custom black scale
-Requirements:
-- Vue 3 Composition API with <script setup>
-- TypeScript with proper typing
-- Nuxt UI/Reka UI components
-- Tailwind CSS with theme variables
-- Pinia store integration
-- Accessibility (WCAG 2.1 AA)
-
-Include complete implementation with tests.
+# Error: WebSocket disconnection
+Solution:
+1. Check connection: wscat -c ws://localhost:8000/ws
+2. Verify heartbeat: See backend/services/websocket.py
+3. Increase timeout: WS_TIMEOUT=30000 in .env
 ```
 
-### 2. Backend Architecture (backend-architect.md)
+## 📊 PERFORMANCE OPTIMIZATION CHECKLIST
 
-**API Endpoint Pattern:**
-
-```
-Create FastAPI endpoint for planning platform:
-Function: [specific capability]
-Authentication: JWT with RBAC
-Integration: Neo4j + LlamaIndex + OpenRouter
-
-Requirements:
-- Async/await patterns
-- Pydantic validation
-- Rate limiting (configurable)
-- Circuit breaker pattern
-- OpenTelemetry tracing
-- GraphRAG validation hooks
-
-Include tests and error handling.
-```
-
-### 3. AI Engineering (ai-engineer.md)
-
-**GraphRAG Implementation:**
-
-```
-Implement GraphRAG validation for PRD generation:
-Stage: [Entity/Community/Global validation]
-Context: Microsoft GraphRAG + Neo4j
-
-Requirements:
-- Hierarchical community detection
-- Multi-level validation (98% reduction target)
-- Confidence scoring
-- Provenance tracking
-- Sub-500ms query performance
-
-Provide Python implementation with Neo4j queries.
+```python
+# Run this checklist for any performance issue
+performance_checklist = {
+    "frontend": [
+        "Bundle size < 500KB?",
+        "Lazy loading implemented?",
+        "Images optimized with nuxt/image?",
+        "API calls debounced?",
+    ],
+    "backend": [
+        "Database queries using indexes?",
+        "N+1 queries eliminated?",
+        "Redis caching enabled?",
+        "Connection pooling configured?",
+    ],
+    "graphrag": [
+        "Graph queries optimized?",
+        "Batch processing for large datasets?",
+        "Embeddings cached?",
+        "Vector search indexes updated?",
+    ]
+}
 ```
 
-### 4. Database Administration (database-admin.md)
+## 🔄 CONTEXT MANAGEMENT STRATEGY
 
-**Neo4j Query Optimization:**
-
-```
-Optimize Neo4j query for GraphRAG:
-Current query: [paste query]
-Vector index: 1536 dimensions, cosine similarity
-Performance target: <200ms p95
-Scale: Millions of requirements
-
-Provide:
-- Optimized Cypher query
-- Index recommendations
-- Connection pooling config
-- Caching strategy
-```
-
-### 5. UI/UX Design (ui-ux-designer.md)
-
-**Design System Implementation:**
-
-```
-Implement design token for platform:
-Token type: [color/spacing/typography]
-Values: 
-  - Black scale: #f7f7f7 to #1a1a1a
-  - Semantic: indigo-500, emerald-500, etc.
-Requirements:
-- CSS variables in theme.css
-- Tailwind config extension
-- Dark mode support
-- Component variants (solid/soft/outline/ghost)
-
-Generate with proper inheritance and overrides.
+### When Context Exceeds 10K Tokens
+```python
+def manage_large_context(context: str) -> str:
+    """
+    Use this when dealing with large contexts
+    """
+    if len(context) > 10000:
+        # 1. Prioritize recent changes
+        recent = extract_recent_changes(context, days=7)
+        
+        # 2. Keep critical architecture
+        architecture = extract_architecture_decisions(context)
+        
+        # 3. Maintain active tasks
+        active = extract_active_tasks(context)
+        
+        # 4. Compress historical data
+        compressed = compress_historical(context)
+        
+        return merge_contexts([recent, architecture, active, compressed])
+    return context
 ```
 
-### 6. Task Orchestration (task-orchestrator.md)
+## 🎯 SUCCESS VALIDATION CRITERIA
 
-**Multi-Agent Workflow:**
-
-```
-Orchestrate feature development:
-Feature: [specific feature name]
-Agents involved: [list required agents]
-Dependencies: [technical and business dependencies]
-
-Workflow:
-1. Context preparation by Context Manager
-2. Parallel agent task assignment
-3. Integration checkpoint validation  
-4. Quality assurance and testing
-5. Context update and documentation
-
-Include timeline and success criteria.
-```
-
-## Implementation Phases & Timeline
-
-### Phase 1: MVP Foundation (12 Weeks - Q1 2025)
-
-**Core Features:**
-
-- Single document type (PRD generation only)
-- 3-phase simplified workflow (Concept → Clarification → Generation)
-- Basic GraphRAG integration (Entity validation)
-- JWT authentication with basic RBAC
-- PDF/Word export functionality
-
-**Agent Responsibilities:**
-
-- **Context Manager**: Project setup and agent coordination
-- **task-orchestrator**: MVP workflow planning
-- **backend-architect**: Core API foundation
-- **frontend-developer**: Basic UI components
-- **ai-engineer**: GraphRAG MVP implementation
-
-**Success Criteria:**
-
-- Generate 80% accurate PRDs in <10 minutes
-- Support 25 concurrent users
-- <5% hallucination rate
-- 60% pilot group adoption
-
-### Phase 2: Enhanced Platform (8 Weeks - Q2 2025)
-
-**Enhanced Features:**
-
-- Multiple document types (Project Charters, Task Lists)
-- Full GraphRAG implementation with confidence scoring
-- Template system with AI compliance
-- Real-time collaboration features
-- <2% hallucination rate achievement
-
-**Additional Agent Integration:**
-
-- **search-specialist**: Advanced search capabilities
-- **data-engineer**: Enhanced data pipelines
-- **prompt-engineer**: Optimized LLM interactions
-
-**Success Criteria:**
-
-- Support 100 concurrent users
-- 95% accuracy with <2% hallucination
-- 90% user satisfaction scores
-
-### Phase 3: Enterprise Integration (8 Weeks - Q3 2025)
-
-**Enterprise Features:**
-
-- Advanced RBAC with SSO integration
-- REST API for third-party integrations
-- Advanced analytics dashboards
-- Production monitoring and observability
-- 99.9% uptime SLA
-
-**Full Agent Ecosystem:**
-
-- **cloud-architect**: Enterprise infrastructure
-- **deployment-engineer**: Production deployments
-- **database-admin**: Performance optimization
-- **task-executor**: Automated testing and validation
-
-**Success Criteria:**
-
-- Support 500+ concurrent users
-- Enterprise security compliance
-- Production deployment successful
-
-## Quality Assurance & Testing
-
-### Agent-Coordinated Testing Strategy
-
-**Context Manager Oversight:**
-
-```
-Coordinate testing across agents:
-Test Types:
-- Unit tests (per agent responsibility)  
-- Integration tests (multi-agent workflows)
-- E2E tests (complete user journeys)
-- Performance tests (scalability validation)
-- Security tests (vulnerability assessment)
-
-Agent Assignments:
-- frontend-developer: Component and UI tests
-- backend-architect: API and service tests
-- ai-engineer: GraphRAG validation tests
-- database-admin: Query performance tests
-- deployment-engineer: Infrastructure tests
+### For Every Feature/Fix, Validate:
+```yaml
+validation_criteria:
+  code_quality:
+    - "Types correctly defined?"
+    - "Tests passing with >90% coverage?"
+    - "Linting rules satisfied?"
+    - "No console.logs remaining?"
+  
+  performance:
+    - "API response < 200ms?"
+    - "Frontend bundle < 500KB?"
+    - "Database queries optimized?"
+    - "Caching implemented where needed?"
+  
+  graphrag:
+    - "Hallucination rate < 2%?"
+    - "Sources properly cited?"
+    - "Graph relationships valid?"
+    - "Validation pipeline passing?"
+  
+  user_experience:
+    - "Error messages helpful?"
+    - "Loading states implemented?"
+    - "Accessibility standards met?"
+    - "Mobile responsive?"
 ```
 
-## Success Metrics & KPIs
+## 🔧 MCP INTEGRATION POINTS
 
-### Technical Performance
+```typescript
+// MCP Tool Integration Examples
+const mcpTools = {
+  // For complex planning
+  sequential_thinking: "Use for multi-step reasoning",
+  
+  // For web research
+  web_search: "Validate external references",
+  
+  // For documentation
+  project_knowledge_search: "Find internal docs",
+  
+  // For development
+  artifacts: "Generate code artifacts",
+  
+  // For analysis
+  repl: "Test code snippets"
+}
 
-- **Page Load**: <2 seconds initial load
-- **API Response**: <200ms for simple queries
-- **GraphRAG Validation**: <500ms for complex traversals
-- **Document Generation**: <60 seconds for complete PRD
-- **Concurrent Users**: 100+ with stable performance
-- **Uptime**: 99.9% availability SLA
+// Example Usage Pattern
+async function enhancedPRDGeneration(requirement: string) {
+  // 1. Search existing knowledge
+  const context = await project_knowledge_search(requirement)
+  
+  // 2. Sequential planning
+  const plan = await sequential_thinking({
+    thought: "Breaking down PRD requirements",
+    total_thoughts: 5
+  })
+  
+  // 3. Generate artifact
+  const prd = await artifacts({
+    command: "create",
+    type: "text/markdown",
+    title: "Product Requirements Document"
+  })
+  
+  return prd
+}
+```
 
-### Agent Coordination Metrics
+## 📚 QUICK REFERENCES
 
-- **Context Accuracy**: >95% relevant context distribution
-- **Agent Response Time**: <30 seconds for standard tasks
-- **Multi-Agent Workflow**: <2 hours for complex features
-- **Context Persistence**: Zero context loss across sessions
-- **Agent Utilization**: >80% efficient task distribution
+| Task | Command/File | Notes |
+|------|--------------|-------|
+| Add new agent | `.claude/agents/[name].md` | Follow template |
+| Update GraphRAG | `backend/services/graphrag_validator.py` | Test thoroughly |
+| New API endpoint | `backend/api/routes/` | Include OpenAPI spec |
+| Frontend component | `frontend/components/` | Use Composition API |
+| Database migration | `alembic revision -m "message"` | Never modify existing |
+| Deploy to staging | `./deploy.sh staging` | Requires approval |
 
-### Business Impact
+## 🆘 WHEN STUCK
 
-- **Planning Time**: 80% reduction (weeks to hours)
-- **Document Quality**: 90% stakeholder satisfaction
-- **Hallucination Rate**: <2% false positives
-- **Adoption Rate**: 50% of projects within 6 months
-- **ROI**: 3x return within first year
+1. **Check existing patterns**: `grep -r "similar_function" .`
+2. **Review agent definitions**: `.claude/agents/README.md`
+3. **Consult test files**: Often contain usage examples
+4. **Check GraphRAG logs**: `tail -f logs/graphrag.log`
+5. **Use sequential thinking**: Break complex problems into steps
 
-## References & Integration Points
+---
 
-**Agent System Documentation**:
+**Remember**: You're building an enterprise platform. Every decision impacts:
+- Performance at scale (100+ concurrent users)
+- Hallucination rates (must stay <2%)
+- Developer experience (other team members will use this)
+- Maintainability (code lives for years)
 
-- @.claude/agents/README.md - Complete agent index and usage guide
-- @.claude/agents/CLAUDE.md - Multi-agent system architecture and coordination patterns
+**Your North Star**: Ship fast, but ship quality. Use agents wisely.
+```
 
-**Core Orchestration Agents**:
+## Summary of Key Enhancements
 
-- @.claude/agents/context-manager.md - Central coordination hub for multi-agent workflows
-- @.claude/agents/task-orchestrator.md - Task Master workflow coordination with parallel execution
-- @.claude/agents/task-executor.md - Individual task execution with error handling
-- @.claude/agents/task-checker.md - Quality validation and completion verification
-- @.claude/agents/prompt-engineer.md - LLM prompt optimization and GraphRAG integration
+1. **Added Interactive Decision Trees** - Clear paths for common scenarios
+2. **Included Copy-Paste Ready Code** - Practical patterns developers can use immediately  
+3. **Created Error Recovery Playbook** - Specific solutions for common problems
+4. **Enhanced MCP Integration** - Shows how to leverage available tools
+5. **Added Success Validation Criteria** - Clear checklist for quality assurance
+6. **Improved Quick Reference Tables** - Faster access to common operations
+7. **Better Context Management** - Strategies for handling large contexts
+8. **More Specific Anti-Patterns** - Clear "never do this" examples
 
-**Development Agents**:
-
-- @.claude/agents/ai-engineer.md - GraphRAG implementation and hallucination prevention
-- @.claude/agents/backend-architect.md - API design and microservices architecture  
-- @.claude/agents/backend-developer.md - Scalable server-side development
-- @.claude/agents/frontend-developer.md - Modern UI development with Nuxt.js 4
-- @.claude/agents/fullstack-developer.md - End-to-end feature development
-- @.claude/agents/typescript-pro.md - Advanced TypeScript development
-- @.claude/agents/vue-expert.md - Vue.js 3 and Nuxt 3 specialization
-
-**Infrastructure & Operations Agents**:
-
-- @.claude/agents/cloud-architect.md - Multi-cloud infrastructure design
-- @.claude/agents/hybrid-cloud-architect.md - Hybrid cloud and OpenStack integration
-- @.claude/agents/kubernetes-architect.md - Container orchestration and cloud-native patterns
-- @.claude/agents/deployment-engineer.md - CI/CD pipelines and production deployments
-- @.claude/agents/devops-troubleshooter.md - Production debugging and system reliability
-- @.claude/agents/terraform-specialist.md - Infrastructure as Code automation
-- @.claude/agents/incident-responder.md - Critical incident management
-- @.claude/agents/network-engineer.md - Network connectivity and performance
-
-**Data & AI Specialists**:
-
-- @.claude/agents/database-admin.md - Neo4j and PostgreSQL administration
-- @.claude/agents/database-optimizer.md - Query optimization and performance tuning
-- @.claude/agents/postgres-pro.md - PostgreSQL expertise and optimization
-- @.claude/agents/data-engineer.md - ETL pipelines and data architecture
-- @.claude/agents/data-scientist.md - Data analysis and machine learning workflows
-- @.claude/agents/llm-architect.md - Large language model architecture and deployment
-- @.claude/agents/ml-engineer.md - ML model development and deployment
-- @.claude/agents/mlops-engineer.md - ML pipeline automation and lifecycle management
-
-**Quality & Security Agents**:
-
-- @.claude/agents/security-auditor.md - Vulnerability assessment and compliance
-- @.claude/agents/code-reviewer.md - Code quality and best practices validation
-- @.claude/agents/test-automator.md - Comprehensive testing strategy and automation
-- @.claude/agents/performance-engineer.md - Performance optimization and monitoring
-- @.claude/agents/debugger.md - Bug investigation and error resolution
-- @.claude/agents/error-detective.md - Log analysis and pattern recognition
-
-**Design & User Experience**:
-
-- @.claude/agents/ui-designer.md - Visual design and interface creation
-- @.claude/agents/ui-ux-designer.md - Comprehensive user experience design
-
-**Language Specialists**:
-
-- @.claude/agents/python-pro.md - Advanced Python development and optimization
-- @.claude/agents/javascript-pro.md - Modern JavaScript and Node.js development  
-- @.claude/agents/golang-pro.md - Go concurrency and microservices patterns
-- @.claude/agents/rust-pro.md - Systems programming with Rust
-- @.claude/agents/java-pro.md - Enterprise Java development
-- @.claude/agents/csharp-pro.md - .NET development with C#
-- @.claude/agents/php-pro.md - Modern PHP frameworks and optimization
-- @.claude/agents/ruby-pro.md - Ruby on Rails development and testing
-- @.claude/agents/c-pro.md - Systems programming with C
-- @.claude/agents/cpp-pro.md - Modern C++ development
-- @.claude/agents/elixir-pro.md - Functional programming with Elixir
-- @.claude/agents/scala-pro.md - Enterprise Scala with functional patterns
-- @.claude/agents/sql-pro.md - Advanced SQL and database design
-
-**Documentation & Communication**:
-
-- @.claude/agents/docs-architect.md - Technical documentation and architecture guides
-- @.claude/agents/tutorial-engineer.md - Educational content and onboarding materials
-- @.claude/agents/reference-builder.md - API references and technical specifications
-- @.claude/agents/api-documenter.md - API documentation and SDK generation
-- @.claude/agents/mermaid-expert.md - Diagrams and visual documentation
-
-**Business & Analytics**:
-
-- @.claude/agents/business-analyst.md - Metrics analysis and KPI tracking
-- @.claude/agents/content-marketer.md - Marketing content and growth strategies  
-- @.claude/agents/customer-support.md - Support documentation and help systems
-- @.claude/agents/sales-automator.md - Sales process automation
-- @.claude/agents/hr-pro.md - HR processes and policy development
-- @.claude/agents/legal-advisor.md - Legal documentation and compliance
-
-**Specialized Domains**:
-
-- @.claude/agents/unity-developer.md - Game development with Unity engine
-- @.claude/agents/flutter-expert.md - Cross-platform mobile development
-- @.claude/agents/ios-developer.md - Native iOS development
-- @.claude/agents/mobile-developer.md - React Native and cross-platform apps
-- @.claude/agents/wordpress-master.md - WordPress development and customization
-- @.claude/agents/minecraft-bukkit-pro.md - Minecraft server plugin development
-- @.claude/agents/payment-integration.md - Payment processing and e-commerce
-- @.claude/agents/quant-analyst.md - Financial modeling and trading algorithms
-- @.claude/agents/risk-manager.md - Risk assessment and mitigation
-- @.claude/agents/legacy-modernizer.md - Legacy system modernization
-- @.claude/agents/refactoring-specialist.md - Code refactoring and technical debt
-- @.claude/agents/search-specialist.md - Advanced research and information gathering
-- @.claude/agents/dx-optimizer.md - Developer experience optimization
-
-**SEO & Marketing Specialists**:
-
-- @.claude/agents/seo-content-writer.md - SEO-optimized content creation
-- @.claude/agents/seo-content-auditor.md - Content quality and E-E-A-T analysis
-- @.claude/agents/seo-keyword-strategist.md - Keyword research and optimization
-- @.claude/agents/seo-meta-optimizer.md - Meta tags and SERP optimization
-- @.claude/agents/seo-structure-architect.md - Content structure and schema markup
-- @.claude/agents/seo-snippet-hunter.md - Featured snippet optimization
-- @.claude/agents/seo-content-planner.md - Content strategy and planning
-- @.claude/agents/seo-content-refresher.md - Content updates and freshness
-- @.claude/agents/seo-authority-builder.md - Authority signals and E-E-A-T
-- @.claude/agents/seo-cannibalization-detector.md - Keyword overlap detection
-
-**Implementation Documentation**:
-
-- @docs/implementation_runbook.md
-- @docs/ui-ux-requirements.md
-- @docs/PRD.md
-- @docs/RAG_strategy.md
-- @docs/project_charter.md
-- @docs/product-roadmap.md
-- @input/01-Project-overview.md
-
-**Task Master Integration**:
-
-- @./.taskmaster/CLAUDE.md
-
-See @README for project overview and @package.json for available npm commands for this project.
-
-## Conclusion
-
-This enhanced guide establishes Claude as the strategic technical partner within a sophisticated multi-agent ecosystem for building an enterprise-grade AI-powered strategic planning platform. The Context Manager ensures coherent coordination across all specialized agents while maintaining project context and quality standards.
-
-**Critical Success Factors:**
-
-- Context Manager maintains <95% context accuracy across agent interactions
-- Specialized agents deliver within defined performance parameters
-- Multi-agent workflows complete complex features in <2 hours
-- Maintain <2% hallucination rate through coordinated GraphRAG validation
-- Achieve enterprise scalability with coordinated infrastructure management
-
-The platform's success depends on seamless agent coordination, consistent context management, and continuous quality validation across the entire development ecosystem.

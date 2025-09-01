@@ -169,7 +169,7 @@ API Gateway (FastAPI)
        │      ├── Task Generator  
        │      └── WBS Creator
        │
-       ├── GraphRAG Service ──── Neo4j + ChromaDB
+       ├── GraphRAG Service ──── Neo4j + Milvus
        │      │
        │      ├── Entity Validator
        │      ├── Community Analyzer

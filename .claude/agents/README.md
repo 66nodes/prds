@@ -1,10 +1,10 @@
-# AI Agents Directory
+Here is the comprehensive list of agents which I already have, in addition to these what other agents do i need to # AI Agents Directory
 
 ## Overview
 
 This directory contains specialized AI agent definitions for the AI-Powered Strategic Planning Platform. Each agent represents a domain expert with specific tools, capabilities, and coordination patterns designed to work within the multi-agent architecture orchestrated by the Context Manager.
 
-The collection contains **83 specialized agents** that extend Claude Code's capabilities for building enterprise-grade AI-powered applications. Each agent is an expert in a specific domain, automatically invoked based on context or explicitly called when needed. All agents are configured with specific Claude models based on task complexity for optimal performance and cost-effectiveness.
+The collection contains 95 specialized agents** that extend Claude Code's capabilities for building enterprise-grade AI-powered applications. Each agent is an expert in a specific domain, automatically invoked based on context or explicitly called when needed. All agents are configured with specific Claude models based on task complexity for optimal performance and cost-effectiveness.
 
 ## Agent Architecture
 
@@ -41,14 +41,33 @@ graph TB
 
 ## Agent Categories
 
+| **Agent**                     | **Description**                                                                                     | **Primary Tools**                                                                                                                 |
+| ------------------------- | ----------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| hallucination-trace-agent | Advanced hallucination detection and validation agent for GraphRAG-powered content verification | Read, Trace, GraphRAG, Annotate                                                                                               |
+| provenance-auditor        | Complete traceability and source verification agent for all generated content                   | Graph Traversal ,Engine, <br> Source Link Validator,  Claim Extractor, Evidence Mapper, Audit Report Generator                |
+| wbs-structuring-agent     | Intelligent work breakdown structure generator with dependency analysis and effort estimation   | Task Decomposer, Dependency Analyzer, Critical Path Calculator, Effort Estimator,  Resource Optimizer, GitHub Issue Generator |
+| feedback-loop-tracker     | Continuous improvement agent that tracks feedback patterns and optimizes agent performance      | Feedback Analyzer, Pattern Detector, Prompt Optimizer, Revision Tracker, Learning Pipeline                                    |
+| cost-optimization-agent   | Intelligent cost management agent for multi-model LLM usage optimization                        | Token Counter, Cost Calculator, Model Selector, Cache Manager, Usage Analyzer, Budget Enforcer                                |
+| compliance-officer-agent  | Enterprise compliance validation and regulatory enforcement agent                               | Compliance Checker, Policy Validator, Audit Logger, Regulation Scanner, Risk Assessor,  Certification Manager                 |
+| change-management-agent   | Intelligent change tracking and impact analysis agent for requirement evolution                 | Diff Engine, Impact Analyzer, Notification Manager, Version Controller, Dependency Tracker, Rollback Manager                  |
+
+
+| **Agent**                         | **Purpose**                                                                              | **Notes**                           |
+| ----------------------------- | ------------------------------------------------------------------------------------ | ------------------------------- |
+| AI Agent Performance Profiler | Tracks response time, quality score, failure rate for each agent                     | For internal benchmarking       |
+| User Behavior Analyst         | Analyzes platform usage to tune UX flows and agent prioritization                    | Based on telemetry and metadata |
+| Human-in-the-Loop Handler     | Flags uncertain results and coordinates with humans for manual review                | Key for RLHF + compliance loop  |
+| API Schema Auto-Migrator      |   Automatically updates OpenAPI and agent API specs when model or data layer changes | For faster API-first evolution  |
+| Training Data Steward         |   Validates and updates prompt embeddings and context documents in vector DB         |   For ongoing semantic accuracy |
+
 ### 🎯 Planning & Strategy Agents
-| Agent | Description | Primary Tools |
-|-------|-------------|---------------|
-| [context-manager](./context-manager.md) | **Core Orchestrator** - Manages multi-agent workflows and maintains project context | All MCP tools |
-| [task-orchestrator](./task-orchestrator.md) | Coordinates Task Master workflows with parallel execution optimization | Task Master MCP |
-| [task-executor](./task-executor.md) | Executes individual tasks with proper error handling and reporting | Task Master MCP |
-| [task-checker](./task-checker.md) | Validates task completion and quality assurance | Task Master MCP |
-| [prompt-engineer](./prompt-engineer.md) | Optimizes prompts for GraphRAG and LLM interactions | OpenAI, Anthropic |
+| Agent                                       | Description                                                                         | Primary Tools     |
+| ------------------------------------------- | ----------------------------------------------------------------------------------- | ----------------- |
+| [context-manager](./context-manager.md)     | **Core Orchestrator** - Manages multi-agent workflows and maintains project context | All MCP tools     |
+| [task-orchestrator](./task-orchestrator.md) | Coordinates Task Master workflows with parallel execution optimization              | Task Master MCP   |
+| [task-executor](./task-executor.md)         | Executes individual tasks with proper error handling and reporting                  | Task Master MCP   |
+| [task-checker](./task-checker.md)           | Validates task completion and quality assurance                                     | Task Master MCP   |
+| [prompt-engineer](./prompt-engineer.md)     | Optimizes prompts for GraphRAG and LLM interactions                                 | OpenAI, Anthropic |
 
 ### 💻 Core Development Agents
 | Agent | Description | Primary Tools |

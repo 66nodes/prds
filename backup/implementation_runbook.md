@@ -169,7 +169,7 @@ celery==5.3.4
 openai==1.10.0
 llama-index==0.9.40
 llama-index-graph-stores-neo4j==0.1.2
-chromadb==0.4.22
+Milvus==0.4.22
 python-dotenv==1.0.0
 pytest==7.4.4
 pytest-asyncio==0.23.3

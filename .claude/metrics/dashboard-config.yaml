@@ -1,0 +1,103 @@
+# Monitoring Dashboard Configuration
+version: 1.0.0
+
+dashboards:
+  iterative_refinement:
+    name: "Content Refinement Pipeline"
+    refresh_rate: 10s
+    panels:
+      - type: gauge
+        title: "Average Iterations to Approval"
+        metric: draft_judge.iteration_count
+        target: <=3
+        
+      - type: line_chart
+        title: "Quality Progression"
+        metrics:
+          - draft.quality_score
+          - judge.evaluation_score
+        time_range: 24h
+        
+      - type: heatmap
+        title: "Improvement Areas"
+        dimensions: [section, iteration]
+        metric: improvement_magnitude
+        
+  document_lifecycle:
+    name: "Document Management"
+    panels:
+      - type: pie_chart
+        title: "Document Status Distribution"
+        metric: document.status
+        
+      - type: histogram
+        title: "Retrieval Latency"
+        metric: librarian.retrieval_time_ms
+        buckets: [10, 50, 100, 500, 1000]
+        
+      - type: counter
+        title: "Total Documents"
+        metrics:
+          - documents.total
+          - documents.active
+          - documents.archived
+          
+  knowledge_evolution:
+    name: "Knowledge Graph Health"
+    panels:
+      - type: graph
+        title: "Knowledge Graph Overview"
+        metrics:
+          - nodes.count
+          - edges.count
+          - components.count
+          
+      - type: time_series
+        title: "Accuracy Trend"
+        metric: graph.accuracy_score
+        comparison: week_over_week
+        
+      - type: table
+        title: "Recent Patterns Discovered"
+        columns: [pattern, frequency, significance]
+        limit: 10
+        
+  workflow_performance:
+    name: "Workflow Optimization"
+    panels:
+      - type: sankey
+        title: "Agent Flow Visualization"
+        source: workflow.stages
+        
+      - type: bar_chart
+        title: "Stage Duration Breakdown"
+        metric: stage.duration_ms
+        grouping: workflow_id
+        
+      - type: scatter_plot
+        title: "Cost vs Quality"
+        x_axis: workflow.token_cost
+        y_axis: workflow.quality_score
+
+alerts:
+  critical:
+    - name: iteration_limit_exceeded
+      condition: draft_judge.iteration_count > 5
+      action: page_on_call
+      
+    - name: retrieval_latency_high
+      condition: librarian.p95_latency > 1000ms
+      action: alert_team
+      
+    - name: graph_accuracy_degraded
+      condition: graph.accuracy_score < 0.85
+      action: trigger_investigation
+      
+  warning:
+    - name: high_token_usage
+      condition: workflow.token_cost > budget * 0.8
+      action: notify_stakeholders
+      
+    - name: document_backlog
+      condition: documents.pending_review > 100
+      action: scale_resources

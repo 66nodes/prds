@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: development-agents
+  namespace: ai-agents
+spec:
+  replicas: 10
+  selector:
+    matchLabels:
+      category: development
+  template:
+    metadata:
+      labels:
+        category: development
+        tier: core
+    spec:
+      containers:
+      - name: agent-container
+        image: ai-agents/development:latest
+        env:
+        - name: AGENT_CATEGORY
+          value: "development"
+        - name: MODEL_TYPE
+          value: "sonnet"
+        - name: GRAPHRAG_ENABLED
+          value: "true"
+        - name: CACHE_ENABLED
+          value: "true"
+        resources:
+          requests:
+            memory: "4Gi"
+            cpu: "2"
+          limits:
+            memory: "8Gi"
+            cpu: "4"
+        volumeMounts:
+        - name: code-cache
+          mountPath: /cache
+        - name: templates
+          mountPath: /templates
+      volumes:
+      - name: code-cache
+        persistentVolumeClaim:
+          claimName: code-cache-pvc
+      - name: templates
+        configMap:
+          name: code-templates
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: development-agents-service
+  namespace: ai-agents
+spec:
+  selector:
+    category: development
+  ports:
+  - port: 8080
+    targetPort: 8080
+  type: ClusterIP

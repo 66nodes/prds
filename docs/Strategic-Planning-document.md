@@ -169,7 +169,7 @@ API Gateway (FastAPI)
        │      ├── Task Generator  
        │      └── WBS Creator
        │
-       ├── GraphRAG Service ──── Neo4j + ChromaDB
+       ├── GraphRAG Service ──── Neo4j + Milvus
        │      │
        │      ├── Entity Validator
        │      ├── Community Analyzer
@@ -1069,4 +1069,4 @@ project-root/
 - Operations documentation
 - Training materials
 
-This PRD provides a comprehensive blueprint for building the AI-powered strategic planning platform. Each section contains specific, actionable requirements that can be implemented incrementally while maintaining system coherence and quality standards.
+This PRD provides a comprehensive blueprint for building the AI-powered strategic planning platform. Each section contains specific, actionable requirements that can be implemented incrementally while maintaining system coherence and quality standards

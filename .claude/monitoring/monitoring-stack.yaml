@@ -1,0 +1,133 @@
+# Complete Monitoring Stack Configuration
+version: 4.0.0
+
+metrics:
+  prometheus:
+    enabled: true
+    retention: 30d
+    scrape_interval: 15s
+    targets:
+      - job: agent_metrics
+        path: /metrics
+        port: 9090
+      - job: infrastructure
+        path: /metrics
+        port: 9100
+        
+  custom_metrics:
+    - name: agent_request_duration
+      type: histogram
+      buckets: [0.1, 0.5, 1, 2, 5, 10]
+    - name: agent_error_rate
+      type: counter
+      labels: [agent, error_type]
+    - name: hallucination_rate
+      type: gauge
+      labels: [agent, document_type]
+    - name: token_usage
+      type: counter
+      labels: [agent, model]
+    - name: cache_hit_ratio
+      type: gauge
+      labels: [cache_type]
+
+dashboards:
+  grafana:
+    enabled: true
+    dashboards:
+      - name: Agent Performance Overview
+        panels:
+          - Request rate by agent
+          - Error rate by category
+          - P95 latency by workflow
+          - Token usage by model
+          - Cost tracking
+          
+      - name: Quality Metrics
+        panels:
+          - Hallucination rate trend
+          - Iteration count distribution
+          - Judge approval rate
+          - GraphRAG validation scores
+          
+      - name: Infrastructure Health
+        panels:
+          - CPU utilization by node
+          - Memory usage by pod
+          - GPU utilization
+          - Network throughput
+          - Storage usage
+
+tracing:
+  opentelemetry:
+    enabled: true
+    sampling_rate: 0.1
+    exporters:
+      - jaeger
+      - zipkin
+    
+  spans:
+    - agent_execution
+    - workflow_stage
+    - model_inference
+    - cache_lookup
+    - graphrag_validation
+
+logging:
+  elasticsearch:
+    enabled: true
+    retention: 7d
+    indices:
+      - agent-logs
+      - workflow-logs
+      - error-logs
+      - audit-logs
+      
+  log_levels:
+    default: INFO
+    development: DEBUG
+    production: WARNING
+    security: ALL
+
+alerting:
+  pagerduty:
+    enabled: true
+    integration_key: ${PAGERDUTY_KEY}
+    
+  rules:
+    - name: high_error_rate
+      condition: error_rate > 0.05
+      severity: critical
+      escalation: immediate
+      
+    - name: high_latency
+      condition: p95_latency > 5000ms
+      severity: warning
+      escalation: 5_minutes
+      
+    - name: low_cache_hit
+      condition: cache_hit_ratio < 0.3
+      severity: info
+      escalation: none
+      
+    - name: budget_exceeded
+      condition: daily_cost > daily_budget * 0.9
+      severity: critical
+      escalation: immediate
+      
+    - name: hallucination_spike
+      condition: hallucination_rate > 0.05
+      severity: critical
+      escalation: immediate
+
+sla_monitoring:
+  targets:
+    availability: 99.9%
+    latency_p95: 2000ms
+    error_rate: <1%
+    hallucination_rate: <2%
+    
+  reporting:
+    frequency: daily
+    recipients: [sre-team, product-team]
+    format: [dashboard, email, slack]

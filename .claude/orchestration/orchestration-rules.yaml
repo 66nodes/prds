@@ -1,0 +1,161 @@
+# Multi-Agent Orchestration Rules and Patterns
+version: 4.0.0
+
+orchestration_patterns:
+  # Pattern 1: Full Stack Development
+  fullstack_development:
+    trigger: "project.type == 'fullstack'"
+    workflow:
+      - stage: planning
+        agents: [context-manager, task-orchestrator]
+        parallel: false
+      - stage: design
+        agents: [ui-designer, database-admin]
+        parallel: true
+      - stage: development
+        agents: [frontend-developer, backend-developer, database-admin]
+        parallel: true
+      - stage: testing
+        agents: [test-automator, code-reviewer]
+        parallel: true
+      - stage: deployment
+        agents: [deployment-engineer, devops-troubleshooter]
+        parallel: false
+    sla: 4_hours
+    
+  # Pattern 2: AI/ML Pipeline
+  ml_pipeline:
+    trigger: "project.type == 'machine_learning'"
+    workflow:
+      - stage: data_preparation
+        agents: [data-engineer, data-scientist]
+        parallel: false
+      - stage: model_development
+        agents: [ml-engineer, ai-engineer]
+        parallel: false
+      - stage: training
+        agents: [ml-engineer, mlops-engineer]
+        parallel: false
+      - stage: deployment
+        agents: [mlops-engineer, deployment-engineer]
+        parallel: false
+    sla: 8_hours
+    requires_gpu: true
+    
+  # Pattern 3: GraphRAG Document Generation
+  graphrag_document:
+    trigger: "project.type == 'document' && project.graphrag == true"
+    workflow:
+      - stage: research
+        agents: [search-specialist, rd-knowledge-engineer]
+        parallel: true
+      - stage: drafting
+        agents: [draft-agent]
+        iterations: 3
+      - stage: validation
+        agents: [judge-agent, hallucination-trace-agent]
+        parallel: true
+      - stage: refinement
+        agents: [draft-agent, judge-agent]
+        loop: true
+        max_iterations: 5
+      - stage: finalization
+        agents: [provenance-auditor, documentation-librarian]
+        parallel: false
+    sla: 2_hours
+    
+  # Pattern 4: Infrastructure Automation
+  infrastructure_automation:
+    trigger: "project.type == 'infrastructure'"
+    workflow:
+      - stage: architecture
+        agents: [cloud-architect, kubernetes-architect]
+        parallel: false
+      - stage: implementation
+        agents: [terraform-specialist, network-engineer]
+        parallel: true
+      - stage: security
+        agents: [security-auditor]
+        parallel: false
+      - stage: deployment
+        agents: [deployment-engineer, devops-troubleshooter]
+        parallel: false
+    sla: 6_hours
+    
+  # Pattern 5: SEO Content Pipeline
+  seo_content:
+    trigger: "project.type == 'content' && project.seo == true"
+    workflow:
+      - stage: research
+        agents: [seo-keyword-strategist, seo-structure-architect]
+        parallel: true
+      - stage: writing
+        agents: [seo-content-writer, draft-agent]
+        parallel: false
+      - stage: optimization
+        agents: [seo-meta-optimizer, seo-snippet-hunter]
+        parallel: true
+      - stage: audit
+        agents: [seo-content-auditor, seo-cannibalization-detector]
+        parallel: true
+    sla: 3_hours
+
+routing_rules:
+  priority_routing:
+    P0:
+      max_wait: 30_seconds
+      preferred_agents: [high_capacity]
+      escalation: immediate
+    P1:
+      max_wait: 2_minutes
+      preferred_agents: [standard]
+      escalation: after_1_retry
+    P2:
+      max_wait: 10_minutes
+      preferred_agents: [available]
+      escalation: after_3_retries
+      
+  load_balancing:
+    strategy: weighted_round_robin
+    weights:
+      by_model:
+        haiku: 3
+        sonnet: 2
+        opus: 1
+      by_availability:
+        idle: 3
+        busy: 1
+        overloaded: 0
+        
+  failover:
+    retry_policy:
+      max_retries: 3
+      backoff: exponential
+      base_delay: 1_second
+    fallback_chain:
+      - primary_agent
+      - category_backup
+      - general_purpose
+      - human_escalation
+
+coordination:
+  communication:
+    protocol: grpc
+    serialization: protobuf
+    compression: gzip
+    encryption: tls_1_3
+    
+  state_management:
+    backend: redis_cluster
+    persistence: true
+    ttl: 24_hours
+    
+  context_sharing:
+    method: shared_memory
+    max_size: 1GB
+    format: json
+    
+  synchronization:
+    locks: distributed
+    timeout: 30_seconds
+    deadlock_detection: true

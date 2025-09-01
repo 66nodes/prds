@@ -1,0 +1,89 @@
+# Global Deployment Configuration for All Agents
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: agent-deployment-config
+  namespace: ai-agents
+data:
+  deployment.yaml: |
+    global:
+      namespace: ai-agents
+      environment: production
+      region: us-central1
+      
+    defaults:
+      replicas:
+        min: 1
+        max: 10
+        target_cpu: 70
+        target_memory: 80
+        
+      resources:
+        requests:
+          cpu: 1
+          memory: 2Gi
+        limits:
+          cpu: 4
+          memory: 8Gi
+          
+      healthcheck:
+        liveness:
+          path: /health/live
+          period: 30
+          timeout: 5
+        readiness:
+          path: /health/ready
+          period: 10
+          timeout: 3
+          
+      networking:
+        service_type: ClusterIP
+        port: 8080
+        protocol: HTTP2
+        
+      security:
+        service_account: agent-sa
+        pod_security_policy: restricted
+        network_policy: allow-internal
+        
+    model_resources:
+      haiku:
+        cpu: 1
+        memory: 2Gi
+        gpu: none
+        cost_per_hour: 0.10
+        
+      sonnet:
+        cpu: 2
+        memory: 4Gi
+        gpu: optional
+        cost_per_hour: 0.25
+        
+      opus:
+        cpu: 4
+        memory: 16Gi
+        gpu: recommended
+        cost_per_hour: 1.00
+        
+    autoscaling:
+      enabled: true
+      metrics:
+        - type: cpu
+          target: 70
+        - type: memory
+          target: 80
+        - type: custom
+          metric: request_latency_p95
+          target: 1000
+          
+    observability:
+      monitoring:
+        prometheus: enabled
+        grafana: enabled
+        datadog: enabled
+      tracing:
+        opentelemetry: enabled
+        jaeger: enabled
+      logging:
+        fluentbit: enabled
+        elasticsearch: enabled

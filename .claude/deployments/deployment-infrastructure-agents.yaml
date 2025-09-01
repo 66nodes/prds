@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: infrastructure-agents
+  namespace: ai-agents
+spec:
+  replicas: 8
+  selector:
+    matchLabels:
+      category: infrastructure
+  template:
+    metadata:
+      labels:
+        category: infrastructure
+        tier: platform
+    spec:
+      serviceAccount: infra-agent-sa
+      containers:
+      - name: agent-container
+        image: ai-agents/infrastructure:latest
+        env:
+        - name: AGENT_CATEGORY
+          value: "infrastructure"
+        - name: CLOUD_PROVIDERS
+          value: "aws,gcp,azure"
+        - name: TERRAFORM_ENABLED
+          value: "true"
+        - name: KUBERNETES_ACCESS
+          value: "true"
+        resources:
+          requests:
+            memory: "8Gi"
+            cpu: "4"
+          limits:
+            memory: "16Gi"
+            cpu: "8"
+        volumeMounts:
+        - name: cloud-credentials
+          mountPath: /credentials
+          readOnly: true
+        - name: terraform-modules
+          mountPath: /terraform
+      volumes:
+      - name: cloud-credentials
+        secret:
+          secretName: cloud-credentials
+      - name: terraform-modules
+        persistentVolumeClaim:
+          claimName: terraform-modules-pvc

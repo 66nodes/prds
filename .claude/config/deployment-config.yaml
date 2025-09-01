@@ -1,0 +1,81 @@
+# Deployment Configuration for Missing Agents
+version: 3.0.0
+environment: production
+
+deployments:
+  judge_agent:
+    replicas: 3
+    model: claude-3-opus
+    resources:
+      cpu: 4
+      memory: 8Gi
+      gpu: optional
+    autoscaling:
+      min: 2
+      max: 10
+      target_cpu: 70%
+    health_check:
+      endpoint: /health
+      interval: 30s
+      
+  draft_agent:
+    replicas: 5
+    model: claude-3-sonnet
+    resources:
+      cpu: 2
+      memory: 4Gi
+    autoscaling:
+      min: 3
+      max: 20
+      target_latency: 1000ms
+    cache:
+      enabled: true
+      size: 10Gi
+      
+  documentation_librarian:
+    replicas: 2
+    model: claude-3-sonnet
+    resources:
+      cpu: 4
+      memory: 16Gi
+      storage: 100Gi
+    persistence:
+      enabled: true
+      backup_interval: 1h
+      retention: 30d
+      
+  rd_knowledge_engineer:
+    replicas: 2
+    model: claude-3-opus
+    resources:
+      cpu: 8
+      memory: 32Gi
+      gpu: required
+    batch_processing:
+      enabled: true
+      schedule: "0 2 * * *"
+      
+  ai_workflow_designer:
+    replicas: 2
+    model: claude-3-opus
+    resources:
+      cpu: 4
+      memory: 8Gi
+    state_management:
+      backend: redis
+      persistence: true
+
+load_balancing:
+  strategy: least_connections
+  health_checks: true
+  circuit_breaker:
+    threshold: 5
+    timeout: 60s
+    
+service_mesh:
+  enabled: true
+  mtls: required
+  tracing: enabled
+  retry_policy:
+    attempts: 3
+    backoff: exponential

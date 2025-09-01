@@ -1,0 +1,94 @@
+# Resource Allocation and Cost Management
+version: 4.0.0
+
+resource_pools:
+  development:
+    cpu_cores: 100
+    memory_gb: 400
+    gpu_count: 0
+    storage_tb: 10
+    
+  infrastructure:
+    cpu_cores: 50
+    memory_gb: 200
+    gpu_count: 0
+    storage_tb: 5
+    
+  ai_ml:
+    cpu_cores: 200
+    memory_gb: 800
+    gpu_count: 16
+    storage_tb: 100
+    
+  production:
+    cpu_cores: 500
+    memory_gb: 2000
+    gpu_count: 20
+    storage_tb: 200
+
+cost_controls:
+  budgets:
+    daily_limit: 5000
+    monthly_limit: 100000
+    
+  model_costs:
+    haiku:
+      per_1k_tokens: 0.0005
+      daily_limit: 500
+    sonnet:
+      per_1k_tokens: 0.003
+      daily_limit: 1500
+    opus:
+      per_1k_tokens: 0.015
+      daily_limit: 3000
+      
+  alerts:
+    - threshold: 80%
+      action: notify
+    - threshold: 90%
+      action: throttle
+    - threshold: 100%
+      action: suspend
+
+resource_optimization:
+  auto_scaling:
+    enabled: true
+    min_utilization: 30
+    max_utilization: 80
+    scale_down_delay: 300
+    scale_up_delay: 60
+    
+  spot_instances:
+    enabled: true
+    percentage: 40
+    fallback: on_demand
+    
+  reserved_capacity:
+    percentage: 30
+    term: 1_year
+    
+  caching:
+    enabled: true
+    ttl: 3600
+    max_size: 100GB
+    eviction: lru
+
+quotas:
+  per_team:
+    default:
+      cpu: 50
+      memory: 200GB
+      storage: 5TB
+      gpu: 2
+      
+  per_agent:
+    default:
+      cpu: 4
+      memory: 16GB
+      requests_per_minute: 100
+      
+  per_user:
+    default:
+      concurrent_requests: 10
+      daily_requests: 1000
+      storage: 100GB

@@ -1,0 +1,66 @@
+# AI Model Deployment Workflow
+name: ai_model_deployment
+version: 1.0.0
+description: Deploy ML models with validation and monitoring
+
+stages:
+  - id: model_preparation
+    agents:
+      - ml-engineer
+      - mlops-engineer
+    tasks:
+      - Validate model artifacts
+      - Optimize for inference
+      - Create serving container
+    outputs: [model_container, serving_config]
+    
+  - id: infrastructure_setup
+    agents:
+      - cloud-architect
+      - kubernetes-architect
+    tasks:
+      - Provision GPU nodes
+      - Setup model registry
+      - Configure load balancing
+    outputs: [infrastructure_ready]
+    
+  - id: deployment
+    agents:
+      - mlops-engineer
+      - deployment-engineer
+    tasks:
+      - Deploy to staging
+      - Run inference tests
+      - Setup A/B testing
+    outputs: [staging_endpoint]
+    
+  - id: validation
+    agents:
+      - ml-engineer
+      - data-scientist
+    tasks:
+      - Validate predictions
+      - Check performance metrics
+      - Monitor drift
+    outputs: [validation_report]
+    
+  - id: production_rollout
+    agents:
+      - mlops-engineer
+      - incident-responder
+    tasks:
+      - Gradual rollout
+      - Monitor metrics
+      - Setup alerts
+    outputs: [production_endpoint]
+
+monitoring:
+  metrics:
+    - inference_latency
+    - throughput
+    - accuracy
+    - drift_score
+  alerts:
+    - latency > 100ms
+    - accuracy < 0.95
+    - drift_score > 0.1

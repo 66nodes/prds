@@ -1,0 +1,29 @@
+# GraphRAG Integration Configuration
+version: 2.0.0
+
+graphrag:
+  primary_store: neo4j
+  vector_store: pinecone
+  
+  validation:
+    enabled: true
+    confidence_threshold: 0.85
+    fact_check_apis:
+      - wikipedia
+      - wikidata
+      - custom_knowledge_base
+      
+  indexing:
+    batch_size: 1000
+    embedding_model: text-embedding-ada-002
+    dimension: 1536
+    
+  query:
+    max_hops: 3
+    result_limit: 50
+    semantic_search: true
+    
+  maintenance:
+    reindex_schedule: weekly
+    cleanup_orphans: true
+    optimize_embeddings: true

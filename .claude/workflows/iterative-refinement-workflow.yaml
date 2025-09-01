@@ -1,0 +1,61 @@
+# Iterative Refinement Workflow Template
+name: iterative_content_refinement
+version: 1.0.0
+description: Multi-pass content generation with quality gates
+
+stages:
+  - id: initial_draft
+    agent: draft-agent
+    config:
+      mode: quick_draft
+      time_budget: 30s
+    outputs: [draft_v1]
+    
+  - id: first_review
+    agent: judge-agent
+    inputs: [draft_v1]
+    config:
+      critique_mode: standard
+      threshold: 0.70
+    outputs: [review_v1, continue_flag]
+    
+  - id: refinement_loop
+    type: loop
+    condition: continue_flag == true
+    max_iterations: 5
+    stages:
+      - agent: draft-agent
+        inputs: [previous_draft, review_feedback]
+        config:
+          mode: iterative
+          focus: improvement_areas
+      - agent: judge-agent
+        config:
+          critique_mode: iterative
+          threshold: 0.90
+    outputs: [final_draft]
+    
+  - id: final_validation
+    agent: provenance-auditor
+    inputs: [final_draft]
+    outputs: [validated_content]
+    
+  - id: storage
+    agent: documentation-librarian
+    inputs: [validated_content]
+    config:
+      lifecycle: published
+      versioning: true
+
+error_handling:
+  max_iterations_exceeded:
+    action: escalate_to_human
+  validation_failure:
+    action: rollback_and_retry
+    
+monitoring:
+  metrics:
+    - iteration_count
+    - quality_progression
+    - time_to_completion
+    - token_usage

@@ -2,134 +2,232 @@
   "master": {
     "tasks": [
       {
-        "id": 1,
-        "title": "Initialize Project Infrastructure and Repository",
-        "description": "Set up the foundational infrastructure for the platform, including code repositories, CI/CD pipelines, and cloud environments.",
-        "details": "Create a monorepo with separate folders for Nuxt.js 4 frontend and FastAPI backend. Configure TypeScript, Prettier, ESLint, and Vitest for the frontend. Set up Python virtual environment, pytest, and linting for the backend. Provision AWS and GCP environments, configure Kubernetes manifests for deployments, and set up automated CI/CD pipelines with code quality, security, and test stages as described in the PRD.",
-        "testStrategy": "Validate repository structure, run initial CI/CD pipeline, ensure successful deployment of 'hello world' apps for both frontend and backend in staging.",
+        "id": 12,
+        "title": "Initialize Project Repository and Environment",
+        "description": "Set up the foundational codebase, Docker Compose files, and environment configuration for frontend, backend, and database services.",
+        "details": "Create GitHub repository. Scaffold Nuxt.js 4 frontend, FastAPI backend, Neo4j and PostgreSQL containers. Configure environment variables for local, staging, and production. Integrate Supabase for authentication and secrets management.",
+        "testStrategy": "Verify all containers start successfully. Confirm environment variables load correctly. Run health checks for each service endpoint.",
         "priority": "high",
         "dependencies": [],
         "status": "pending",
         "subtasks": []
       },
       {
-        "id": 2,
-        "title": "Implement Authentication and RBAC System",
-        "description": "Develop secure JWT-based authentication and role-based access control for all user types.",
-        "details": "Implement FastAPI endpoints for user registration, login, password reset, and session management. Use JWT with RS256 signing, refresh token rotation, and enforce rate limiting and account lockout. Define roles (Admin, Project Manager, Contributor, Viewer) and resource-level permissions. Integrate with Nuxt.js frontend using Pinia for state management. Prepare for future SSO and MFA integration.",
-        "testStrategy": "Write unit and integration tests for all auth endpoints. Perform security testing for token handling, brute force, and privilege escalation. Validate RBAC enforcement via E2E tests.",
+        "id": 13,
+        "title": "Implement Authentication and RBAC",
+        "description": "Develop user authentication using Supabase Auth, JWT sessions, and role-based access control (RBAC) for all platform endpoints.",
+        "details": "Integrate Supabase Auth SDK in Nuxt.js frontend and FastAPI backend. Define roles (Viewer, Editor, Admin) and enforce RBAC in API endpoints. Implement SSO and multi-factor authentication support.",
+        "testStrategy": "Unit test login, registration, and role assignment. Attempt unauthorized actions and verify access is denied. Validate JWT expiry and refresh logic.",
         "priority": "high",
         "dependencies": [
-          1
+          12
         ],
         "status": "pending",
         "subtasks": []
       },
       {
-        "id": 3,
-        "title": "Design and Deploy Neo4j Graph Database Schema",
-        "description": "Create and deploy the Neo4j schema for PRDs, requirements, users, and validation results.",
-        "details": "Apply all Cypher constraints and indexes as specified in the PRD, including unique constraints, vector indexes for embeddings, and full-text search. Implement initial data seeding scripts. Ensure secure connection and encryption at rest and in transit.",
-        "testStrategy": "Run schema migration scripts in a test environment. Validate constraints, indexes, and data integrity. Benchmark query performance and verify encryption.",
+        "id": 14,
+        "title": "Design and Build Project Concept Intake UI",
+        "description": "Create a responsive Nuxt.js UI for users to submit high-level project concepts, with auto-classification and similar project retrieval.",
+        "details": "Develop input form (100–2000 chars), auto-classification logic, and semantic search for similar projects using Milvus embeddings. Ensure WCAG 2.1 AA compliance.",
+        "testStrategy": "UI/UX tests for input validation, accessibility, and responsiveness. Validate classification accuracy and semantic match results.",
         "priority": "high",
         "dependencies": [
-          1
+          12,
+          13
         ],
         "status": "pending",
         "subtasks": []
       },
       {
-        "id": 4,
-        "title": "Develop Phase 0-2 PRD Creation Workflow (Frontend & Backend)",
-        "description": "Implement the end-to-end workflow for project invitation, objective clarification, and objective drafting/approval.",
-        "details": "Build Nuxt.js 4 components for project input, clarifying questions, and objective drafting using Vue 3 Composition API, TypeScript, and Pinia. Implement FastAPI endpoints for each phase, following the provided endpoint structure and Pydantic models. Integrate real-time input validation, progress tracking, and mobile-responsive design with WCAG 2.1 AA compliance.",
-        "testStrategy": "Write unit/component tests for all UI elements (Vitest, Vue Test Utils). Backend: pytest for endpoints. E2E tests (Playwright) for the full workflow. Accessibility tests with axe-core.",
+        "id": 15,
+        "title": "Implement Entity Extraction and Knowledge Graph Construction",
+        "description": "Parse project concepts into entities and relationships, then build a Neo4j knowledge graph with confidence scoring and provenance tracking.",
+        "details": "Use PydanticAI agent to extract requirements, goals, risks, stakeholders. Store nodes and edges in Neo4j. Assign confidence scores and metadata for auditability.",
+        "testStrategy": "Integration tests for entity extraction accuracy. Validate graph structure and confidence scores. Confirm provenance metadata is stored.",
         "priority": "high",
         "dependencies": [
-          2,
-          3
+          14
         ],
         "status": "pending",
         "subtasks": []
       },
       {
-        "id": 5,
-        "title": "Implement GraphRAG Validation Pipeline (Entity Level)",
-        "description": "Develop the initial GraphRAG validation service for entity extraction and verification.",
-        "details": "Implement the GraphRAGValidator class in Python as per the PRD, focusing on entity validation (50% weight). Integrate with Neo4j for similarity search and confidence scoring. Expose validation endpoints in FastAPI. Ensure parameterized queries and input sanitization for security.",
-        "testStrategy": "Unit and integration tests for validation logic. Simulate various content inputs and verify confidence scores and corrections. Security tests for injection prevention.",
+        "id": 16,
+        "title": "Develop AI-Driven Clarification Workflow",
+        "description": "Automatically identify gaps in project input and generate clarifying questions, collecting user responses to enrich planning accuracy.",
+        "details": "Implement FastAPI endpoint to detect graph gaps and generate 3–5 context-aware questions. Store user responses in project metadata.",
+        "testStrategy": "Unit test question generation logic. Validate provenance links to graph gaps. Confirm user responses update project context.",
         "priority": "high",
         "dependencies": [
-          3,
-          4
+          15
         ],
         "status": "pending",
         "subtasks": []
       },
       {
-        "id": 6,
-        "title": "Build Phase 3-4 PRD Section Co-Creation and Synthesis Workflow",
-        "description": "Enable section-by-section PRD co-creation, editing, approval, and final document synthesis/export.",
-        "details": "Develop frontend components for each PRD section (scope, deliverables, timeline, etc.) with rich text editing, status tracking, and sidebar navigation. Implement backend endpoints for section creation, editing, validation, and finalization. Add export functionality for PDF, Word, Markdown, and HTML. Integrate audit trail and approval flows.",
-        "testStrategy": "Component and E2E tests for section workflows. Backend tests for section endpoints and export logic. Validate document assembly and export formats.",
+        "id": 17,
+        "title": "Integrate GraphRAG Validation Pipeline",
+        "description": "Validate AI-generated content against the knowledge graph using entity, community, and global validation layers, scoring each section.",
+        "details": "Implement GraphRAG agent using Microsoft GraphRAG + LlamaIndex. Calculate confidence scores per section. Flag and auto-correct low-confidence content.",
+        "testStrategy": "Unit and integration tests for validation accuracy. Simulate hallucinated content and verify correction loop. Confirm provenance and scoring.",
         "priority": "high",
         "dependencies": [
-          4,
-          5
+          15,
+          16
         ],
         "status": "pending",
         "subtasks": []
       },
       {
-        "id": 7,
-        "title": "Integrate Advanced GraphRAG Validation (Community & Global Levels)",
-        "description": "Extend the validation pipeline to include community and global validation layers with weighted confidence scoring.",
-        "details": "Implement community validation (pattern matching, consistency checks) and global validation (strategic alignment, policy compliance) in the GraphRAGValidator. Update endpoints to return detailed validation results and trigger corrections or human review as per quality gates. Ensure performance targets (<500ms) are met.",
-        "testStrategy": "Unit/integration tests for new validation layers. Performance/load tests for validation endpoints. E2E tests for quality gate enforcement.",
+        "id": 18,
+        "title": "Automate PRD Document Generation",
+        "description": "Generate comprehensive PRDs with validated sections, confidence scores, and traceable sources using orchestrated AI agents.",
+        "details": "Implement Draft Agent for initial content, Judge Agent for critique, and Orchestrator for workflow management. Store PRD documents in PostgreSQL with section-level metadata.",
+        "testStrategy": "End-to-end tests for PRD generation. Validate section structure, scoring, and traceability. Confirm low-confidence sections trigger correction or review.",
+        "priority": "high",
+        "dependencies": [
+          17
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 19,
+        "title": "Implement Work Breakdown Structure (WBS) Generation",
+        "description": "Decompose validated requirements into atomic tasks, map dependencies, estimate effort, and identify the critical path.",
+        "details": "Use PydanticAI agent to break requirements into 1–2 day tasks. Build dependency DAG in Neo4j. Estimate effort using complexity and historical data. Output JSON schema for tasks.",
+        "testStrategy": "Unit test decomposition logic. Validate dependency mapping and effort estimation. Confirm critical path calculation and output formatting.",
+        "priority": "high",
+        "dependencies": [
+          18
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 20,
+        "title": "Develop GitHub Integration Layer",
+        "description": "Enable automatic creation of GitHub repositories, issues, milestones, and project boards from WBS tasks and PRDs.",
+        "details": "Implement FastAPI endpoints for GitHub OAuth, repo creation, issue/milestone mapping, and webhook tracking. Use GitHub REST and GraphQL APIs.",
+        "testStrategy": "Integration tests for repo and issue creation. Validate milestone and label mapping. Confirm webhook events update project status.",
+        "priority": "high",
+        "dependencies": [
+          19
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 21,
+        "title": "Build Export and Sharing Functionality",
+        "description": "Support export of PRDs and WBS in PDF, DOCX, Markdown, JSON formats, and secure sharing with permission controls.",
+        "details": "Implement export service using S3/MinIO for file storage. Generate zipped bundles with embedded traceability. Enforce view/edit permissions on shared links.",
+        "testStrategy": "Unit and integration tests for export formats. Validate permission enforcement and traceability data in exports.",
         "priority": "medium",
         "dependencies": [
-          5,
-          6
+          18,
+          19
         ],
         "status": "pending",
         "subtasks": []
       },
       {
-        "id": 8,
-        "title": "Implement Dashboard, Analytics, and Reporting Features",
-        "description": "Develop the main dashboard, analytics visualizations, and reporting tools for users and admins.",
-        "details": "Build Nuxt.js dashboard components for project status, PRD quality scores, and performance metrics. Implement backend endpoints for analytics data aggregation and reporting. Add executive summary, productivity, and quality dashboards. Prepare for custom report builder in later phases.",
-        "testStrategy": "Component tests for dashboard widgets. Backend tests for analytics endpoints. E2E tests for dashboard workflows. Visual regression tests for design consistency.",
+        "id": 22,
+        "title": "Implement Quality Assurance Dashboard",
+        "description": "Create a dashboard to display PRD quality metrics, section scores, and trigger feedback or manual review workflows.",
+        "details": "Develop Nuxt.js dashboard UI. Aggregate metrics from PostgreSQL. Implement feedback loop for low-scoring sections. Integrate with audit log for reviewer actions.",
+        "testStrategy": "UI tests for metric display and feedback triggers. Validate reviewer actions are logged and update document status.",
         "priority": "medium",
         "dependencies": [
-          6,
-          7
+          18
         ],
         "status": "pending",
         "subtasks": []
       },
       {
-        "id": 9,
-        "title": "Establish Monitoring, Alerting, and Observability Stack",
-        "description": "Set up application and infrastructure monitoring, alerting, and business metric tracking.",
-        "details": "Integrate DataDog RUM for frontend, APM for backend, and Neo4j monitoring. Implement custom metrics collection (API response time, hallucination rate, validation confidence, etc.) and alerting for critical thresholds. Configure dashboards for technical and business KPIs.",
-        "testStrategy": "Simulate failures and verify alert triggers. Validate metric collection and dashboard accuracy. Test alerting for business and technical events.",
+        "id": 23,
+        "title": "Develop Monitoring and Observability Stack",
+        "description": "Instrument backend and frontend for logging, metrics, and tracing using Prometheus, Grafana, Logfire, and OpenTelemetry.",
+        "details": "Configure Prometheus for API and validation metrics. Set up Grafana dashboards. Integrate Logfire for structured logs and OpenTelemetry for distributed tracing.",
+        "testStrategy": "Simulate load and error scenarios. Validate metrics and logs appear in dashboards. Confirm tracing across services.",
         "priority": "medium",
         "dependencies": [
-          8
+          12,
+          18,
+          19
         ],
         "status": "pending",
         "subtasks": []
       },
       {
-        "id": 10,
-        "title": "Implement Security, Compliance, and Disaster Recovery Controls",
-        "description": "Enforce security best practices, compliance requirements, and disaster recovery procedures.",
-        "details": "Apply encryption at rest and in transit, audit logging, and RBAC enforcement. Integrate SAST/DAST scanning in CI/CD. Implement GDPR and SOC 2 controls (data subject rights, access logs, incident response). Set up automated Neo4j/database backups, cross-region replication, and runbook documentation for recovery.",
-        "testStrategy": "Security audits, penetration testing, and compliance checklists. Test backup/restore procedures and failover. Validate audit logs and access controls.",
+        "id": 24,
+        "title": "Implement Audit Logging and Compliance Features",
+        "description": "Track all user actions, document changes, and validation events for compliance and auditability.",
+        "details": "Store audit logs in Supabase. Log provenance for all document edits and validation outcomes. Support privacy controls and encrypted export logs.",
+        "testStrategy": "Unit test audit log entries for all actions. Validate privacy controls and encrypted exports. Confirm audit trail completeness.",
         "priority": "medium",
         "dependencies": [
-          9
+          13,
+          18,
+          22
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 25,
+        "title": "Integrate Hybrid RAG Retrieval System",
+        "description": "Combine Milvus vector store and Neo4j graph database for hybrid semantic and relational retrieval, with query routing and context aggregation.",
+        "details": "Implement document preprocessing and embedding generation. Configure Milvus for semantic search. Build query router to select Milvus, Neo4j, or both. Aggregate context for LLM answer generation.",
+        "testStrategy": "Integration tests for semantic and graph retrieval. Validate query routing logic and context aggregation. Confirm LLM answers use combined context.",
+        "priority": "medium",
+        "dependencies": [
+          15,
+          17
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 26,
+        "title": "Implement Persona-Tailored Prompting and Multi-Agent Drafting",
+        "description": "Adapt generated content tone, structure, and depth per user persona. Orchestrate multi-agent drafting pipeline (Draft → Judge → Revise → Approve).",
+        "details": "Define persona profiles and prompt templates. Implement agent orchestration logic in FastAPI. Store agent decisions and revisions in document metadata.",
+        "testStrategy": "Unit test persona adaptation logic. Validate agent pipeline execution and revision tracking. Confirm final output matches persona requirements.",
+        "priority": "medium",
+        "dependencies": [
+          18,
+          22
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 27,
+        "title": "Implement Temporal Knowledge Graph Querying",
+        "description": "Enable time-constrained queries on the knowledge graph to answer project questions about trends, risks, and historical context.",
+        "details": "Extend Neo4j schema to include temporal attributes. Implement query endpoints for time-based analysis. Visualize trends in frontend dashboard.",
+        "testStrategy": "Unit and integration tests for temporal queries. Validate frontend visualization accuracy and backend query performance.",
+        "priority": "low",
+        "dependencies": [
+          15,
+          23
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 28,
+        "title": "Finalize Deployment, CI/CD, and Rollback Strategy",
+        "description": "Configure CI/CD pipelines, deployment scripts, and rollback mechanisms for all environments (Dev, Staging, Prod).",
+        "details": "Set up GitHub Actions for build/test/deploy. Use Terraform for infra provisioning. Implement version-tagged Docker images and backup/restore scripts.",
+        "testStrategy": "Run CI/CD pipeline for all environments. Simulate rollback and restore from backups. Validate deployment health checks.",
+        "priority": "medium",
+        "dependencies": [
+          12,
+          23,
+          24
         ],
         "status": "pending",
         "subtasks": []
@@ -137,7 +235,7 @@
     ],
     "metadata": {
       "created": "2025-08-29T16:22:54.269Z",
-      "updated": "2025-08-30T18:27:54.587Z",
+      "updated": "2025-09-01T16:07:29.427Z",
       "description": "Tasks for master context"
     }
   }

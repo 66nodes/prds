@@ -1,0 +1,63 @@
+name: generate_docs_catalog
+description: >
+  Scans the @docs directory and generates a README.md with a summary table of documents and a CLAUDE.md context file to guide Claude Code workflows.
+
+inputs:
+  - docs_path: ./docs
+  - max_files: 100
+
+tasks:
+  - id: read_docs_directory
+    agent: filesystem-reader
+    description: List all Markdown and YAML files under `@docs/` with relative paths and read up to 100 files for summarization.
+
+  - id: summarize_docs
+    agent: documentation-librarian
+    description: |
+      For each file:
+      - Extract title or heading
+      - Provide a 1–2 sentence summary
+      - Identify the purpose (e.g., PRD, strategy, UI spec)
+      - Identify dependencies (e.g., referenced agents or APIs)
+
+  - id: generate_docs_readme
+    agent: draft-agent
+    description: Generate a new `README.md` in `@docs/` with:
+      - Introductory paragraph
+      - Summary table: Filename | Title | Purpose | Dependencies
+      - Update instructions for future contributors
+    output_file: ./docs/README.md
+
+  - id: generate_docs_claude
+    agent: draft-agent
+    description: Generate a `CLAUDE.md` file for the `@docs/` folder with:
+      - Project context and purpose
+      - Tips for other Claude agents (e.g., where to look for PRD, FRD)
+      - Access patterns (e.g., read this before answering planning prompts)
+      - Performance suggestions (e.g., skip large files unless needed)
+    output_file: ./docs/CLAUDE.md
+
+workflow:
+  - read_docs_directory
+  - summarize_docs
+  - generate_docs_readme
+  - generate_docs_claude
+
+plan:
+  - id: list_docs
+    agent: filesystem-reader
+    inputs:
+      path: ./docs
+  - id: summarize_files
+    agent: summarizer
+    uses: list_docs.output
+  - id: generate_readme
+    agent: draft-agent
+    inputs:
+      summaries: summarize_files.output
+      target_file: ./docs/README.md
+  - id: generate_claude_md
+    agent: draft-agent
+    inputs:
+      summaries: summarize_files.output
+      target_file: ./docs/CLAUDE.md

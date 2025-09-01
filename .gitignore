@@ -168,3 +168,8 @@ dev-debug.log
 # Task files
 # tasks.json
 # tasks/ 
+
+# Backup files
+*.save
+*.bak
+*.backup

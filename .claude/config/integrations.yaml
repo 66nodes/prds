@@ -1,0 +1,101 @@
+# External Integration Configuration
+version: 4.0.0
+
+graphrag:
+  enabled: true
+  endpoints:
+    primary: https://graphrag.internal/api/v1
+    fallback: https://graphrag-backup.internal/api/v1
+  authentication:
+    type: api_key
+    key_ref: vault://graphrag/api_key
+  config:
+    validation_threshold: 0.85
+    max_retries: 3
+    timeout: 30s
+    cache_ttl: 3600
+    
+version_control:
+  github:
+    enabled: true
+    org: your-org
+    auth:
+      type: github_app
+      app_id: ${GITHUB_APP_ID}
+      private_key_ref: vault://github/private_key
+    webhooks:
+      - push
+      - pull_request
+      - issue_comment
+      
+  gitlab:
+    enabled: false
+    url: https://gitlab.internal
+    
+document_storage:
+  primary:
+    type: s3
+    bucket: agent-documents
+    region: us-central1
+    encryption: true
+    versioning: true
+    
+  backup:
+    type: gcs
+    bucket: agent-documents-backup
+    region: us-east1
+    
+databases:
+  postgresql:
+    host: postgres.internal
+    port: 5432
+    database: agents
+    ssl: required
+    pool_size: 20
+    
+  redis:
+    cluster: true
+    nodes:
+      - redis-1.internal:6379
+      - redis-2.internal:6379
+      - redis-3.internal:6379
+    password_ref: vault://redis/password
+    
+  elasticsearch:
+    nodes:
+      - https://es-1.internal:9200
+      - https://es-2.internal:9200
+    auth:
+      type: basic
+      username: agent_user
+      password_ref: vault://elasticsearch/password
+      
+external_apis:
+  openai:
+    enabled: true
+    api_key_ref: vault://openai/api_key
+    organization: ${OPENAI_ORG}
+    rate_limit: 1000_per_minute
+    
+  anthropic:
+    enabled: true
+    api_key_ref: vault://anthropic/api_key
+    rate_limit: 500_per_minute
+    
+communication:
+  slack:
+    enabled: true
+    workspace: your-workspace
+    bot_token_ref: vault://slack/bot_token
+    channels:
+      alerts: "#agent-alerts"
+      monitoring: "#agent-monitoring"
+      
+  email:
+    smtp:
+      host: smtp.internal
+      port: 587
+      tls: true
+      auth:
+        username: agent-notifications
+        password_ref: vault://smtp/password

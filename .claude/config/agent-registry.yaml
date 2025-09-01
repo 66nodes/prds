@@ -1,0 +1,206 @@
+# Master Agent Registry - Central configuration for all 90+ agents
+version: 4.0.0
+total_agents: 95
+
+agent_categories:
+  planning_strategy:
+    agents:
+      - name: context-manager
+        model: opus
+        priority: P0
+        replicas: 3
+        memory: 8Gi
+      - name: task-orchestrator
+        model: sonnet
+        priority: P0
+        replicas: 5
+        memory: 4Gi
+      - name: task-executor
+        model: sonnet
+        priority: P0
+        replicas: 10
+        memory: 4Gi
+      - name: task-checker
+        model: haiku
+        priority: P1
+        replicas: 3
+        memory: 2Gi
+      - name: prompt-engineer
+        model: opus
+        priority: P1
+        replicas: 2
+        memory: 4Gi
+
+  core_development:
+    agents:
+      - name: ai-engineer
+        model: opus
+        priority: P0
+        replicas: 3
+        memory: 16Gi
+        gpu: required
+      - name: backend-developer
+        model: sonnet
+        priority: P0
+        replicas: 5
+        memory: 8Gi
+      - name: frontend-developer
+        model: sonnet
+        priority: P0
+        replicas: 5
+        memory: 4Gi
+      - name: fullstack-developer
+        model: sonnet
+        priority: P1
+        replicas: 3
+        memory: 8Gi
+      - name: typescript-pro
+        model: sonnet
+        priority: P1
+        replicas: 3
+        memory: 4Gi
+
+  infrastructure_devops:
+    agents:
+      - name: cloud-architect
+        model: opus
+        priority: P0
+        replicas: 2
+        memory: 8Gi
+      - name: deployment-engineer
+        model: sonnet
+        priority: P0
+        replicas: 5
+        memory: 4Gi
+      - name: devops-troubleshooter
+        model: sonnet
+        priority: P0
+        replicas: 3
+        memory: 4Gi
+      - name: kubernetes-architect
+        model: opus
+        priority: P1
+        replicas: 2
+        memory: 8Gi
+      - name: terraform-specialist
+        model: sonnet
+        priority: P1
+        replicas: 2
+        memory: 4Gi
+
+  data_database:
+    agents:
+      - name: database-admin
+        model: sonnet
+        priority: P0
+        replicas: 3
+        memory: 8Gi
+      - name: database-optimizer
+        model: sonnet
+        priority: P1
+        replicas: 2
+        memory: 4Gi
+      - name: postgres-pro
+        model: sonnet
+        priority: P1
+        replicas: 2
+        memory: 8Gi
+      - name: data-engineer
+        model: sonnet
+        priority: P1
+        replicas: 3
+        memory: 16Gi
+      - name: data-scientist
+        model: opus
+        priority: P1
+        replicas: 2
+        memory: 32Gi
+        gpu: optional
+
+  security_quality:
+    agents:
+      - name: security-auditor
+        model: opus
+        priority: P0
+        replicas: 2
+        memory: 8Gi
+      - name: code-reviewer
+        model: sonnet
+        priority: P0
+        replicas: 5
+        memory: 4Gi
+      - name: test-automator
+        model: sonnet
+        priority: P0
+        replicas: 5
+        memory: 4Gi
+      - name: performance-engineer
+        model: sonnet
+        priority: P1
+        replicas: 2
+        memory: 8Gi
+
+  language_specialists:
+    count: 15
+    default_model: sonnet
+    default_replicas: 2
+    default_memory: 4Gi
+    languages:
+      - python-pro
+      - javascript-pro
+      - golang-pro
+      - rust-pro
+      - java-pro
+      - csharp-pro
+      - php-pro
+      - ruby-pro
+      - c-pro
+      - cpp-pro
+      - elixir-pro
+      - scala-pro
+      - sql-pro
+
+  ai_ml_specialists:
+    agents:
+      - name: llm-architect
+        model: opus
+        priority: P0
+        replicas: 2
+        memory: 32Gi
+        gpu: required
+      - name: ml-engineer
+        model: opus
+        priority: P1
+        replicas: 3
+        memory: 16Gi
+        gpu: required
+      - name: mlops-engineer
+        model: sonnet
+        priority: P1
+        replicas: 2
+        memory: 8Gi
+
+  seo_marketing:
+    count: 10
+    default_model: haiku
+    default_replicas: 2
+    default_memory: 2Gi
+
+  specialized_domains:
+    count: 12
+    varied_models: true
+    custom_resources: true
+
+model_distribution:
+  haiku:
+    count: 25
+    avg_memory: 2Gi
+    use_cases: [seo, content, business_analysis]
+  sonnet:
+    count: 44
+    avg_memory: 4Gi
+    use_cases: [development, devops, testing]
+  opus:
+    count: 14
+    avg_memory: 16Gi
+    use_cases: [architecture, ai_ml, security, orchestration]
