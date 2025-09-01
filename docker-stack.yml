@@ -9,7 +9,7 @@ networks:
     attachable: true
     ipam:
       config:
-        - subnet: 172.20.0.0/16
+        - subnet: 172.28.0.0/16
 
 volumes:
   # Database volumes
@@ -38,6 +38,12 @@ volumes:
   agent_logs:
     driver: local
   api_logs:
+    driver: local
+  
+  # Pulsar volumes
+  pulsar_data:
+    driver: local
+  pulsar_conf:
     driver: local
 
 # Secrets for sensitive data
@@ -153,7 +159,7 @@ services:
   # ================================
   
   neo4j:
-    image: neo4j:5.15-enterprise
+    image: neo4j:5.15-community
     hostname: neo4j
     networks:
       - ai-platform-network
@@ -267,6 +273,44 @@ services:
           cpus: '0.5'
 
   # ================================
+  # MESSAGE BROKER - PULSAR
+  # ================================
+  
+  pulsar:
+    image: apachepulsar/pulsar:3.1.1
+    hostname: pulsar
+    networks:
+      - ai-platform-network
+    command: bin/pulsar standalone
+    environment:
+      - PULSAR_MEM=-Xms2g -Xmx2g -XX:MaxDirectMemorySize=2g
+      - PULSAR_LOG_LEVEL=info
+    ports:
+      - "6650:6650"   # Pulsar broker port
+      - "8080:8080"   # Pulsar admin port
+    volumes:
+      - pulsar_data:/pulsar/data
+      - pulsar_conf:/pulsar/conf
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/admin/v2/namespaces/public"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          memory: 4G
+          cpus: '2.0'
+        reservations:
+          memory: 2G
+          cpus: '1.0'
+      restart_policy:
+        condition: on-failure
+        delay: 30s
+        max_attempts: 3
+
+  # ================================
   # APPLICATION SERVICES
   # ================================
   
@@ -284,6 +328,8 @@ services:
       - MILVUS_PORT=19530
       - POSTGRES_URL=postgresql://postgres:development@postgres:5432/aiplatform
       - REDIS_URL=redis://redis:6379
+      - PULSAR_SERVICE_URL=pulsar://pulsar:6650
+      - PULSAR_ADMIN_URL=http://pulsar:8080
       - OPENROUTER_API_KEY_FILE=/run/secrets/openrouter_api_key
       - API_HOST=0.0.0.0
       - API_PORT=8000
@@ -301,6 +347,7 @@ services:
       - milvus-standalone
       - postgres
       - redis
+      - pulsar
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
       interval: 30s
@@ -460,11 +507,12 @@ services:
     command: |
       sh -c '
         while true; do
-          echo "=== Health Check $(date) ==="
+          echo "=== Health Check $$(date) ==="
           echo "Neo4j: $$(curl -s -o /dev/null -w "%{http_code}" http://neo4j:7474)"
           echo "Milvus: $$(curl -s -o /dev/null -w "%{http_code}" http://milvus-standalone:9091/healthz)"
           echo "Postgres: $$(if nc -z postgres 5432; then echo "200"; else echo "000"; fi)"
           echo "Redis: $$(if nc -z redis 6379; then echo "200"; else echo "000"; fi)"
+          echo "Pulsar: $$(curl -s -o /dev/null -w "%{http_code}" http://pulsar:8080/admin/v2/namespaces/public)"
           echo "Backend: $$(curl -s -o /dev/null -w "%{http_code}" http://backend:8000/health)"
           echo "Frontend: $$(curl -s -o /dev/null -w "%{http_code}" http://frontend:3000)"
           sleep 30

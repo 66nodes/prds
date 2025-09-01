@@ -1,0 +1,271 @@
+version: '3.8'
+
+# AI Agent Platform - Production Infrastructure with Hybrid RAG
+# Complete stack: Milvus + Neo4j + PostgreSQL + Redis + Pulsar + Monitoring
+
+networks:
+  ai-platform-network:
+    driver: bridge
+
+volumes:
+  # Database volumes
+  neo4j_data:
+  neo4j_logs:
+  postgres_data:
+  redis_data:
+  minio_data:
+  
+  # Milvus volumes
+  milvus_etcd:
+  milvus_minio:
+  milvus_data:
+  
+  # Pulsar volumes
+  pulsar_data:
+  pulsar_conf:
+  
+  # Application volumes
+  graphrag_cache:
+  agent_logs:
+  api_logs:
+  
+  # Monitoring volumes
+  prometheus_data:
+  grafana_data:
+
+services:
+  # ================================
+  # VECTOR DATABASE - MILVUS STACK
+  # ================================
+  
+  # Milvus dependencies
+  etcd:
+    image: quay.io/coreos/etcd:v3.5.0
+    hostname: etcd
+    networks:
+      - ai-platform-network
+    environment:
+      - ETCD_AUTO_COMPACTION_MODE=revision
+      - ETCD_AUTO_COMPACTION_RETENTION=1000
+      - ETCD_QUOTA_BACKEND_BYTES=4294967296
+      - ETCD_SNAPSHOT_COUNT=50000
+    volumes:
+      - milvus_etcd:/etcd
+    command: etcd -advertise-client-urls=http://127.0.0.1:2379 -listen-client-urls http://0.0.0.0:2379 --data-dir /etcd
+    restart: unless-stopped
+
+  minio:
+    image: minio/minio:RELEASE.2023-03-20T20-16-18Z
+    hostname: minio
+    networks:
+      - ai-platform-network
+    environment:
+      MINIO_ACCESS_KEY: minioadmin
+      MINIO_SECRET_KEY: minioadmin
+    ports:
+      - "9001:9001"
+      - "9000:9000"
+    volumes:
+      - milvus_minio:/minio_data
+    command: minio server /minio_data --console-address ":9001"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+    restart: unless-stopped
+
+  # Milvus components
+  milvus-standalone:
+    image: milvusdb/milvus:v2.3.3
+    hostname: milvus-standalone
+    networks:
+      - ai-platform-network
+    command: ["milvus", "run", "standalone"]
+    environment:
+      ETCD_ENDPOINTS: etcd:2379
+      MINIO_ADDRESS: minio:9000
+    volumes:
+      - milvus_data:/var/lib/milvus
+    ports:
+      - "19530:19530"
+      - "9091:9091"
+    depends_on:
+      - etcd
+      - minio
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9091/healthz"]
+      interval: 30s
+      timeout: 20s
+      retries: 5
+    restart: unless-stopped
+
+  # ================================
+  # GRAPH DATABASE - NEO4J
+  # ================================
+  
+  neo4j:
+    image: neo4j:5.15-community
+    hostname: neo4j
+    networks:
+      - ai-platform-network
+    environment:
+      - NEO4J_AUTH=neo4j/development
+      - NEO4J_PLUGINS=["apoc"]
+      - NEO4J_dbms_security_procedures_unrestricted=apoc.*
+      - NEO4J_apoc_export_file_enabled=true
+      - NEO4J_apoc_import_file_enabled=true
+      - NEO4J_dbms_memory_heap_initial__size=1G
+      - NEO4J_dbms_memory_heap_max__size=2G
+      - NEO4J_dbms_memory_pagecache_size=1G
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    volumes:
+      - neo4j_data:/data
+      - neo4j_logs:/logs
+    healthcheck:
+      test: ["CMD", "cypher-shell", "-u", "neo4j", "-p", "development", "RETURN 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped
+
+  # ================================
+  # RELATIONAL DATABASE - POSTGRESQL
+  # ================================
+  
+  postgres:
+    image: postgres:16-alpine
+    hostname: postgres
+    networks:
+      - ai-platform-network
+    environment:
+      - POSTGRES_DB=aiplatform
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=development
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./infrastructure/postgres/init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d aiplatform"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # ================================
+  # CACHE - REDIS
+  # ================================
+  
+  redis:
+    image: redis:7.2-alpine
+    hostname: redis
+    networks:
+      - ai-platform-network
+    command: redis-server --appendonly yes --maxmemory 1gb --maxmemory-policy allkeys-lru
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
+
+  # ================================
+  # MESSAGE BROKER - PULSAR
+  # ================================
+  
+  pulsar:
+    image: apachepulsar/pulsar:3.1.1
+    hostname: pulsar
+    networks:
+      - ai-platform-network
+    command: bin/pulsar standalone
+    environment:
+      - PULSAR_MEM=-Xms2g -Xmx2g -XX:MaxDirectMemorySize=2g
+      - PULSAR_LOG_LEVEL=info
+    ports:
+      - "6650:6650"   # Pulsar broker port
+      - "8080:8080"   # Pulsar admin port
+    volumes:
+      - pulsar_data:/pulsar/data
+      - pulsar_conf:/pulsar/conf
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/admin/v2/namespaces/public"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped
+
+  # ================================
+  # MONITORING & OBSERVABILITY
+  # ================================
+  
+  # Prometheus
+  prometheus:
+    image: prom/prometheus:v2.47.0
+    hostname: prometheus
+    networks:
+      - ai-platform-network
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=15d'
+      - '--web.enable-lifecycle'
+    ports:
+      - "9092:9090"
+    volumes:
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    restart: unless-stopped
+
+  # Grafana
+  grafana:
+    image: grafana/grafana:10.1.0
+    hostname: grafana
+    networks:
+      - ai-platform-network
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=development
+      - GF_USERS_ALLOW_SIGN_UP=false
+    ports:
+      - "3001:3000"
+    volumes:
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - grafana_data:/var/lib/grafana
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+
+  # ================================
+  # HEALTH MONITORING
+  # ================================
+  
+  healthchecker:
+    image: curlimages/curl:8.3.0
+    networks:
+      - ai-platform-network
+    command: |
+      sh -c '
+        while true; do
+          echo "=== Health Check $$(date) ==="
+          echo "Neo4j: $$(curl -s -o /dev/null -w "%{http_code}" http://neo4j:7474 || echo "000")"
+          echo "Milvus: $$(curl -s -o /dev/null -w "%{http_code}" http://milvus-standalone:9091/healthz || echo "000")"
+          echo "Postgres: $$(if nc -z postgres 5432 2>/dev/null; then echo "200"; else echo "000"; fi)"
+          echo "Redis: $$(if nc -z redis 6379 2>/dev/null; then echo "200"; else echo "000"; fi)"
+          echo "Pulsar: $$(curl -s -o /dev/null -w "%{http_code}" http://pulsar:8080/admin/v2/namespaces/public || echo "000")"
+          echo "Prometheus: $$(curl -s -o /dev/null -w "%{http_code}" http://prometheus:9090/-/healthy || echo "000")"
+          echo "Grafana: $$(curl -s -o /dev/null -w "%{http_code}" http://grafana:3000/api/health || echo "000")"
+          sleep 30
+        done
+      '
+    restart: unless-stopped
