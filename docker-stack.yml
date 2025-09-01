@@ -1,0 +1,500 @@
+version: '3.8'
+
+# AI Agent Platform - Hybrid RAG Infrastructure Stack
+# Milvus + Neo4j + PostgreSQL + Redis + Application Services
+
+networks:
+  ai-platform-network:
+    driver: overlay
+    attachable: true
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
+volumes:
+  # Database volumes
+  neo4j_data:
+    driver: local
+  neo4j_logs:
+    driver: local
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  minio_data:
+    driver: local
+  
+  # Milvus volumes
+  milvus_etcd:
+    driver: local
+  milvus_minio:
+    driver: local
+  milvus_data:
+    driver: local
+  
+  # Application volumes
+  graphrag_cache:
+    driver: local
+  agent_logs:
+    driver: local
+  api_logs:
+    driver: local
+
+# Secrets for sensitive data
+secrets:
+  neo4j_password:
+    external: true
+  postgres_password:
+    external: true
+  jwt_secret:
+    external: true
+  openrouter_api_key:
+    external: true
+
+services:
+  # ================================
+  # VECTOR DATABASE - MILVUS STACK
+  # ================================
+  
+  # Milvus dependencies
+  etcd:
+    image: quay.io/coreos/etcd:v3.5.0
+    hostname: etcd
+    networks:
+      - ai-platform-network
+    environment:
+      - ETCD_AUTO_COMPACTION_MODE=revision
+      - ETCD_AUTO_COMPACTION_RETENTION=1000
+      - ETCD_QUOTA_BACKEND_BYTES=4294967296
+      - ETCD_SNAPSHOT_COUNT=50000
+    volumes:
+      - milvus_etcd:/etcd
+    command: etcd -advertise-client-urls=http://127.0.0.1:2379 -listen-client-urls http://0.0.0.0:2379 --data-dir /etcd
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          memory: 1G
+          cpus: '0.5'
+        reservations:
+          memory: 512M
+          cpus: '0.25'
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+
+  minio:
+    image: minio/minio:RELEASE.2023-03-20T20-16-18Z
+    hostname: minio
+    networks:
+      - ai-platform-network
+    environment:
+      MINIO_ACCESS_KEY: minioadmin
+      MINIO_SECRET_KEY: minioadmin
+    ports:
+      - "9001:9001"
+      - "9000:9000"
+    volumes:
+      - milvus_minio:/minio_data
+    command: minio server /minio_data --console-address ":9001"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          memory: 2G
+          cpus: '1.0'
+        reservations:
+          memory: 1G
+          cpus: '0.5'
+
+  # Milvus components
+  milvus-standalone:
+    image: milvusdb/milvus:v2.3.3
+    hostname: milvus-standalone
+    networks:
+      - ai-platform-network
+    command: ["milvus", "run", "standalone"]
+    environment:
+      ETCD_ENDPOINTS: etcd:2379
+      MINIO_ADDRESS: minio:9000
+    volumes:
+      - milvus_data:/var/lib/milvus
+    ports:
+      - "19530:19530"
+      - "9091:9091"
+    depends_on:
+      - "etcd"
+      - "minio"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9091/healthz"]
+      interval: 30s
+      timeout: 20s
+      retries: 5
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          memory: 8G
+          cpus: '4.0'
+        reservations:
+          memory: 4G
+          cpus: '2.0'
+      restart_policy:
+        condition: on-failure
+        delay: 30s
+
+  # ================================
+  # GRAPH DATABASE - NEO4J
+  # ================================
+  
+  neo4j:
+    image: neo4j:5.15-enterprise
+    hostname: neo4j
+    networks:
+      - ai-platform-network
+    environment:
+      - NEO4J_AUTH=neo4j/development
+      - NEO4J_PLUGINS=["apoc", "graph-data-science", "n10s"]
+      - NEO4J_dbms_security_procedures_unrestricted=apoc.*,gds.*,n10s.*
+      - NEO4J_dbms_security_procedures_allowlist=apoc.*,gds.*,n10s.*
+      - NEO4J_apoc_export_file_enabled=true
+      - NEO4J_apoc_import_file_enabled=true
+      - NEO4J_apoc_import_file_use__neo4j__config=true
+      - NEO4J_dbms_memory_heap_initial__size=2G
+      - NEO4J_dbms_memory_heap_max__size=4G
+      - NEO4J_dbms_memory_pagecache_size=2G
+      - NEO4J_dbms_connector_bolt_listen__address=0.0.0.0:7687
+      - NEO4J_dbms_connector_http_listen__address=0.0.0.0:7474
+      - NEO4J_dbms_logs_query_enabled=INFO
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    volumes:
+      - neo4j_data:/data
+      - neo4j_logs:/logs
+      - ./infrastructure/neo4j/plugins:/plugins
+      - ./infrastructure/neo4j/import:/var/lib/neo4j/import
+    healthcheck:
+      test: ["CMD", "cypher-shell", "-u", "neo4j", "-p", "development", "RETURN 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.database == true
+      resources:
+        limits:
+          memory: 6G
+          cpus: '3.0'
+        reservations:
+          memory: 3G
+          cpus: '1.5'
+      restart_policy:
+        condition: on-failure
+        delay: 30s
+
+  # ================================
+  # RELATIONAL DATABASE - POSTGRESQL
+  # ================================
+  
+  postgres:
+    image: postgres:16-alpine
+    hostname: postgres
+    networks:
+      - ai-platform-network
+    environment:
+      - POSTGRES_DB=aiplatform
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=development
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./infrastructure/postgres/init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d aiplatform"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          memory: 2G
+          cpus: '1.0'
+        reservations:
+          memory: 1G
+          cpus: '0.5'
+      restart_policy:
+        condition: on-failure
+
+  # ================================
+  # CACHE - REDIS
+  # ================================
+  
+  redis:
+    image: redis:7.2-alpine
+    hostname: redis
+    networks:
+      - ai-platform-network
+    command: redis-server --appendonly yes --maxmemory 1gb --maxmemory-policy allkeys-lru
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          memory: 1.5G
+          cpus: '1.0'
+        reservations:
+          memory: 1G
+          cpus: '0.5'
+
+  # ================================
+  # APPLICATION SERVICES
+  # ================================
+  
+  # FastAPI Backend
+  backend:
+    image: ai-platform/backend:latest
+    hostname: backend
+    networks:
+      - ai-platform-network
+    environment:
+      - NEO4J_URI=bolt://neo4j:7687
+      - NEO4J_USER=neo4j
+      - NEO4J_PASSWORD=development
+      - MILVUS_HOST=milvus-standalone
+      - MILVUS_PORT=19530
+      - POSTGRES_URL=postgresql://postgres:development@postgres:5432/aiplatform
+      - REDIS_URL=redis://redis:6379
+      - OPENROUTER_API_KEY_FILE=/run/secrets/openrouter_api_key
+      - API_HOST=0.0.0.0
+      - API_PORT=8000
+      - FRONTEND_URL=http://frontend:3000
+    ports:
+      - "8000:8000"
+    volumes:
+      - graphrag_cache:/app/graphrag_cache
+      - agent_logs:/app/logs
+    secrets:
+      - openrouter_api_key
+      - jwt_secret
+    depends_on:
+      - neo4j
+      - milvus-standalone
+      - postgres
+      - redis
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    deploy:
+      replicas: 2
+      update_config:
+        parallelism: 1
+        delay: 10s
+        order: start-first
+      resources:
+        limits:
+          memory: 4G
+          cpus: '2.0'
+        reservations:
+          memory: 2G
+          cpus: '1.0'
+      restart_policy:
+        condition: on-failure
+        delay: 30s
+        max_attempts: 3
+
+  # Nuxt.js Frontend
+  frontend:
+    image: ai-platform/frontend:latest
+    hostname: frontend
+    networks:
+      - ai-platform-network
+    environment:
+      - NUXT_PUBLIC_API_BASE_URL=http://backend:8000
+      - NUXT_PUBLIC_WS_URL=ws://backend:8000/ws
+      - NODE_ENV=production
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    deploy:
+      replicas: 2
+      update_config:
+        parallelism: 1
+        delay: 10s
+      resources:
+        limits:
+          memory: 2G
+          cpus: '1.0'
+        reservations:
+          memory: 1G
+          cpus: '0.5'
+
+  # ================================
+  # REVERSE PROXY - NGINX
+  # ================================
+  
+  nginx:
+    image: nginx:1.25-alpine
+    hostname: nginx
+    networks:
+      - ai-platform-network
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./infrastructure/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./infrastructure/nginx/ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - frontend
+      - backend
+    healthcheck:
+      test: ["CMD", "nginx", "-t"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.5'
+        reservations:
+          memory: 256M
+          cpus: '0.25'
+
+  # ================================
+  # MONITORING & OBSERVABILITY
+  # ================================
+  
+  # Prometheus
+  prometheus:
+    image: prom/prometheus:v2.47.0
+    hostname: prometheus
+    networks:
+      - ai-platform-network
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=15d'
+      - '--web.enable-lifecycle'
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./monitoring/prometheus/rules:/etc/prometheus/rules:ro
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          memory: 2G
+          cpus: '1.0'
+        reservations:
+          memory: 1G
+          cpus: '0.5'
+
+  # Grafana
+  grafana:
+    image: grafana/grafana:10.1.0
+    hostname: grafana
+    networks:
+      - ai-platform-network
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=development
+      - GF_USERS_ALLOW_SIGN_UP=false
+    ports:
+      - "3001:3000"
+    volumes:
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards:ro
+    depends_on:
+      - prometheus
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          memory: 1G
+          cpus: '0.5'
+        reservations:
+          memory: 512M
+          cpus: '0.25'
+
+  # ================================
+  # UTILITY SERVICES
+  # ================================
+  
+  # Health checker service
+  healthchecker:
+    image: curlimages/curl:8.3.0
+    networks:
+      - ai-platform-network
+    command: |
+      sh -c '
+        while true; do
+          echo "=== Health Check $(date) ==="
+          echo "Neo4j: $$(curl -s -o /dev/null -w "%{http_code}" http://neo4j:7474)"
+          echo "Milvus: $$(curl -s -o /dev/null -w "%{http_code}" http://milvus-standalone:9091/healthz)"
+          echo "Postgres: $$(if nc -z postgres 5432; then echo "200"; else echo "000"; fi)"
+          echo "Redis: $$(if nc -z redis 6379; then echo "200"; else echo "000"; fi)"
+          echo "Backend: $$(curl -s -o /dev/null -w "%{http_code}" http://backend:8000/health)"
+          echo "Frontend: $$(curl -s -o /dev/null -w "%{http_code}" http://frontend:3000)"
+          sleep 30
+        done
+      '
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          memory: 64M
+          cpus: '0.1'
+      restart_policy:
+        condition: on-failure
+
+# ================================
+# DEPLOYMENT CONFIGURATION
+# ================================
+
+configs:
+  nginx_config:
+    file: ./infrastructure/nginx/nginx.conf
+  prometheus_config:
+    file: ./monitoring/prometheus/prometheus.yml
+
+x-logging: &default-logging
+  driver: "json-file"
+  options:
+    max-size: "10m"
+    max-file: "3"
+
+x-common-variables: &common-variables
+  TZ: UTC
+  COMPOSE_PROJECT_NAME: ai-agent-platform

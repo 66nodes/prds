@@ -165,11 +165,83 @@ dev-debug.log
 .vscode
 # OS specific
 
-# Task files
-# tasks.json
-# tasks/ 
-
 # Backup files
 *.save
 *.bak
 *.backup
+
+# Task files
+# tasks.json
+# tasks/ 
+
+# AI Agent Platform Specific
+# Vector databases
+*.faiss
+*.index
+milvus_data/
+neo4j_data/
+neo4j_logs/
+vector_store/
+
+# AI/ML models and embeddings
+models/
+embeddings/
+checkpoints/
+*.pkl
+*.joblib
+*.model
+*.bin
+
+# GraphRAG specific
+graphrag_cache/
+community_reports/
+entity_graphs/
+graph_embeddings/
+llm_cache/
+
+# Agent orchestration
+agent_logs/
+agent_cache/
+workflow_state/
+execution_logs/
+
+# Monitoring and observability
+prometheus_data/
+grafana_data/
+logs/
+metrics/
+
+# Docker volumes
+postgres_data/
+redis_data/
+minio_data/
+
+# Development tools
+.taskmaster/state/
+.taskmaster/cache/
+execution_reports/
+debug_logs/
+
+# Performance testing
+load_test_results/
+benchmarks/
+
+# Generated API documentation
+api_docs/generated/
+
+# Temporary GraphRAG files
+*.graphrag_tmp
+query_results/
+validation_cache/
+
+# Claude Code specific
+.claude/cache/
+.claude/sessions/
+.claude/temp/
+
+# Large files that shouldn't be in git
+*.large
+*.dump
+*.backup
+data/raw/
+data/processed/
