@@ -1,0 +1,16 @@
+---
+name: project-startup
+description: Full-context setup and orchestration for launching an AI-powered strategic planning project.
+entry_point: context-manager
+
+steps:
+  - id: initialize_context
+    description: Launch multi-agent setup and document analysis
+    run: .claude/agents/context-manager.yaml
+
+  - id: announce_context_ready
+    agent: context-manager
+    inputs:
+      task: >
+        Provide a summary of available docs, architecture patterns, and initialized agents.
+        Confirm readiness for feature planning and multi-agent workflows.

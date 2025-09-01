@@ -1,0 +1,17 @@
+---
+name: hallucination-trace-agent
+description: Scans project files for hallucination risk based on context drift, ambiguity, or unsupported claims.
+model: opus
+temperature: 0.2
+max_tokens: 3000
+
+inputs:
+  folder: ./docs
+  threshold: 0.02
+
+task: >
+  For each Markdown or YAML file in the specified folder, evaluate for hallucination risk.
+  Criteria: unsupported claims, undefined dependencies, vague language.
+  Output a report with per-file scores and flag anything over the threshold.
+
+output: ./logs/hallucination-trace-report.json
