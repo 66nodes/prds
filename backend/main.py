@@ -18,12 +18,11 @@ from opentelemetry.sdk.resources import SERVICE_NAME, Resource
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
 
-from api.endpoints import auth, dashboard, prd, validation
+from api.endpoints import auth, dashboard, prd, validation, websocket
 from core.config import get_settings
-from core.database import init_neo4j, close_neo4j
+from core.database import init_all_databases, close_all_databases, check_all_databases_health
 from core.logging_config import setup_logging
 from core.middleware import LoggingMiddleware, RateLimitMiddleware
-from services.graphrag.graph_service import GraphRAGService
 
 # Initialize settings and logging
 settings = get_settings()
@@ -35,15 +34,9 @@ async def lifespan(app: FastAPI):
     """Application lifespan manager for startup and shutdown events."""
     logger.info("Starting Strategic Planning Platform API")
     
-    # Initialize Neo4j database
-    await init_neo4j()
-    logger.info("Neo4j database initialized")
-    
-    # Initialize GraphRAG service
-    graphrag_service = GraphRAGService()
-    await graphrag_service.initialize()
-    app.state.graphrag_service = graphrag_service
-    logger.info("GraphRAG service initialized")
+    # Initialize all databases
+    await init_all_databases()
+    logger.info("All databases initialized successfully")
     
     # Setup OpenTelemetry tracing
     if settings.enable_tracing:
@@ -56,8 +49,8 @@ async def lifespan(app: FastAPI):
     
     # Cleanup on shutdown
     logger.info("Shutting down Strategic Planning Platform API")
-    await close_neo4j()
-    logger.info("Neo4j connections closed")
+    await close_all_databases()
+    logger.info("All database connections closed")
 
 
 # Create FastAPI application
@@ -137,6 +130,12 @@ app.include_router(
     tags=["Dashboard & Analytics"]
 )
 
+app.include_router(
+    websocket.router,
+    prefix="/api/v1",
+    tags=["WebSocket & Real-time"]
+)
+
 
 @app.get("/", include_in_schema=False)
 async def root():
@@ -160,23 +159,15 @@ async def root():
 async def health_check():
     """Comprehensive health check endpoint."""
     try:
-        # Check Neo4j connectivity
-        neo4j_status = await check_neo4j_health()
-        
-        # Check GraphRAG service
-        graphrag_status = await app.state.graphrag_service.health_check()
-        
-        # Check Redis connectivity
-        redis_status = await check_redis_health()
+        # Check all database components
+        components_health = await check_all_databases_health()
         
         health_status = {
             "status": "healthy",
             "timestamp": settings.current_timestamp(),
             "version": "1.0.0",
             "components": {
-                "neo4j": neo4j_status,
-                "graphrag": graphrag_status,
-                "redis": redis_status,
+                **components_health,
                 "api": {"status": "healthy", "response_time_ms": "<1"}
             }
         }
@@ -268,22 +259,6 @@ def setup_tracing():
     FastAPIInstrumentor.instrument_app(app)
 
 
-async def check_neo4j_health() -> Dict[str, Any]:
-    """Check Neo4j database health."""
-    try:
-        # Implementation would check Neo4j connectivity
-        return {"status": "healthy", "response_time_ms": 5}
-    except Exception as e:
-        return {"status": "unhealthy", "error": str(e)}
-
-
-async def check_redis_health() -> Dict[str, Any]:
-    """Check Redis cache health."""
-    try:
-        # Implementation would check Redis connectivity
-        return {"status": "healthy", "response_time_ms": 2}
-    except Exception as e:
-        return {"status": "unhealthy", "error": str(e)}
 
 
 if __name__ == "__main__":

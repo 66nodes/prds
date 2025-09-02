@@ -1,84 +1,286 @@
 """
-Structured logging configuration with JSON output
+Comprehensive logging configuration for the Strategic Planning Platform.
+
+Provides structured logging with OpenTelemetry tracing, performance metrics,
+security audit logging, and error monitoring integration.
 """
 
 import logging
 import sys
+import json
 from typing import Any, Dict, Optional
+from datetime import datetime, timezone
+from pathlib import Path
+import os
 
 import structlog
+from structlog import contextvars
 from structlog.types import EventDict
+from structlog.stdlib import LoggerFactory
+from pythonjsonlogger import jsonlogger
 
 from .config import get_settings
 
 settings = get_settings()
 
 
+class SecurityAuditProcessor:
+    """Processor for security-related log events."""
+    
+    SECURITY_EVENTS = {
+        "login_success", "login_failure", "token_refresh", "logout",
+        "permission_denied", "account_locked", "password_change",
+        "admin_action", "data_access", "configuration_change"
+    }
+    
+    def __call__(self, logger, method_name, event_dict):
+        """Process security audit events."""
+        
+        # Check if this is a security event
+        event_type = event_dict.get("event_type")
+        if event_type in self.SECURITY_EVENTS:
+            event_dict["security_audit"] = True
+            event_dict["audit_timestamp"] = datetime.now(timezone.utc).isoformat()
+        
+        return event_dict
+
+
+class PerformanceProcessor:
+    """Processor for performance metrics and monitoring."""
+    
+    def __call__(self, logger, method_name, event_dict):
+        """Add performance metrics to log events."""
+        
+        # Add performance markers
+        if "duration_ms" in event_dict:
+            duration = event_dict["duration_ms"]
+            if duration > 5000:  # > 5 seconds
+                event_dict["performance_alert"] = "slow_operation"
+            elif duration > 1000:  # > 1 second
+                event_dict["performance_warning"] = "elevated_duration"
+        
+        return event_dict
+
+
+class ErrorEnrichmentProcessor:
+    """Processor to enrich error logs with context and metadata."""
+    
+    def __call__(self, logger, method_name, event_dict):
+        """Enrich error events with additional context."""
+        
+        if method_name in ("error", "critical", "exception"):
+            # Add error classification
+            error = event_dict.get("error", "")
+            if isinstance(error, str):
+                if "database" in error.lower() or "connection" in error.lower():
+                    event_dict["error_category"] = "database"
+                elif "auth" in error.lower() or "token" in error.lower():
+                    event_dict["error_category"] = "authentication"
+                elif "validation" in error.lower():
+                    event_dict["error_category"] = "validation"
+                elif "permission" in error.lower():
+                    event_dict["error_category"] = "authorization"
+                else:
+                    event_dict["error_category"] = "application"
+            
+            # Add severity level
+            if method_name == "critical":
+                event_dict["severity"] = "critical"
+                event_dict["requires_immediate_attention"] = True
+            elif method_name == "error":
+                event_dict["severity"] = "high"
+            
+            # Add timestamp for error tracking
+            event_dict["error_timestamp"] = datetime.now(timezone.utc).isoformat()
+        
+        return event_dict
+
+
+def setup_stdlib_logging() -> None:
+    """Configure standard library logging."""
+    
+    # Create logs directory
+    log_dir = Path("logs")
+    log_dir.mkdir(exist_ok=True)
+    
+    # Configure root logger
+    root_logger = logging.getLogger()
+    root_logger.setLevel(logging.INFO if settings.environment != "development" else logging.DEBUG)
+    
+    # Remove existing handlers
+    for handler in root_logger.handlers[:]:
+        root_logger.removeHandler(handler)
+    
+    # Console handler for development
+    if settings.environment == "development":
+        console_handler = logging.StreamHandler(sys.stdout)
+        console_formatter = logging.Formatter(
+            "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+        )
+        console_handler.setFormatter(console_formatter)
+        root_logger.addHandler(console_handler)
+    
+    # JSON file handler for production
+    if settings.environment in ("production", "staging"):
+        file_handler = logging.FileHandler(log_dir / "application.json")
+        json_formatter = jsonlogger.JsonFormatter(
+            "%(asctime)s %(name)s %(levelname)s %(message)s"
+        )
+        file_handler.setFormatter(json_formatter)
+        root_logger.addHandler(file_handler)
+    
+    # Error file handler
+    error_handler = logging.FileHandler(log_dir / "errors.json")
+    error_handler.setLevel(logging.ERROR)
+    error_formatter = jsonlogger.JsonFormatter(
+        "%(asctime)s %(name)s %(levelname)s %(message)s"
+    )
+    error_handler.setFormatter(error_formatter)
+    root_logger.addHandler(error_handler)
+
+
 def setup_logging() -> structlog.BoundLogger:
-    """Configure structured logging with JSON output."""
+    """Initialize the complete logging system."""
     
-    # Configure standard library logging
-    logging.basicConfig(
-        format="%(message)s",
-        stream=sys.stdout,
-        level=getattr(logging, settings.log_level),
-    )
-    
-    # Configure structlog processors
-    processors = [
-        # Add log level and timestamp
-        structlog.stdlib.add_log_level,
-        structlog.stdlib.add_logger_name,
-        structlog.processors.TimeStamper(fmt="ISO"),
+    try:
+        # Setup standard library logging
+        setup_stdlib_logging()
         
-        # Add context
-        add_app_context,
+        # Configure structlog processors
+        processors = [
+            # Add context variables
+            contextvars.merge_contextvars,
+            
+            # Add timestamp and log level
+            structlog.processors.TimeStamper(fmt="ISO"),
+            structlog.stdlib.add_log_level,
+            structlog.stdlib.add_logger_name,
+            
+            # Add context
+            add_app_context,
+            
+            # Custom processors
+            SecurityAuditProcessor(),
+            PerformanceProcessor(),
+            ErrorEnrichmentProcessor(),
+            
+            # Stack info for exceptions
+            structlog.processors.StackInfoRenderer(),
+            structlog.dev.set_exc_info,
+        ]
         
-        # Stack info for errors
-        structlog.processors.StackInfoRenderer(),
-        structlog.processors.format_exc_info,
-    ]
-    
-    # Add JSON formatting for production
-    if settings.environment == "production" or settings.log_format == "json":
-        processors.append(structlog.processors.JSONRenderer())
-    else:
-        # Development-friendly console output
-        processors.extend([
-            structlog.dev.ConsoleRenderer(colors=True),
-        ])
-    
-    # Configure structlog
-    structlog.configure(
-        processors=processors,
-        wrapper_class=structlog.stdlib.BoundLogger,
-        logger_factory=structlog.stdlib.LoggerFactory(),
-        context_class=dict,
-        cache_logger_on_first_use=True,
-    )
-    
-    # Get logger instance
-    logger = structlog.get_logger(__name__)
-    
-    logger.info(
-        "Logging configured",
-        level=settings.log_level,
-        format=settings.log_format,
-        environment=settings.environment
-    )
-    
-    return logger
+        # Add formatting based on environment
+        if settings.environment == "production" or getattr(settings, 'log_format', 'json') == "json":
+            processors.append(structlog.processors.JSONRenderer())
+        else:
+            processors.append(structlog.dev.ConsoleRenderer(colors=True))
+        
+        # Configure structlog
+        structlog.configure(
+            processors=processors,
+            wrapper_class=structlog.make_filtering_bound_logger(logging.INFO),
+            logger_factory=LoggerFactory(),
+            cache_logger_on_first_use=True,
+        )
+        
+        # Get logger instance
+        logger = structlog.get_logger("startup")
+        logger.info(
+            "Comprehensive logging system initialized",
+            environment=settings.environment,
+            log_level=getattr(settings, 'log_level', 'INFO')
+        )
+        
+        return logger
+        
+    except Exception as e:
+        # Fallback to basic logging if setup fails
+        logging.basicConfig(
+            level=logging.INFO,
+            format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+        )
+        logger = logging.getLogger("logging_setup")
+        logger.error(f"Failed to setup advanced logging: {str(e)}")
+        logger.info("Using fallback logging configuration")
+        
+        return structlog.get_logger("fallback")
 
 
 def add_app_context(logger: Any, method_name: str, event_dict: EventDict) -> EventDict:
     """Add application context to all log entries."""
     event_dict.update({
-        "app": settings.app_name,
-        "version": settings.version,
+        "app": getattr(settings, 'app_name', 'strategic-planning-api'),
+        "version": getattr(settings, 'version', '1.0.0'),
         "environment": settings.environment,
     })
     
     return event_dict
+
+
+def get_logger(name: str) -> structlog.BoundLogger:
+    """Get a configured logger instance."""
+    return structlog.get_logger(name)
+
+
+def log_security_event(
+    event_type: str,
+    user_id: Optional[str] = None,
+    details: Optional[Dict[str, Any]] = None,
+    request_ip: Optional[str] = None
+) -> None:
+    """Log a security audit event."""
+    
+    logger = get_logger("security")
+    
+    event_data = {
+        "event_type": event_type,
+        "user_id": user_id,
+        "source_ip": request_ip,
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        **(details or {})
+    }
+    
+    logger.info("Security audit event", **event_data)
+
+
+def log_performance_event(
+    operation: str,
+    duration_ms: float,
+    user_id: Optional[str] = None,
+    metadata: Optional[Dict[str, Any]] = None
+) -> None:
+    """Log a performance monitoring event."""
+    
+    logger = get_logger("performance")
+    
+    event_data = {
+        "operation": operation,
+        "duration_ms": duration_ms,
+        "user_id": user_id,
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        **(metadata or {})
+    }
+    
+    logger.info("Performance event", **event_data)
+
+
+def log_business_event(
+    event_type: str,
+    user_id: Optional[str] = None,
+    details: Optional[Dict[str, Any]] = None
+) -> None:
+    """Log a business logic event."""
+    
+    logger = get_logger("business")
+    
+    event_data = {
+        "event_type": event_type,
+        "user_id": user_id,
+        "timestamp": datetime.now(timezone.utc).isoformat(),
+        **(details or {})
+    }
+    
+    logger.info("Business event", **event_data)
 
 
 class LoggingMiddleware:

@@ -38,7 +38,7 @@ class Settings(BaseSettings):
     refresh_token_expire_days: int = Field(default=7, description="Refresh token expiration in days")
     allowed_hosts: List[str] = Field(default=["*"], description="Allowed hosts for CORS")
     cors_origins: List[str] = Field(
-        default=["http://localhost:3000", "http://127.0.0.1:3000"],
+        default=["http://localhost:3000", "https://strategic-planning.ai"],
         description="Allowed CORS origins"
     )
     
@@ -47,6 +47,16 @@ class Settings(BaseSettings):
     neo4j_user: str = Field(default="neo4j", description="Neo4j username")
     neo4j_password: str = Field(..., description="Neo4j password")
     neo4j_database: str = Field(default="neo4j", description="Neo4j database name")
+    
+    # Milvus Configuration
+    milvus_host: str = Field(default="localhost", description="Milvus server host")
+    milvus_port: int = Field(default=19530, description="Milvus server port")
+    milvus_user: Optional[str] = Field(default=None, description="Milvus username")
+    milvus_password: Optional[str] = Field(default=None, description="Milvus password")
+    milvus_db_name: str = Field(default="default", description="Milvus database name")
+    
+    # PostgreSQL Configuration (for structured data)
+    postgres_url: str = Field(default="postgresql://postgres:development@localhost:5432/aiplatform", description="PostgreSQL connection URL")
     
     # Redis Configuration
     redis_url: str = Field(default="redis://localhost:6379", description="Redis connection URL")

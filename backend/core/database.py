@@ -1,5 +1,5 @@
 """
-Neo4j database connection and management
+Database connections and initialization for Neo4j, Milvus, PostgreSQL, and Redis
 """
 
 import asyncio
@@ -8,12 +8,20 @@ from contextlib import asynccontextmanager
 
 from neo4j import AsyncGraphDatabase, AsyncDriver, AsyncSession
 from neo4j.exceptions import ServiceUnavailable, AuthError
+from pymilvus import connections, utility
+from sqlalchemy.ext.asyncio import AsyncSession as AsyncSQLSession, async_sessionmaker, create_async_engine
+from sqlalchemy import text
+import redis.asyncio as redis
 import structlog
 
 from .config import get_settings
 
 logger = structlog.get_logger(__name__)
 settings = get_settings()
+
+# Global connection objects
+postgres_engine = None
+redis_client = None
 
 
 class Neo4jConnection:
@@ -121,10 +129,230 @@ class Neo4jConnection:
         async with self.session(database=database) as session:
             result = await session.execute_write(write_transaction)
             return result
+    
+    async def health_check(self) -> Dict[str, Any]:
+        """Check Neo4j database health."""
+        try:
+            if not self.is_connected:
+                return {"status": "unhealthy", "error": "Not connected"}
+            
+            # Test basic query
+            start_time = asyncio.get_event_loop().time()
+            await self.execute_query("RETURN 1 as test")
+            response_time = (asyncio.get_event_loop().time() - start_time) * 1000
+            
+            return {
+                "status": "healthy",
+                "response_time_ms": round(response_time, 2),
+                "connected": self.is_connected
+            }
+            
+        except Exception as e:
+            logger.error("Neo4j health check failed", error=str(e))
+            return {"status": "unhealthy", "error": str(e)}
 
 
 # Global connection instance
 neo4j_connection = Neo4jConnection()
+
+
+class MilvusConnection:
+    """Milvus vector database connection manager."""
+    
+    def __init__(self):
+        self.is_connected = False
+        self.alias = "default"
+    
+    async def connect(self) -> None:
+        """Establish connection to Milvus."""
+        try:
+            connections.connect(
+                alias=self.alias,
+                host=settings.milvus_host,
+                port=settings.milvus_port,
+                user=settings.milvus_user,
+                password=settings.milvus_password,
+                db_name=settings.milvus_db_name,
+            )
+            
+            # Test connection
+            collections = utility.list_collections()
+            self.is_connected = True
+            
+            logger.info(
+                "Connected to Milvus database",
+                host=settings.milvus_host,
+                port=settings.milvus_port,
+                collections_count=len(collections)
+            )
+            
+        except Exception as e:
+            logger.error(
+                "Failed to connect to Milvus database",
+                error=str(e),
+                host=settings.milvus_host
+            )
+            raise
+    
+    async def close(self) -> None:
+        """Close Milvus connection."""
+        try:
+            connections.disconnect(self.alias)
+            self.is_connected = False
+            logger.info("Milvus connection closed")
+        except Exception as e:
+            logger.warning("Error closing Milvus connection", error=str(e))
+    
+    def health_check(self) -> Dict[str, Any]:
+        """Check Milvus health."""
+        try:
+            if not self.is_connected:
+                return {"status": "unhealthy", "error": "Not connected"}
+            
+            collections = utility.list_collections()
+            return {
+                "status": "healthy",
+                "collections_count": len(collections),
+                "collections": collections[:5]  # Show first 5 collections
+            }
+        except Exception as e:
+            return {"status": "unhealthy", "error": str(e)}
+
+
+class PostgreSQLConnection:
+    """PostgreSQL database connection manager."""
+    
+    def __init__(self):
+        self.engine = None
+        self.session_factory = None
+        self.is_connected = False
+    
+    async def connect(self) -> None:
+        """Establish connection to PostgreSQL."""
+        global postgres_engine
+        
+        try:
+            self.engine = create_async_engine(
+                settings.postgres_url,
+                echo=settings.is_development,
+                pool_pre_ping=True,
+                pool_recycle=3600,
+                pool_size=10,
+                max_overflow=20,
+            )
+            
+            # Test connection
+            async with self.engine.begin() as conn:
+                await conn.execute(text("SELECT 1"))
+            
+            self.session_factory = async_sessionmaker(
+                bind=self.engine,
+                class_=AsyncSQLSession,
+                expire_on_commit=False
+            )
+            
+            postgres_engine = self.engine
+            self.is_connected = True
+            
+            logger.info("Connected to PostgreSQL database")
+            
+        except Exception as e:
+            logger.error("Failed to connect to PostgreSQL", error=str(e))
+            raise
+    
+    async def close(self) -> None:
+        """Close PostgreSQL connection."""
+        global postgres_engine
+        
+        if self.engine:
+            await self.engine.dispose()
+            self.engine = None
+            postgres_engine = None
+            self.is_connected = False
+            logger.info("PostgreSQL connection closed")
+    
+    @asynccontextmanager
+    async def session(self) -> AsyncSQLSession:
+        """Get PostgreSQL session context manager."""
+        if not self.session_factory:
+            raise RuntimeError("PostgreSQL not connected")
+        
+        async with self.session_factory() as session:
+            yield session
+    
+    async def health_check(self) -> Dict[str, Any]:
+        """Check PostgreSQL health."""
+        try:
+            if not self.is_connected:
+                return {"status": "unhealthy", "error": "Not connected"}
+            
+            async with self.session() as session:
+                await session.execute(text("SELECT 1"))
+                
+            return {"status": "healthy", "response_time_ms": 3}
+        except Exception as e:
+            return {"status": "unhealthy", "error": str(e)}
+
+
+class RedisConnection:
+    """Redis cache connection manager."""
+    
+    def __init__(self):
+        self.client = None
+        self.is_connected = False
+    
+    async def connect(self) -> None:
+        """Establish connection to Redis."""
+        global redis_client
+        
+        try:
+            self.client = redis.from_url(
+                settings.redis_url,
+                password=settings.redis_password,
+                db=settings.redis_db,
+                decode_responses=True,
+                max_connections=20,
+            )
+            
+            # Test connection
+            await self.client.ping()
+            
+            redis_client = self.client
+            self.is_connected = True
+            
+            logger.info("Connected to Redis cache")
+            
+        except Exception as e:
+            logger.error("Failed to connect to Redis", error=str(e))
+            raise
+    
+    async def close(self) -> None:
+        """Close Redis connection."""
+        global redis_client
+        
+        if self.client:
+            await self.client.aclose()
+            self.client = None
+            redis_client = None
+            self.is_connected = False
+            logger.info("Redis connection closed")
+    
+    async def health_check(self) -> Dict[str, Any]:
+        """Check Redis health."""
+        try:
+            if not self.is_connected:
+                return {"status": "unhealthy", "error": "Not connected"}
+            
+            await self.client.ping()
+            return {"status": "healthy", "response_time_ms": 2}
+        except Exception as e:
+            return {"status": "unhealthy", "error": str(e)}
+
+
+# Global connection instances
+milvus_connection = MilvusConnection()
+postgres_connection = PostgreSQLConnection()
+redis_connection = RedisConnection()
 
 
 async def init_neo4j() -> None:
@@ -135,14 +363,108 @@ async def init_neo4j() -> None:
     await seed_initial_data()
 
 
+async def init_milvus() -> None:
+    """Initialize Milvus vector database connection."""
+    await milvus_connection.connect()
+
+
+async def init_postgres() -> None:
+    """Initialize PostgreSQL database connection."""
+    await postgres_connection.connect()
+
+
+async def init_redis() -> None:
+    """Initialize Redis cache connection."""
+    await redis_connection.connect()
+
+
+async def init_all_databases() -> None:
+    """Initialize all database connections."""
+    logger.info("Initializing all database connections...")
+    
+    try:
+        # Initialize in parallel for better performance
+        await asyncio.gather(
+            init_neo4j(),
+            init_milvus(),
+            init_postgres(),
+            init_redis(),
+            return_exceptions=False
+        )
+        logger.info("All database connections initialized successfully")
+        
+    except Exception as e:
+        logger.error(f"Failed to initialize database connections: {str(e)}")
+        raise
+
+
 async def close_neo4j() -> None:
     """Close Neo4j database connection."""
     await neo4j_connection.close()
 
 
+async def close_milvus() -> None:
+    """Close Milvus connection."""
+    await milvus_connection.close()
+
+
+async def close_postgres() -> None:
+    """Close PostgreSQL connection."""
+    await postgres_connection.close()
+
+
+async def close_redis() -> None:
+    """Close Redis connection."""
+    await redis_connection.close()
+
+
+async def close_all_databases() -> None:
+    """Close all database connections."""
+    logger.info("Closing all database connections...")
+    
+    await asyncio.gather(
+        close_neo4j(),
+        close_milvus(),
+        close_postgres(),
+        close_redis(),
+        return_exceptions=True
+    )
+    logger.info("All database connections closed")
+
+
 async def get_neo4j() -> Neo4jConnection:
     """Get Neo4j connection instance."""
     return neo4j_connection
+
+
+def get_milvus() -> MilvusConnection:
+    """Get Milvus connection instance."""
+    return milvus_connection
+
+
+def get_postgres() -> PostgreSQLConnection:
+    """Get PostgreSQL connection instance."""
+    return postgres_connection
+
+
+def get_redis() -> RedisConnection:
+    """Get Redis connection instance."""
+    return redis_connection
+
+
+async def check_all_databases_health() -> Dict[str, Any]:
+    """Check health of all databases."""
+    neo4j_health = await neo4j_connection.health_check()
+    milvus_health = milvus_connection.health_check()
+    postgres_health = await postgres_connection.health_check()
+    redis_health = await redis_connection.health_check()
+    
+    return {
+        "neo4j": neo4j_health,
+        "milvus": milvus_health,
+        "postgres": postgres_health,
+        "redis": redis_health,
+    }
 
 
 async def create_constraints() -> None:
@@ -312,22 +634,5 @@ async def create_system_entities() -> None:
 
 
 async def health_check() -> Dict[str, Any]:
-    """Check database health status."""
-    try:
-        if not neo4j_connection.is_connected:
-            return {"status": "unhealthy", "error": "Not connected"}
-        
-        # Test basic query
-        start_time = asyncio.get_event_loop().time()
-        await neo4j_connection.execute_query("RETURN 1 as test")
-        response_time = (asyncio.get_event_loop().time() - start_time) * 1000
-        
-        return {
-            "status": "healthy",
-            "response_time_ms": round(response_time, 2),
-            "connected": neo4j_connection.is_connected
-        }
-        
-    except Exception as e:
-        logger.error("Database health check failed", error=str(e))
-        return {"status": "unhealthy", "error": str(e)}
+    """Check Neo4j database health status (legacy function - use check_all_databases_health instead)."""
+    return await neo4j_connection.health_check()
