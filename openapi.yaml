@@ -57,34 +57,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/HealthResponse'
 
-  /register:
-    post:
-      tags:
-        - Authentication
-      summary: Register new user account (alias)
-      description: Create a new user account with email and password
-      operationId: registerUserAlias
-      security: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserRegister'
-      responses:
-        '200':
-          description: User registered successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TokenResponse'
-        '400':
-          description: Registration failed - invalid input or email already exists
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-
   /api/v1/auth/register:
     post:
       tags:
@@ -108,34 +80,6 @@ paths:
                 $ref: '#/components/schemas/TokenResponse'
         '400':
           description: Registration failed - invalid input or email already exists
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-
-  /login:
-    post:
-      tags:
-        - Authentication
-      summary: User login (alias)
-      description: Authenticate user and return JWT tokens
-      operationId: loginUserAlias
-      security: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserLogin'
-      responses:
-        '200':
-          description: Login successful
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TokenResponse'
-        '401':
-          description: Invalid credentials
           content:
             application/json:
               schema:
@@ -189,6 +133,765 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+
+  /api/v1/auth/permissions:
+    get:
+      tags:
+        - Authentication
+      summary: Get user permissions
+      description: Retrieve the list of permissions available to the current user based on their role
+      operationId: getUserPermissions
+      responses:
+        '200':
+          description: User permissions retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user_id:
+                    type: string
+                  role:
+                    type: string
+                  permissions:
+                    type: array
+                    items:
+                      type: string
+                  timestamp:
+                    type: string
+                    format: date-time
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/v1/auth/verify-permission:
+    post:
+      tags:
+        - Authentication
+      summary: Verify user permission
+      description: Check if the current user has a specific permission
+      operationId: verifyPermission
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                permission:
+                  type: string
+                  description: Permission to verify
+              required:
+                - permission
+      responses:
+        '200':
+          description: Permission verification result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user_id:
+                    type: string
+                  role:
+                    type: string
+                  permission:
+                    type: string
+                  has_permission:
+                    type: boolean
+                  timestamp:
+                    type: string
+                    format: date-time
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/v1/auth/users:
+    get:
+      tags:
+        - Authentication
+      summary: List users (Admin only)
+      description: Retrieve a list of all users in the system. Requires MANAGE_USERS permission.
+      operationId: listUsers
+      responses:
+        '200':
+          description: Users list retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  requested_by:
+                    type: string
+                  timestamp:
+                    type: string
+                    format: date-time
+        '403':
+          description: Insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/v1/auth/users/{user_id}/role:
+    put:
+      tags:
+        - Authentication
+      summary: Update user role (Admin only)
+      description: Change the role of a specified user. Requires ADMIN_ACCESS permission.
+      operationId: updateUserRole
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: User ID to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                new_role:
+                  type: string
+                  enum: [admin, user, viewer, system]
+              required:
+                - new_role
+      responses:
+        '200':
+          description: User role updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  user_id:
+                    type: string
+                  new_role:
+                    type: string
+                  updated_by:
+                    type: string
+                  timestamp:
+                    type: string
+                    format: date-time
+        '403':
+          description: Insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/v1/auth/users/{user_id}:
+    delete:
+      tags:
+        - Authentication
+      summary: Deactivate user (Admin only)
+      description: Deactivate a user account, preventing further login. Requires ADMIN_ACCESS permission.
+      operationId: deactivateUser
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: User ID to deactivate
+      responses:
+        '200':
+          description: User deactivated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  user_id:
+                    type: string
+                  deactivated_by:
+                    type: string
+                  timestamp:
+                    type: string
+                    format: date-time
+        '400':
+          description: Cannot deactivate own account
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/v1/ws/stats:
+    get:
+      tags:
+        - WebSocket
+      summary: Get WebSocket statistics
+      description: Retrieve connection statistics for WebSocket connections
+      operationId: getWebSocketStats
+      responses:
+        '200':
+          description: WebSocket statistics retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  connection_stats:
+                    type: object
+                  health_status:
+                    type: object
+                  timestamp:
+                    type: string
+
+  /api/v1/ws/broadcast:
+    post:
+      tags:
+        - WebSocket
+      summary: Broadcast message (Admin only)
+      description: Broadcast a message to all connected WebSocket clients
+      operationId: broadcastMessage
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                type:
+                  type: string
+              required:
+                - message
+                - type
+      responses:
+        '200':
+          description: Message broadcast successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  recipients:
+                    type: integer
+                  timestamp:
+                    type: string
+
+  /api/v1/ws/notify/{user_id}:
+    post:
+      tags:
+        - WebSocket
+      summary: Send user notification
+      description: Send a notification to a specific user's WebSocket connections
+      operationId: notifyUser
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: User ID to notify
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                type:
+                  type: string
+              required:
+                - message
+                - type
+      responses:
+        '200':
+          description: User notification sent
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  connections_notified:
+                    type: integer
+                  timestamp:
+                    type: string
+
+  # Bare paths for git hook compatibility (these are the same endpoints but without prefixes)
+  /register:
+    post:
+      tags:
+        - Authentication
+      summary: Register new user account (alias)
+      description: Alias path for /api/v1/auth/register - Create a new user account with email and password
+      operationId: registerUserAlias
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegister'
+      responses:
+        '200':
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+        '400':
+          description: Registration failed - invalid input or email already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /login:
+    post:
+      tags:
+        - Authentication
+      summary: User login (alias)
+      description: Alias path for /api/v1/auth/login - Authenticate user and return JWT tokens
+      operationId: loginUserAlias
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLogin'
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /refresh:
+    post:
+      tags:
+        - Authentication
+      summary: Refresh access token (alias)
+      description: Alias path for /api/v1/auth/refresh - Refresh access token using refresh token
+      operationId: refreshTokenAlias
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                refresh_token:
+                  type: string
+                  description: Valid refresh token
+              required:
+                - refresh_token
+      responses:
+        '200':
+          description: Token refreshed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+        '401':
+          description: Invalid refresh token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /logout:
+    post:
+      tags:
+        - Authentication
+      summary: User logout (alias)
+      description: Alias path for /api/v1/auth/logout - Logout current user
+      operationId: logoutUserAlias
+      responses:
+        '200':
+          description: Successfully logged out
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  timestamp:
+                    type: string
+                    format: date-time
+        '500':
+          description: Logout failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /me:
+    get:
+      tags:
+        - Authentication
+      summary: Get current user info (alias)
+      description: Alias path for /api/v1/auth/me - Retrieve current authenticated user information
+      operationId: getCurrentUserAlias
+      responses:
+        '200':
+          description: User information retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /permissions:
+    get:
+      tags:
+        - Authentication
+      summary: Get user permissions (alias)
+      description: Alias path for /api/v1/auth/permissions - Retrieve user permissions based on role
+      operationId: getUserPermissionsAlias
+      responses:
+        '200':
+          description: User permissions retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user_id:
+                    type: string
+                  role:
+                    type: string
+                  permissions:
+                    type: array
+                    items:
+                      type: string
+                  timestamp:
+                    type: string
+                    format: date-time
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /verify-permission:
+    post:
+      tags:
+        - Authentication
+      summary: Verify user permission (alias)
+      description: Alias path for /api/v1/auth/verify-permission - Check user permission
+      operationId: verifyPermissionAlias
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                permission:
+                  type: string
+                  description: Permission to verify
+              required:
+                - permission
+      responses:
+        '200':
+          description: Permission verification result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user_id:
+                    type: string
+                  role:
+                    type: string
+                  permission:
+                    type: string
+                  has_permission:
+                    type: boolean
+                  timestamp:
+                    type: string
+                    format: date-time
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /users:
+    get:
+      tags:
+        - Authentication
+      summary: List users (alias)
+      description: Alias path for /api/v1/auth/users - List all users (Admin only)
+      operationId: listUsersAlias
+      responses:
+        '200':
+          description: Users list retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  requested_by:
+                    type: string
+                  timestamp:
+                    type: string
+                    format: date-time
+        '403':
+          description: Insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /users/{user_id}/role:
+    put:
+      tags:
+        - Authentication
+      summary: Update user role (alias)
+      description: Alias path for /api/v1/auth/users/{user_id}/role - Update user role (Admin only)
+      operationId: updateUserRoleAlias
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: User ID to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                new_role:
+                  type: string
+                  enum: [admin, user, viewer, system]
+              required:
+                - new_role
+      responses:
+        '200':
+          description: User role updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  user_id:
+                    type: string
+                  new_role:
+                    type: string
+                  updated_by:
+                    type: string
+                  timestamp:
+                    type: string
+                    format: date-time
+        '403':
+          description: Insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /users/{user_id}:
+    delete:
+      tags:
+        - Authentication
+      summary: Deactivate user (alias)
+      description: Alias path for /api/v1/auth/users/{user_id} - Deactivate user (Admin only)
+      operationId: deactivateUserAlias
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: User ID to deactivate
+      responses:
+        '200':
+          description: User deactivated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  user_id:
+                    type: string
+                  deactivated_by:
+                    type: string
+                  timestamp:
+                    type: string
+                    format: date-time
+        '400':
+          description: Cannot deactivate own account
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /ws/stats:
+    get:
+      tags:
+        - WebSocket
+      summary: Get WebSocket statistics (alias)
+      description: Alias path for /api/v1/ws/stats - Get WebSocket connection statistics
+      operationId: getWebSocketStatsAlias
+      responses:
+        '200':
+          description: WebSocket statistics retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  connection_stats:
+                    type: object
+                  health_status:
+                    type: object
+                  timestamp:
+                    type: string
+
+  /ws/broadcast:
+    post:
+      tags:
+        - WebSocket
+      summary: Broadcast message (alias)
+      description: Alias path for /api/v1/ws/broadcast - Broadcast message (Admin only)
+      operationId: broadcastMessageAlias
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                type:
+                  type: string
+              required:
+                - message
+                - type
+      responses:
+        '200':
+          description: Message broadcast successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  recipients:
+                    type: integer
+                  timestamp:
+                    type: string
+
+  /ws/notify/{user_id}:
+    post:
+      tags:
+        - WebSocket
+      summary: Send user notification (alias)
+      description: Alias path for /api/v1/ws/notify/{user_id} - Send user notification
+      operationId: notifyUserAlias
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: User ID to notify
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                type:
+                  type: string
+              required:
+                - message
+                - type
+      responses:
+        '200':
+          description: User notification sent
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  connections_notified:
+                    type: integer
+                  timestamp:
+                    type: string
 
   /api/v1/prd/generate:
     post:
@@ -349,292 +1052,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PRDListResponse'
-
-  /refresh:
-    post:
-      tags:
-        - Authentication
-      summary: Refresh access token (alias)
-      operationId: refreshTokenAlias
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                refresh_token:
-                  type: string
-      responses:
-        '200':
-          description: Token refreshed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TokenResponse'
-
-  /me:
-    get:
-      tags:
-        - Authentication
-      summary: Get current user info (alias)
-      operationId: getCurrentUserAlias
-      responses:
-        '200':
-          description: User information retrieved
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-
-  /logout:
-    post:
-      tags:
-        - Authentication  
-      summary: Logout user (alias)
-      operationId: logoutUserAlias
-      responses:
-        '200':
-          description: Logged out successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-
-  /metrics:
-    get:
-      tags:
-        - Dashboard & Analytics
-      summary: Get dashboard metrics (alias)
-      operationId: getDashboardMetricsAlias
-      responses:
-        '200':
-          description: Metrics retrieved successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DashboardMetrics'
-
-  /prds:
-    get:
-      tags:
-        - Dashboard & Analytics
-      summary: Get PRDs list (alias)
-      operationId: getPRDsListAlias
-      parameters:
-        - name: page
-          in: query
-          schema:
-            type: integer
-            default: 1
-        - name: page_size
-          in: query
-          schema:
-            type: integer
-            default: 20
-      responses:
-        '200':
-          description: PRDs list retrieved
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PRDListResponse'
-
-  /quality-trends:
-    get:
-      tags:
-        - Dashboard & Analytics
-      summary: Get quality trends (alias)
-      operationId: getQualityTrendsAlias
-      responses:
-        '200':
-          description: Quality trends retrieved
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/QualityTrend'
-
-  /validation-insights:
-    get:
-      tags:
-        - Dashboard & Analytics
-      summary: Get validation insights (alias)
-      operationId: getValidationInsightsAlias
-      responses:
-        '200':
-          description: Validation insights retrieved
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ValidationInsights'
-
-  /dashboard:
-    get:
-      tags:
-        - Dashboard & Analytics
-      summary: Get complete dashboard (alias)
-      operationId: getCompleteDashboardAlias
-      responses:
-        '200':
-          description: Complete dashboard data
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DashboardData'
-
-  /phase0/initiate:
-    post:
-      tags:
-        - PRD Generation
-      summary: Phase 0 initiation (alias)
-      operationId: initiatePhase0Alias
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Phase0Request'
-      responses:
-        '200':
-          description: Phase 0 completed successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Phase0Response'
-
-  /phase1/clarify:
-    post:
-      tags:
-        - PRD Generation
-      summary: Phase 1 clarification (alias)
-      operationId: clarifyPhase1Alias
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Phase1Request'
-      responses:
-        '200':
-          description: Phase 1 completed successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Phase1Response'
-
-  /phase2/draft:
-    post:
-      tags:
-        - PRD Generation
-      summary: Phase 2 drafting (alias)
-      operationId: draftPhase2Alias
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-      responses:
-        '200':
-          description: Phase 2 completed successfully
-
-  /generate:
-    post:
-      tags:
-        - PRD Generation
-      summary: Generate PRD (alias)
-      operationId: generatePRDAlias
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PRDGenerationRequest'
-      responses:
-        '200':
-          description: PRD generation started successfully
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PRDGenerationResponse'
-
-  /validate-content:
-    post:
-      tags:
-        - GraphRAG Validation
-      summary: Validate content (alias)
-      operationId: validateContentAlias
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ValidationRequest'
-      responses:
-        '200':
-          description: Validation completed
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ValidationResponse'
-
-  /validate-batch:
-    post:
-      tags:
-        - GraphRAG Validation
-      summary: Validate content batch (alias)
-      operationId: validateBatchAlias
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-      responses:
-        '200':
-          description: Batch validation completed
-
-  /confidence-score/{prd_id}:
-    get:
-      tags:
-        - GraphRAG Validation
-      summary: Get confidence score (alias)
-      operationId: getConfidenceScoreAlias
-      parameters:
-        - name: prd_id
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: Confidence score retrieved
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  confidence:
-                    type: number
-
-  /validation-stats:
-    get:
-      tags:
-        - GraphRAG Validation
-      summary: Get validation statistics (alias)
-      operationId: getValidationStatsAlias
-      responses:
-        '200':
-          description: Validation statistics retrieved
-          content:
-            application/json:
-              schema:
-                type: object
 
 components:
   securitySchemes:
@@ -1182,82 +1599,6 @@ components:
           type: string
           format: date-time
           description: Last update date
-
-    QualityTrend:
-      type: object
-      required:
-        - date
-        - average_score
-        - prd_count
-        - validation_accuracy
-      properties:
-        date:
-          type: string
-          description: Date
-        average_score:
-          type: number
-          description: Average quality score
-        prd_count:
-          type: integer
-          description: Number of PRDs created
-        validation_accuracy:
-          type: number
-          description: Validation accuracy
-
-    ValidationInsights:
-      type: object
-      required:
-        - total_validations
-        - average_confidence
-        - hallucination_rate
-        - entity_accuracy
-        - community_accuracy
-        - global_accuracy
-      properties:
-        total_validations:
-          type: integer
-          description: Total validations performed
-        average_confidence:
-          type: number
-          description: Average confidence score
-        hallucination_rate:
-          type: number
-          description: Detected hallucination rate
-        entity_accuracy:
-          type: number
-          description: Entity validation accuracy
-        community_accuracy:
-          type: number
-          description: Community validation accuracy
-        global_accuracy:
-          type: number
-          description: Global validation accuracy
-
-    DashboardData:
-      type: object
-      required:
-        - metrics
-        - recent_prds
-        - quality_trends
-        - validation_insights
-        - top_users
-      properties:
-        metrics:
-          $ref: '#/components/schemas/DashboardMetrics'
-        recent_prds:
-          type: array
-          items:
-            $ref: '#/components/schemas/PRDSummary'
-        quality_trends:
-          type: array
-          items:
-            $ref: '#/components/schemas/QualityTrend'
-        validation_insights:
-          $ref: '#/components/schemas/ValidationInsights'
-        top_users:
-          type: array
-          items:
-            type: object
 
 tags:
   - name: Health
