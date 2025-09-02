@@ -134,6 +134,316 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
+  /api/v1/auth/permissions:
+    get:
+      tags:
+        - Authentication
+      summary: Get user permissions
+      description: Retrieve the list of permissions available to the current user based on their role
+      operationId: getUserPermissions
+      responses:
+        '200':
+          description: User permissions retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user_id:
+                    type: string
+                  role:
+                    type: string
+                  permissions:
+                    type: array
+                    items:
+                      type: string
+                  timestamp:
+                    type: string
+                    format: date-time
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/v1/auth/verify-permission:
+    post:
+      tags:
+        - Authentication
+      summary: Verify user permission
+      description: Check if the current user has a specific permission
+      operationId: verifyPermission
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                permission:
+                  type: string
+                  description: Permission to verify
+              required:
+                - permission
+      responses:
+        '200':
+          description: Permission verification result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user_id:
+                    type: string
+                  role:
+                    type: string
+                  permission:
+                    type: string
+                  has_permission:
+                    type: boolean
+                  timestamp:
+                    type: string
+                    format: date-time
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/v1/auth/users:
+    get:
+      tags:
+        - Authentication
+      summary: List users (Admin only)
+      description: Retrieve a list of all users in the system. Requires MANAGE_USERS permission.
+      operationId: listUsers
+      responses:
+        '200':
+          description: Users list retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  requested_by:
+                    type: string
+                  timestamp:
+                    type: string
+                    format: date-time
+        '403':
+          description: Insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/v1/auth/users/{user_id}/role:
+    put:
+      tags:
+        - Authentication
+      summary: Update user role (Admin only)
+      description: Change the role of a specified user. Requires ADMIN_ACCESS permission.
+      operationId: updateUserRole
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: User ID to update
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                new_role:
+                  type: string
+                  enum: [admin, user, viewer, system]
+              required:
+                - new_role
+      responses:
+        '200':
+          description: User role updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  user_id:
+                    type: string
+                  new_role:
+                    type: string
+                  updated_by:
+                    type: string
+                  timestamp:
+                    type: string
+                    format: date-time
+        '403':
+          description: Insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/v1/auth/users/{user_id}:
+    delete:
+      tags:
+        - Authentication
+      summary: Deactivate user (Admin only)
+      description: Deactivate a user account, preventing further login. Requires ADMIN_ACCESS permission.
+      operationId: deactivateUser
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: User ID to deactivate
+      responses:
+        '200':
+          description: User deactivated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  user_id:
+                    type: string
+                  deactivated_by:
+                    type: string
+                  timestamp:
+                    type: string
+                    format: date-time
+        '400':
+          description: Cannot deactivate own account
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/v1/ws/stats:
+    get:
+      tags:
+        - WebSocket
+      summary: Get WebSocket statistics
+      description: Retrieve connection statistics for WebSocket connections
+      operationId: getWebSocketStats
+      responses:
+        '200':
+          description: WebSocket statistics retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  connection_stats:
+                    type: object
+                  health_status:
+                    type: object
+                  timestamp:
+                    type: string
+
+  /api/v1/ws/broadcast:
+    post:
+      tags:
+        - WebSocket
+      summary: Broadcast message (Admin only)
+      description: Broadcast a message to all connected WebSocket clients
+      operationId: broadcastMessage
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                type:
+                  type: string
+              required:
+                - message
+                - type
+      responses:
+        '200':
+          description: Message broadcast successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  recipients:
+                    type: integer
+                  timestamp:
+                    type: string
+
+  /api/v1/ws/notify/{user_id}:
+    post:
+      tags:
+        - WebSocket
+      summary: Send user notification
+      description: Send a notification to a specific user's WebSocket connections
+      operationId: notifyUser
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: User ID to notify
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                type:
+                  type: string
+              required:
+                - message
+                - type
+      responses:
+        '200':
+          description: User notification sent
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  connections_notified:
+                    type: integer
+                  timestamp:
+                    type: string
+
   /api/v1/prd/generate:
     post:
       tags:
