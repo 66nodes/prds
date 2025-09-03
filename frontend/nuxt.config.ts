@@ -16,7 +16,8 @@ export default defineNuxtConfig({
   // TypeScript configuration
   typescript: {
     strict: true,
-    typeCheck: true
+    typeCheck: true,
+    shim: false
   },
 
   // Nuxt UI configuration
@@ -34,8 +35,7 @@ export default defineNuxtConfig({
 
   // CSS imports
   css: [
-    '~/assets/css/main.css',
-    '~/assets/css/theme.css'
+    '~/assets/css/main.css'
   ],
 
   // Google Fonts
@@ -55,6 +55,7 @@ export default defineNuxtConfig({
     // Public keys (exposed to client-side)
     public: {
       apiBase: process.env.API_BASE_URL || 'http://localhost:8000',
+      wsBase: process.env.WS_BASE_URL || 'ws://localhost:8000',
       appName: 'Strategic Planning Platform',
       appVersion: '1.0.0'
     }
@@ -65,7 +66,37 @@ export default defineNuxtConfig({
 
   // Build configuration
   build: {
-    transpile: ['@headlessui/vue']
+    transpile: ['@headlessui/vue'],
+    analyze: false,
+    optimizeDeps: {
+      include: ['vue', 'pinia', '@vueuse/core']
+    }
+  },
+
+  // Nitro server configuration
+  nitro: {
+    compressPublicAssets: true,
+    prerender: {
+      crawlLinks: true,
+      routes: ['/login', '/']
+    }
+  },
+
+  // Vite configuration
+  vite: {
+    optimizeDeps: {
+      include: ['vue', 'pinia', '@vueuse/core']
+    },
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            'vendor': ['vue', 'pinia'],
+            'ui': ['@nuxt/ui', '@headlessui/vue']
+          }
+        }
+      }
+    }
   },
 
   // App configuration
@@ -86,6 +117,18 @@ export default defineNuxtConfig({
 
   // Experimental features
   experimental: {
-    typedPages: true
+    typedPages: true,
+    payloadExtraction: false,
+    renderJsonPayloads: true,
+    componentIslands: true
+  },
+
+  // Performance optimizations
+  routeRules: {
+    '/': { prerender: true },
+    '/login': { prerender: true },
+    '/api/**': { cors: true },
+    '/dashboard/**': { ssr: false, prerender: false },
+    '/projects/**': { isr: 60 }
   }
 })
