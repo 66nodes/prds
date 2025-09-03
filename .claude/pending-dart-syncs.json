@@ -70,5 +70,23 @@
     "title": "Claude",
     "content_preview": "# CLAUDE.md - AI Agent Context for Strategic Planning Platform\n\n## \ud83c\udfaf Project Context & Objectives\n\n**Primary Mission**: Build an enterprise-grade AI-powered strategic planning platform that reduces pl...",
     "timestamp": "2025-09-01T10:43:39.426674"
+  },
+  {
+    "file_path": "/home/jgrewal/projects/website/prds/README_TESTING.md",
+    "title": "Prds/Readme Testing",
+    "content_preview": "# Testing Documentation for Strategic Planning Platform\n\n## Overview\n\nThis document provides comprehensive information about the testing infrastructure, test execution, and quality assurance processes...",
+    "timestamp": "2025-09-02T23:26:01.250067"
+  },
+  {
+    "file_path": "/home/jgrewal/projects/website/prds/docs/DEPLOYMENT_RUNBOOK.md",
+    "title": "Deployment Runbook",
+    "content_preview": "# AI Agent Platform - Production Deployment Runbook\n\n## \ud83c\udfaf Overview\n\nThis runbook provides comprehensive instructions for deploying and maintaining the AI Agent Platform in production using Docker Swar...",
+    "timestamp": "2025-09-02T23:51:38.427324"
+  },
+  {
+    "file_path": "/home/jgrewal/projects/website/prds/PROJECT_COMPLETION_REPORT.md",
+    "title": "Prds/Project Completion Report",
+    "content_preview": "# \ud83d\ude80 AI Agent Platform - Project Completion Report\n\n**Project**: Strategic Planning Platform with Hybrid RAG Architecture  \n**Version**: v2.0.0  \n**Completion Date**: September 3, 2025  \n**Status**: \u2705 ...",
+    "timestamp": "2025-09-03T00:14:30.144001"
   }
 ]
