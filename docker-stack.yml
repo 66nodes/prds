@@ -1,15 +1,14 @@
 version: '3.8'
 
-# AI Agent Platform - Hybrid RAG Infrastructure Stack
-# Milvus + Neo4j + PostgreSQL + Redis + Application Services
+# AI Agent Platform - Production Docker Swarm Stack
+# Optimized for high availability, scalability, and monitoring
 
 networks:
   ai-platform-network:
     driver: overlay
     attachable: true
-    ipam:
-      config:
-        - subnet: 172.28.0.0/16
+  traefik-public:
+    external: true
 
 volumes:
   # Database volumes
@@ -52,9 +51,19 @@ secrets:
     external: true
   postgres_password:
     external: true
+  redis_password:
+    external: true
   jwt_secret:
     external: true
-  openrouter_api_key:
+  openai_api_key:
+    external: true
+
+configs:
+  prometheus_config:
+    external: true
+  grafana_dashboard_config:
+    external: true
+  nginx_config:
     external: true
 
 services:
@@ -311,98 +320,140 @@ services:
         max_attempts: 3
 
   # ================================
+  # REVERSE PROXY & LOAD BALANCER
+  # ================================
+  
+  traefik:
+    image: traefik:v3.0
+    command:
+      - --api.dashboard=true
+      - --entrypoints.web.address=:80
+      - --entrypoints.websecure.address=:443
+      - --providers.docker=true
+      - --providers.docker.swarmmode=true
+      - --providers.docker.exposedbydefault=false
+      - --certificatesresolvers.le.acme.email=${ACME_EMAIL}
+      - --certificatesresolvers.le.acme.storage=/certificates/acme.json
+      - --certificatesresolvers.le.acme.tlschallenge=true
+      - --metrics.prometheus=true
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - traefik_certificates:/certificates
+    networks:
+      - traefik-public
+      - ai-platform-network
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+      labels:
+        - traefik.enable=true
+        - traefik.http.routers.traefik-dashboard.rule=Host(`traefik.${DOMAIN_NAME}`)
+        - traefik.http.routers.traefik-dashboard.tls.certresolver=le
+        - traefik.http.services.traefik-dashboard.loadbalancer.server.port=8080
+
+  # ================================
   # APPLICATION SERVICES
   # ================================
   
-  # FastAPI Backend
+  # Backend API
   backend:
-    image: ai-platform/backend:latest
-    hostname: backend
+    image: ${REGISTRY:-ghcr.io}/${IMAGE_NAME}/backend:${IMAGE_TAG:-latest}
     networks:
       - ai-platform-network
+      - traefik-public
     environment:
+      - ENVIRONMENT=production
+      - DATABASE_URL=postgresql://postgres:${POSTGRES_PASSWORD}@postgres:5432/aiplatform
+      - REDIS_URL=redis://:${REDIS_PASSWORD}@redis:6379
       - NEO4J_URI=bolt://neo4j:7687
       - NEO4J_USER=neo4j
-      - NEO4J_PASSWORD=development
+      - NEO4J_PASSWORD=${NEO4J_PASSWORD}
       - MILVUS_HOST=milvus-standalone
       - MILVUS_PORT=19530
-      - POSTGRES_URL=postgresql://postgres:development@postgres:5432/aiplatform
-      - REDIS_URL=redis://redis:6379
-      - PULSAR_SERVICE_URL=pulsar://pulsar:6650
-      - PULSAR_ADMIN_URL=http://pulsar:8080
-      - OPENROUTER_API_KEY_FILE=/run/secrets/openrouter_api_key
-      - API_HOST=0.0.0.0
-      - API_PORT=8000
-      - FRONTEND_URL=http://frontend:3000
-    ports:
-      - "8000:8000"
+      - JWT_SECRET_KEY=${JWT_SECRET}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    secrets:
+      - postgres_password
+      - redis_password
+      - neo4j_password
+      - jwt_secret
+      - openai_api_key
     volumes:
       - graphrag_cache:/app/graphrag_cache
       - agent_logs:/app/logs
-    secrets:
-      - openrouter_api_key
-      - jwt_secret
-    depends_on:
-      - neo4j
-      - milvus-standalone
-      - postgres
-      - redis
-      - pulsar
+    deploy:
+      replicas: 4
+      update_config:
+        parallelism: 2
+        delay: 10s
+        failure_action: rollback
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+      labels:
+        - traefik.enable=true
+        - traefik.http.routers.backend.rule=Host(`api.${DOMAIN_NAME}`)
+        - traefik.http.routers.backend.tls.certresolver=le
+        - traefik.http.services.backend.loadbalancer.server.port=8000
+        - traefik.http.routers.backend.middlewares=backend-ratelimit
+        - traefik.http.middlewares.backend-ratelimit.ratelimit.burst=100
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
       interval: 30s
       timeout: 10s
       retries: 3
-      start_period: 40s
+
+  # Frontend Application
+  frontend:
+    image: ${REGISTRY:-ghcr.io}/${IMAGE_NAME}/frontend:${IMAGE_TAG:-latest}
+    networks:
+      - ai-platform-network
+      - traefik-public
+    environment:
+      - NODE_ENV=production
+      - NUXT_PUBLIC_API_BASE=${API_BASE_URL}
+      - NUXT_PUBLIC_WS_URL=${WS_BASE_URL}
     deploy:
-      replicas: 2
+      replicas: 3
       update_config:
         parallelism: 1
         delay: 10s
-        order: start-first
-      resources:
-        limits:
-          memory: 4G
-          cpus: '2.0'
-        reservations:
-          memory: 2G
-          cpus: '1.0'
+        failure_action: rollback
       restart_policy:
         condition: on-failure
-        delay: 30s
+        delay: 5s
         max_attempts: 3
-
-  # Nuxt.js Frontend
-  frontend:
-    image: ai-platform/frontend:latest
-    hostname: frontend
-    networks:
-      - ai-platform-network
-    environment:
-      - NUXT_PUBLIC_API_BASE_URL=http://backend:8000
-      - NUXT_PUBLIC_WS_URL=ws://backend:8000/ws
-      - NODE_ENV=production
-    ports:
-      - "3000:3000"
-    depends_on:
-      - backend
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+      labels:
+        - traefik.enable=true
+        - traefik.http.routers.frontend.rule=Host(`${DOMAIN_NAME}`)
+        - traefik.http.routers.frontend.tls.certresolver=le
+        - traefik.http.services.frontend.loadbalancer.server.port=3000
+        - traefik.http.routers.frontend.middlewares=frontend-compress
+        - traefik.http.middlewares.frontend-compress.compress=true
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3000"]
       interval: 30s
       timeout: 10s
       retries: 3
-    deploy:
-      replicas: 2
-      update_config:
-        parallelism: 1
-        delay: 10s
-      resources:
-        limits:
-          memory: 2G
-          cpus: '1.0'
-        reservations:
-          memory: 1G
-          cpus: '0.5'
 
   # ================================
   # REVERSE PROXY - NGINX
@@ -531,18 +582,26 @@ services:
 # DEPLOYMENT CONFIGURATION
 # ================================
 
-configs:
-  nginx_config:
-    file: ./infrastructure/nginx/nginx.conf
-  prometheus_config:
-    file: ./monitoring/prometheus/prometheus.yml
+  # Node Exporter
+  node-exporter:
+    image: prom/node-exporter:v1.6.1
+    networks:
+      - ai-platform-network
+    command:
+      - '--path.rootfs=/host'
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    volumes:
+      - '/:/host:ro,rslave'
+    deploy:
+      mode: global
+      restart_policy:
+        condition: on-failure
+      resources:
+        limits:
+          cpus: '0.2'
+          memory: 128M
 
-x-logging: &default-logging
-  driver: "json-file"
-  options:
-    max-size: "10m"
-    max-file: "3"
-
-x-common-variables: &common-variables
-  TZ: UTC
-  COMPOSE_PROJECT_NAME: ai-agent-platform
+volumes:
+  traefik_certificates:

@@ -1,0 +1,97 @@
+# AI Agent Platform - Frontend Docker Ignore
+
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Nuxt dev/build outputs
+.nuxt/
+.output/
+.nitro/
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+*.lcov
+
+# Logs
+*.log
+logs/
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Environment files
+.env
+.env.local
+.env.development
+.env.production
+
+# Testing
+.nyc_output
+coverage/
+test-results/
+playwright-report/
+
+# Git
+.git/
+.gitignore
+
+# Docker
+Dockerfile*
+.dockerignore
+docker-compose*.yml
+
+# Cache directories
+.cache/
+cache/
+
+# Build outputs in source (should be in .output instead)
+dist/
+
+# Documentation
+*.md
+!README.md
+docs/
+
+# Temporary folders
+tmp/
+temp/
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Storybook build outputs
+storybook-static
