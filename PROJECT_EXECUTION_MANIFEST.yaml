@@ -122,14 +122,17 @@ infrastructure_tasks:
   - id: "infra_004"
     name: "Configure CI/CD pipelines"
     description: "GitHub Actions for automated testing and deployment"
-    status: "pending"
+    status: "completed"
     priority: "high"
     dependencies: ["infra_001", "infra_002"]
     deliverables:
-      - ".github/workflows/ci.yml"
-      - ".github/workflows/deploy.yml"
-      - ".github/workflows/security.yml"
+      - ".github/workflows/ci-cd.yml"
+      - "scripts/production_check.sh"
+      - "scripts/backup.sh"
+      - "scripts/restore.sh"
     estimated_hours: 8
+    completed_at: "2025-09-03"
+    progress: "Complete CI/CD pipeline with security scanning, testing, and automated deployment"
 
   - id: "infra_005"
     name: "Deploy and validate infrastructure stack"
@@ -375,7 +378,7 @@ milestones:
     description: "Complete infrastructure setup with Hybrid RAG"
     target_date: "2025-01-28"
     status: "completed"
-    tasks: ["infra_001", "infra_002", "infra_003", "infra_005"]
+    tasks: ["infra_001", "infra_002", "infra_003", "infra_004", "infra_005"]
     progress: "Infrastructure foundation complete: all critical services deployed and validated"
     completed_at: "2025-09-01"
     validation_summary:

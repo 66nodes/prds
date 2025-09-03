@@ -1,0 +1,55 @@
+{
+  "validation_timestamp": "2025-09-03T00:05:23.200236",
+  "system_status": "healthy",
+  "infrastructure": {},
+  "performance": {
+    "api_endpoints": [
+      {
+        "endpoint": "Health Check",
+        "response_time_ms": 1.45721435546875,
+        "status_code": 200
+      },
+      {
+        "endpoint": "Prometheus Status",
+        "response_time_ms": 1.4030933380126953,
+        "status_code": 200
+      },
+      {
+        "endpoint": "MinIO Health",
+        "response_time_ms": 1.1696815490722656,
+        "status_code": 200
+      }
+    ],
+    "average_response_time": 1.3433297475179036,
+    "target_met": true
+  },
+  "security": {
+    "checks": [
+      {
+        "check": "Environment Template",
+        "status": "secure",
+        "message": "Production template contains placeholder values"
+      },
+      {
+        "check": "Port Exposure",
+        "status": "configured",
+        "message": "Container ports configured"
+      }
+    ],
+    "total_checks": 2,
+    "passed_checks": 2
+  },
+  "services": {},
+  "errors": [
+    {
+      "component": "Docker Infrastructure",
+      "message": "Missing containers: {'prds-etcd-1', 'prds-neo4j-1', 'prds-redis-1', 'prds-minio-1', 'prds-prometheus-1', 'prds-postgres-1', 'prds-grafana-1', 'prds-pulsar-1', 'prds-healthchecker-1', 'prds-milvus-standalone-1'}",
+      "error": null,
+      "timestamp": "2025-09-03T00:05:23.212943"
+    }
+  ],
+  "warnings": [],
+  "success_count": 17,
+  "total_checks": 18,
+  "success_rate": 94.44444444444444
+}

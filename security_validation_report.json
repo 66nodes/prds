@@ -1,0 +1,86 @@
+{
+  "security_status": "secure",
+  "checks": [
+    {
+      "category": "Environment",
+      "name": "Production Secrets",
+      "status": "pass",
+      "message": "Production environment file is not committed",
+      "score": 1
+    },
+    {
+      "category": "Environment",
+      "name": "Template Security",
+      "status": "fail",
+      "message": "Environment template may contain real credentials",
+      "score": 0
+    },
+    {
+      "category": "Docker",
+      "name": "Non-root User",
+      "status": "pass",
+      "message": "Application runs as non-root user",
+      "score": 1
+    },
+    {
+      "category": "Docker",
+      "name": "Health Checks",
+      "status": "pass",
+      "message": "Health checks are configured",
+      "score": 1
+    },
+    {
+      "category": "Docker",
+      "name": "docker-stack.yml Secrets",
+      "status": "pass",
+      "message": "No hardcoded passwords found",
+      "score": 1
+    },
+    {
+      "category": "Docker",
+      "name": "docker-compose.yml Secrets",
+      "status": "pass",
+      "message": "No hardcoded passwords found",
+      "score": 1
+    },
+    {
+      "category": "API",
+      "name": "Security Headers",
+      "status": "pass",
+      "message": "Security headers configuration found",
+      "score": 1
+    },
+    {
+      "category": "API",
+      "name": "CORS Configuration",
+      "status": "pass",
+      "message": "CORS configuration found",
+      "score": 1
+    },
+    {
+      "category": "Secrets",
+      "name": "Gitignore Protection",
+      "status": "pass",
+      "message": "Secret patterns protected in gitignore (4/4)",
+      "score": 1
+    },
+    {
+      "category": "Secrets",
+      "name": "Secret Scanning",
+      "status": "pass",
+      "message": "No obvious secrets detected in code",
+      "score": 1
+    }
+  ],
+  "vulnerabilities": [
+    {
+      "severity": "medium",
+      "component": "backend/requirements-test.txt",
+      "description": "Old requests versions may have vulnerabilities",
+      "recommendation": null
+    }
+  ],
+  "recommendations": [],
+  "score": 9,
+  "max_score": 10
+}
