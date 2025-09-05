@@ -3,17 +3,17 @@ info:
   title: Strategic Planning Platform API
   description: |
     AI-Powered Strategic Planning Platform with GraphRAG validation.
-    
+
     ## Features
-    
+
     * **4-Phase PRD Creation Workflow**: From concept to comprehensive document
     * **GraphRAG Validation**: <2% hallucination rate through three-tier validation
     * **PydanticAI Agents**: Intelligent PRD processing and task generation
     * **GitHub Integration**: Automated project setup and task management
     * **Enterprise Security**: JWT auth, RBAC, and comprehensive audit logging
-    
+
     ## Performance Targets
-    
+
     * API Response Time: <200ms P95
     * Document Generation: <60 seconds
     * Concurrent Users: 100+ with stable performance
@@ -1053,6 +1053,332 @@ paths:
               schema:
                 $ref: '#/components/schemas/PRDListResponse'
 
+  # Graph Mutation Endpoints
+  /api/v1/graph/nodes:
+    post:
+      tags:
+        - Graph Mutations
+      summary: Create node
+      description: Create a new node in the knowledge graph
+      operationId: createNode
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateNodeRequest'
+      responses:
+        '200':
+          description: Node created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MutationResult'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/v1/graph/nodes/{node_id}:
+    put:
+      tags:
+        - Graph Mutations
+      summary: Update node
+      description: Update an existing node in the knowledge graph
+      operationId: updateNode
+      parameters:
+        - name: node_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Unique identifier of the node
+        - name: node_type
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/NodeType'
+          description: Type of the node being updated
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateNodeRequest'
+      responses:
+        '200':
+          description: Node updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MutationResult'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Node not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      tags:
+        - Graph Mutations
+      summary: Delete node
+      description: Delete a node from the knowledge graph
+      operationId: deleteNode
+      parameters:
+        - name: node_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Unique identifier of the node
+        - name: node_type
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/NodeType'
+          description: Type of the node being deleted
+        - name: cascade
+          in: query
+          required: false
+          schema:
+            type: boolean
+            default: false
+          description: Delete relationships if they exist
+      responses:
+        '200':
+          description: Node deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MutationResult'
+        '400':
+          description: Invalid request or node has relationships
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Node not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/v1/graph/relationships:
+    post:
+      tags:
+        - Graph Mutations
+      summary: Create relationship
+      description: Create a new relationship between nodes
+      operationId: createRelationship
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateRelationshipRequest'
+      responses:
+        '200':
+          description: Relationship created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MutationResult'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/v1/graph/relationships/{relationship_id}:
+    put:
+      tags:
+        - Graph Mutations
+      summary: Update relationship
+      description: Update an existing relationship
+      operationId: updateRelationship
+      parameters:
+        - name: relationship_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Unique identifier of the relationship
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateRelationshipRequest'
+      responses:
+        '200':
+          description: Relationship updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MutationResult'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      tags:
+        - Graph Mutations
+      summary: Delete relationship
+      description: Delete a relationship from the knowledge graph
+      operationId: deleteRelationship
+      parameters:
+        - name: relationship_id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Unique identifier of the relationship
+      responses:
+        '200':
+          description: Relationship deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MutationResult'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Relationship not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/v1/graph/nodes/bulk:
+    post:
+      tags:
+        - Graph Mutations
+      summary: Bulk create nodes
+      description: Create multiple nodes in a single operation
+      operationId: bulkCreateNodes
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BulkCreateRequest'
+      responses:
+        '200':
+          description: Nodes created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MutationResult'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/v1/graph/transaction:
+    post:
+      tags:
+        - Graph Mutations
+      summary: Execute transaction
+      description: Execute multiple graph operations in a single transaction
+      operationId: executeTransaction
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransactionRequest'
+      responses:
+        '200':
+          description: Transaction completed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MutationResult'
+        '400':
+          description: Transaction failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/v1/graph/query:
+    post:
+      tags:
+        - Graph Mutations
+      summary: Query graph
+      description: Query the knowledge graph with various query types
+      operationId: queryGraph
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GraphQueryRequest'
+      responses:
+        '200':
+          description: Query executed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  query_type:
+                    type: string
+                  results:
+                    type: array
+                    items:
+                      type: object
+        '400':
+          description: Invalid query
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /api/v1/graph/health:
+    get:
+      tags:
+        - Graph Mutations
+      summary: Graph service health
+      description: Check the health status of the graph mutation service
+      operationId: graphHealth
+      security: []
+      responses:
+        '200':
+          description: Graph service health status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum: [healthy, unhealthy]
+                  initialized:
+                    type: boolean
+                  neo4j_connected:
+                    type: boolean
+                  redis_connected:
+                    type: boolean
+
 components:
   securitySchemes:
     BearerAuth:
@@ -1600,6 +1926,183 @@ components:
           format: date-time
           description: Last update date
 
+    # Graph Mutation Schemas
+    NodeType:
+      type: string
+      enum:
+        - Requirement
+        - PRD
+        - Objective
+        - Entity
+        - Community
+        - Project
+        - User
+        - Task
+        - ValidationResult
+        - Agent
+        - Workflow
+
+    RelationshipType:
+      type: string
+      enum:
+        - CONTAINS
+        - RELATES_TO
+        - PART_OF
+        - DEPENDS_ON
+        - VALIDATES
+        - CREATED_BY
+        - ASSIGNED_TO
+        - FOLLOWS
+        - CONTRADICTS
+        - IMPLEMENTS
+
+    CreateNodeRequest:
+      type: object
+      required:
+        - type
+      properties:
+        type:
+          $ref: '#/components/schemas/NodeType'
+        properties:
+          type: object
+          additionalProperties: true
+          description: Key-value pairs for node properties
+        embedding:
+          type: array
+          items:
+            type: number
+          description: Optional vector embedding for similarity search
+
+    UpdateNodeRequest:
+      type: object
+      required:
+        - updates
+      properties:
+        updates:
+          type: object
+          additionalProperties: true
+          description: Key-value pairs of properties to update
+
+    CreateRelationshipRequest:
+      type: object
+      required:
+        - type
+        - from_node_id
+        - to_node_id
+      properties:
+        type:
+          $ref: '#/components/schemas/RelationshipType'
+        from_node_id:
+          type: string
+          description: Source node ID
+        to_node_id:
+          type: string
+          description: Target node ID
+        properties:
+          type: object
+          additionalProperties: true
+          description: Optional relationship properties
+
+    UpdateRelationshipRequest:
+      type: object
+      required:
+        - updates
+      properties:
+        updates:
+          type: object
+          additionalProperties: true
+          description: Properties to update
+
+    BulkCreateRequest:
+      type: object
+      required:
+        - nodes
+      properties:
+        nodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateNodeRequest'
+          description: List of nodes to create
+
+    TransactionRequest:
+      type: object
+      required:
+        - operations
+      properties:
+        operations:
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+                enum: [create_node, update_node, create_relationship]
+                description: Operation type
+              data:
+                type: object
+                additionalProperties: true
+                description: Operation data
+          description: List of operations to execute in transaction
+
+    GraphQueryRequest:
+      type: object
+      required:
+        - query_type
+      properties:
+        query_type:
+          type: string
+          enum: [neighbors, path, subgraph]
+          description: Type of query
+        node_id:
+          type: string
+          description: Node ID for query
+        depth:
+          type: integer
+          minimum: 1
+          maximum: 5
+          default: 1
+          description: Query depth
+        filters:
+          type: object
+          additionalProperties: true
+          description: Query filters
+
+    MutationResult:
+      type: object
+      required:
+        - success
+        - mutation_id
+        - operation
+        - execution_time_ms
+      properties:
+        success:
+          type: boolean
+          description: Whether the operation succeeded
+        mutation_id:
+          type: string
+          description: Unique identifier for this mutation
+        operation:
+          type: string
+          description: Type of mutation operation
+        affected_nodes:
+          type: integer
+          default: 0
+          description: Number of nodes affected
+        affected_relationships:
+          type: integer
+          default: 0
+          description: Number of relationships affected
+        data:
+          type: object
+          additionalProperties: true
+          description: Additional result data
+        error:
+          type: string
+          description: Error message if operation failed
+        execution_time_ms:
+          type: number
+          description: Execution time in milliseconds
+
 tags:
   - name: Health
     description: System health and status endpoints
@@ -1611,3 +2114,5 @@ tags:
     description: Content validation using GraphRAG
   - name: Dashboard & Analytics
     description: Dashboard metrics and analytics
+  - name: Graph Mutations
+    description: Dynamic knowledge graph updates and mutations
