@@ -1,9 +1,11 @@
 ---
-description: Guidelines for creating and maintaining VS Code rules to ensure consistency and effectiveness.
-applyTo: ".github/instructions/*.instructions.md"
+description:
+  Guidelines for creating and maintaining VS Code rules to ensure consistency and effectiveness.
+applyTo: '.github/instructions/*.instructions.md'
 ---
 
 - **Required Rule Structure:**
+
   ```markdown
   ---
   description: Clear, one-line description of what the rule enforces
@@ -18,15 +20,17 @@ applyTo: ".github/instructions/*.instructions.md"
 
 - **File References:**
   - Use `[filename](mdc:path/to/file)` ([filename](mdc:filename)) to reference files
-  - Example: [prisma.instructions.md](.github/instructions/prisma.instructions.md) for rule references
+  - Example: [prisma.instructions.md](.github/instructions/prisma.instructions.md) for rule
+    references
   - Example: [schema.prisma](mdc:prisma/schema.prisma) for code references
 
 - **Code Examples:**
   - Use language-specific code blocks
+
   ```typescript
   // ✅ DO: Show good examples
   const goodExample = true;
-  
+
   // ❌ DON'T: Show anti-patterns
   const badExample = false;
   ```
@@ -49,4 +53,4 @@ applyTo: ".github/instructions/*.instructions.md"
   - Keep descriptions concise
   - Include both DO and DON'T examples
   - Reference actual code over theoretical examples
-  - Use consistent formatting across rules 
+  - Use consistent formatting across rules

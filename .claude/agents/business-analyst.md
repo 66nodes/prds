@@ -1,6 +1,8 @@
 ---
 name: business-analyst
-description: Analyze metrics, create reports, and track KPIs. Builds dashboards, revenue models, and growth projections. Use PROACTIVELY for business metrics or investor updates.
+description:
+  Analyze metrics, create reports, and track KPIs. Builds dashboards, revenue models, and growth
+  projections. Use PROACTIVELY for business metrics or investor updates.
 model: haiku
 ---
 

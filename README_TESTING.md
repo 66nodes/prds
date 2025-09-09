@@ -2,7 +2,8 @@
 
 ## Overview
 
-This document provides comprehensive information about the testing infrastructure, test execution, and quality assurance processes for the Strategic Planning Platform.
+This document provides comprehensive information about the testing infrastructure, test execution,
+and quality assurance processes for the Strategic Planning Platform.
 
 ## 🧪 Test Suite Architecture
 
@@ -84,7 +85,7 @@ locust -f tests/performance/locustfile.py --host=http://localhost:8000
 # Generate unit test coverage only
 ./scripts/generate_test_coverage_report.py --type unit
 
-# Generate integration test coverage only  
+# Generate integration test coverage only
 ./scripts/generate_test_coverage_report.py --type integration
 ```
 
@@ -115,12 +116,14 @@ Coverage reports are generated in multiple formats:
 ### Performance Targets
 
 #### Test Execution Times
+
 - **Unit Tests**: <30 seconds (excellent), <60 seconds (good)
-- **Integration Tests**: <60 seconds (excellent), <180 seconds (good)  
+- **Integration Tests**: <60 seconds (excellent), <180 seconds (good)
 - **E2E Tests**: <180 seconds (excellent), <300 seconds (good)
 - **Performance Tests**: <120 seconds (excellent), <180 seconds (good)
 
 #### API Performance
+
 - **Response Time**: <200ms (95th percentile)
 - **Throughput**: >100 requests/second
 - **Error Rate**: <1%
@@ -166,6 +169,7 @@ pytest tests/security/test_data_protection.py -v
 ### Purpose
 
 The hallucination validation tests ensure that the GraphRAG system:
+
 - Accurately detects hallucinated content
 - Maintains quality thresholds (<2% hallucination rate)
 - Properly validates generated PRDs
@@ -286,6 +290,7 @@ The test suite enforces the following quality gates:
 ### Quality Gate Enforcement
 
 Quality gates are enforced in:
+
 - Pre-commit hooks
 - CI/CD pipelines
 - Pull request validation
@@ -302,7 +307,7 @@ testpaths = tests
 python_files = test_*.py
 python_classes = Test*
 python_functions = test_*
-addopts = 
+addopts =
     --strict-markers
     --disable-socket
     --allow-unix-socket
@@ -320,7 +325,7 @@ module.exports = {
   testDir: './tests/e2e',
   timeout: 30000,
   expect: {
-    timeout: 5000
+    timeout: 5000,
   },
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
@@ -331,22 +336,22 @@ module.exports = {
     baseURL: 'http://localhost:3000',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
-    video: 'retain-on-failure'
+    video: 'retain-on-failure',
   },
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] }
+      use: { ...devices['Desktop Chrome'] },
     },
     {
       name: 'firefox',
-      use: { ...devices['Desktop Firefox'] }
+      use: { ...devices['Desktop Firefox'] },
     },
     {
       name: 'webkit',
-      use: { ...devices['Desktop Safari'] }
-    }
-  ]
+      use: { ...devices['Desktop Safari'] },
+    },
+  ],
 };
 ```
 
@@ -433,22 +438,24 @@ jobs:
         env:
           POSTGRES_PASSWORD: test_pass
           POSTGRES_DB: test_prds_db
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+        options:
+          --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
       redis:
         image: redis:7
-        options: --health-cmd "redis-cli ping" --health-interval 10s --health-timeout 5s --health-retries 5
+        options:
+          --health-cmd "redis-cli ping" --health-interval 10s --health-timeout 5s --health-retries 5
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.11'
-    - name: Install dependencies
-      run: |
-        pip install -r backend/requirements-test.txt
-    - name: Run tests
-      run: ./scripts/run_all_tests.sh
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: |
+          pip install -r backend/requirements-test.txt
+      - name: Run tests
+        run: ./scripts/run_all_tests.sh
 ```
 
 ## 📝 Test Reporting
@@ -476,10 +483,11 @@ Test reports are automatically generated in multiple formats:
 ### Regular Maintenance Tasks
 
 1. **Update Test Dependencies**
+
    ```bash
    # Update Python test dependencies
    pip-compile backend/requirements-test.in
-   
+
    # Update Node.js test dependencies
    npm update --dev
    ```
@@ -541,4 +549,5 @@ When adding new features, include:
 
 ---
 
-For questions or issues with the testing infrastructure, please refer to the main project documentation or contact the development team.
+For questions or issues with the testing infrastructure, please refer to the main project
+documentation or contact the development team.

@@ -11,9 +11,12 @@ batch_processing: true
 ## User Behavior Analyst
 
 ### Purpose
-Analyze platform usage patterns to optimize user experience, improve agent routing, and increase stakeholder satisfaction to >80%.
+
+Analyze platform usage patterns to optimize user experience, improve agent routing, and increase
+stakeholder satisfaction to >80%.
 
 ### Core Responsibilities
+
 1. **Interaction Analysis**
    - Track user journey flows
    - Identify friction points (abandonment rate < 10%)
@@ -33,15 +36,18 @@ Analyze platform usage patterns to optimize user experience, improve agent routi
    - Monitor task completion rates
 
 ### Input Schema
+
 ```json
 {
   "session_data": {
     "user_id": "hashed_string",
-    "events": [{
-      "type": "interaction|navigation|error",
-      "timestamp": "iso8601",
-      "metadata": {}
-    }],
+    "events": [
+      {
+        "type": "interaction|navigation|error",
+        "timestamp": "iso8601",
+        "metadata": {}
+      }
+    ],
     "context": {
       "device": "string",
       "location": "region",
@@ -52,16 +58,19 @@ Analyze platform usage patterns to optimize user experience, improve agent routi
 ```
 
 ### Output Schema
+
 ```json
 {
   "insights": {
     "user_segment": "power|regular|new",
     "behavior_patterns": ["string"],
-    "friction_points": [{
-      "location": "string",
-      "severity": "high|medium|low",
-      "recommendation": "string"
-    }],
+    "friction_points": [
+      {
+        "location": "string",
+        "severity": "high|medium|low",
+        "recommendation": "string"
+      }
+    ],
     "personalization": {
       "preferred_agents": ["string"],
       "optimal_ui_mode": "string",
@@ -77,12 +86,14 @@ Analyze platform usage patterns to optimize user experience, improve agent routi
 ```
 
 ### Key Performance Indicators
+
 - **Engagement**: Daily active users growth > 5% MoM
 - **Satisfaction**: NPS > 50, CSAT > 4.5/5
 - **Efficiency**: Task completion time reduction > 20%
 - **Personalization**: Click-through rate improvement > 15%
 
 ### Privacy Compliance
+
 ```yaml
 data_handling:
   anonymization: true
@@ -97,6 +108,7 @@ processing:
 ```
 
 ### Integration Points
+
 - **Analytics Platform**: Mixpanel/Amplitude
 - **A/B Testing**: Optimizely/LaunchDarkly
 - **CRM**: Salesforce/HubSpot sync

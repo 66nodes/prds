@@ -1,197 +1,197 @@
 {
-	"meta": {
-		"generatedAt": "2025-09-01T21:02:35.351Z",
-		"tasksAnalyzed": 23,
-		"totalTasks": 23,
-		"analysisCount": 23,
-		"thresholdScore": 6,
-		"projectName": "prds",
-		"usedResearch": true
-	},
-	"complexityAnalysis": [
-		{
-			"taskId": 29,
-			"taskTitle": "Initialize Monorepo and Tooling",
-			"complexityScore": 7,
-			"recommendedSubtasks": 7,
-			"expansionPrompt": "Break down monorepo initialization into: (1) pnpm workspace setup, (2) Nuxt.js project inclusion, (3) FastAPI project inclusion, (4) ESLint configuration with TypeScript strict mode, (5) Prettier setup, (6) SonarQube integration for CI, (7) Husky pre-commit hook setup.",
-			"reasoning": "Setting up a modern monorepo with pnpm, code quality tools, and CI integration is moderately complex due to cross-tool configuration, multi-language support, and the need for robust automation. Each tool (pnpm, ESLint, Prettier, SonarQube, Husky) requires separate configuration and validation, and best practices recommend clear separation of concerns and automated enforcement for code quality and CI/CD[1][3][4]."
-		},
-		{
-			"taskId": 31,
-			"taskTitle": "Set Up FastAPI Backend with Async Patterns",
-			"complexityScore": 6,
-			"recommendedSubtasks": 6,
-			"expansionPrompt": "Expand FastAPI backend setup into: (1) project scaffolding, (2) async server configuration with uvicorn, (3) modular microservice architecture, (4) health check endpoint implementation, (5) Pydantic v2+ data validation setup, (6) Pytest-based unit test scaffolding.",
-			"reasoning": "While FastAPI is designed for rapid async API development, establishing a scalable, modular, and testable backend with microservices, validation, and testing requires careful planning and multiple configuration steps. Each aspect (async server, modularity, validation, testing) is a distinct subtask aligned with industry standards."
-		},
-		{
-			"taskId": 30,
-			"taskTitle": "Configure Nuxt.js 4 Frontend with TypeScript",
-			"complexityScore": 6,
-			"recommendedSubtasks": 6,
-			"expansionPrompt": "Decompose Nuxt.js frontend setup into: (1) Nuxt.js 4 project initialization, (2) TypeScript strict mode configuration, (3) Pinia v3+ integration, (4) Tailwind CSS v3+ setup with custom theme, (5) Nuxt UI library installation, (6) Reka UI library installation.",
-			"reasoning": "Bootstrapping a modern Nuxt.js frontend with strict TypeScript, state management, custom theming, and multiple UI libraries is moderately complex. Each integration (TypeScript, Pinia, Tailwind, UI libraries) is a best-practice-aligned subtask requiring separate configuration and validation."
-		},
-		{
-			"taskId": 36,
-			"taskTitle": "Implement OpenRouter LLM Integration",
-			"complexityScore": 7,
-			"recommendedSubtasks": 5,
-			"expansionPrompt": "Split LLM integration into: (1) OpenRouter API v2+ client setup, (2) model selection and routing logic, (3) fallback strategy implementation, (4) interaction logging for audit, (5) test suite for multi-model and fallback scenarios.",
-			"reasoning": "Integrating multi-model LLMs with fallback and audit logging involves API integration, reliability logic, and robust testing. Each component (API, routing, fallback, logging, testing) is a distinct subtask, reflecting best practices for reliability and traceability in AI integrations."
-		},
-		{
-			"taskId": 38,
-			"taskTitle": "Implement Human-in-the-Loop Validation",
-			"complexityScore": 8,
-			"recommendedSubtasks": 6,
-			"expansionPrompt": "Expand human-in-the-loop validation into: (1) UI prompt design and integration, (2) backend event storage, (3) user feedback capture, (4) GraphRAG pipeline override logic, (5) audit log integration, (6) end-to-end validation testing.",
-			"reasoning": "Human-in-the-loop validation in AI workflows is complex due to the need for seamless UI/UX, backend event tracking, integration with AI pipelines, and compliance/audit requirements. Each area is a separate subtask, and industry standards emphasize traceability and override capabilities for critical decisions."
-		},
-		{
-			"taskId": 49,
-			"taskTitle": "Implement Audit Logging and Compliance Reporting",
-			"complexityScore": 8,
-			"recommendedSubtasks": 6,
-			"expansionPrompt": "Break down audit logging into: (1) logging framework selection and setup, (2) authentication and validation event logging, (3) document and agent action logging, (4) secure log storage with retention policies, (5) compliance report generation (SOC 2, regulatory), (6) mock compliance audit testing.",
-			"reasoning": "Comprehensive audit logging and compliance reporting is high complexity due to the breadth of events, secure storage, retention, and regulatory requirements. Each logging and reporting aspect is a best-practice-driven subtask, and compliance testing is essential for industry standards."
-		},
-		{
-			"taskId": 46,
-			"taskTitle": "Develop Multi-Agent Orchestration System",
-			"complexityScore": 9,
-			"recommendedSubtasks": 7,
-			"expansionPrompt": "Decompose agent orchestration into: (1) agent registry definition, (2) context-aware selection logic, (3) asyncio-based parallel execution, (4) integration with GraphRAG validation, (5) agent action logging for QA, (6) error handling and recovery, (7) complex scenario simulation and testing.",
-			"reasoning": "Orchestrating 100+ specialized agents with context-aware selection, parallelism, and validation is highly complex. Each component (registry, selection, parallelism, validation, logging, error handling, testing) is a critical subtask, and robust orchestration is a recognized industry challenge."
-		},
-		{
-			"taskId": 42,
-			"taskTitle": "Build Comment and Annotation System",
-			"complexityScore": 6,
-			"recommendedSubtasks": 5,
-			"expansionPrompt": "Expand comment system into: (1) UI component integration, (2) backend comment storage with references, (3) threaded reply support, (4) notification delivery, (5) permissions and data integrity validation.",
-			"reasoning": "A collaborative comment and annotation system is moderately complex, requiring UI, backend, threading, notifications, and permissions. Each is a standard subtask for such systems, and best practices emphasize data integrity and user experience."
-		},
-		{
-			"taskId": 50,
-			"taskTitle": "Develop Custom Workflow Templates and Policies",
-			"complexityScore": 7,
-			"recommendedSubtasks": 6,
-			"expansionPrompt": "Break down workflow templates into: (1) UI for template creation, (2) backend template storage with policy metadata, (3) policy enforcement logic, (4) planning stage integration, (5) validation stage integration, (6) end-to-end workflow execution testing.",
-			"reasoning": "Enabling custom workflows and policy enforcement involves UI, backend, policy logic, and integration at multiple stages. Each is a distinct subtask, and industry standards require robust enforcement and validation mechanisms."
-		},
-		{
-			"taskId": 35,
-			"taskTitle": "Integrate Neo4j Enterprise Graph Database",
-			"complexityScore": 7,
-			"recommendedSubtasks": 6,
-			"expansionPrompt": "Decompose Neo4j integration into: (1) Neo4j deployment (Docker/cloud), (2) Python neo4j-driver setup, (3) schema definition for entities/relationships/metadata, (4) ACID compliance configuration, (5) backup and restore routines, (6) integration and CRUD operation testing.",
-			"reasoning": "Enterprise graph database integration is moderately high complexity due to deployment, schema design, ACID configuration, and backup requirements. Each area is a standard subtask, and best practices emphasize reliability, integrity, and recoverability."
-		},
-		{
-			"taskId": 32,
-			"taskTitle": "Implement JWT Authentication with RBAC",
-			"complexityScore": 5,
-			"recommendedSubtasks": 3,
-			"expansionPrompt": "Break down this task with a focus on implement jwt authentication with rbac.",
-			"reasoning": "Automatically added due to missing analysis in AI response."
-		},
-		{
-			"taskId": 33,
-			"taskTitle": "Integrate Pinia State Management with Persistence",
-			"complexityScore": 5,
-			"recommendedSubtasks": 3,
-			"expansionPrompt": "Break down this task with a focus on integrate pinia state management with persistence.",
-			"reasoning": "Automatically added due to missing analysis in AI response."
-		},
-		{
-			"taskId": 34,
-			"taskTitle": "Design GraphRAG Validation Pipeline",
-			"complexityScore": 5,
-			"recommendedSubtasks": 3,
-			"expansionPrompt": "Break down this task with a focus on design graphrag validation pipeline.",
-			"reasoning": "Automatically added due to missing analysis in AI response."
-		},
-		{
-			"taskId": 37,
-			"taskTitle": "Develop Conversational Planning Interface",
-			"complexityScore": 5,
-			"recommendedSubtasks": 3,
-			"expansionPrompt": "Break down this task with a focus on develop conversational planning interface.",
-			"reasoning": "Automatically added due to missing analysis in AI response."
-		},
-		{
-			"taskId": 39,
-			"taskTitle": "Develop Document Generation Engine",
-			"complexityScore": 5,
-			"recommendedSubtasks": 3,
-			"expansionPrompt": "Break down this task with a focus on develop document generation engine.",
-			"reasoning": "Automatically added due to missing analysis in AI response."
-		},
-		{
-			"taskId": 40,
-			"taskTitle": "Implement Real-time Collaboration via WebSocket",
-			"complexityScore": 5,
-			"recommendedSubtasks": 3,
-			"expansionPrompt": "Break down this task with a focus on implement real-time collaboration via websocket.",
-			"reasoning": "Automatically added due to missing analysis in AI response."
-		},
-		{
-			"taskId": 41,
-			"taskTitle": "Add Version Control and Change Tracking",
-			"complexityScore": 5,
-			"recommendedSubtasks": 3,
-			"expansionPrompt": "Break down this task with a focus on add version control and change tracking.",
-			"reasoning": "Automatically added due to missing analysis in AI response."
-		},
-		{
-			"taskId": 43,
-			"taskTitle": "Implement Dynamic Knowledge Graph Updates",
-			"complexityScore": 5,
-			"recommendedSubtasks": 3,
-			"expansionPrompt": "Break down this task with a focus on implement dynamic knowledge graph updates.",
-			"reasoning": "Automatically added due to missing analysis in AI response."
-		},
-		{
-			"taskId": 44,
-			"taskTitle": "Integrate Redis Message Queue for Async Processing",
-			"complexityScore": 5,
-			"recommendedSubtasks": 3,
-			"expansionPrompt": "Break down this task with a focus on integrate redis message queue for async processing.",
-			"reasoning": "Automatically added due to missing analysis in AI response."
-		},
-		{
-			"taskId": 45,
-			"taskTitle": "Implement Multi-Tier Caching Strategy",
-			"complexityScore": 5,
-			"recommendedSubtasks": 3,
-			"expansionPrompt": "Break down this task with a focus on implement multi-tier caching strategy.",
-			"reasoning": "Automatically added due to missing analysis in AI response."
-		},
-		{
-			"taskId": 47,
-			"taskTitle": "Implement Risk Assessment and Historical Analysis",
-			"complexityScore": 5,
-			"recommendedSubtasks": 3,
-			"expansionPrompt": "Break down this task with a focus on implement risk assessment and historical analysis.",
-			"reasoning": "Automatically added due to missing analysis in AI response."
-		},
-		{
-			"taskId": 48,
-			"taskTitle": "Integrate Enterprise APIs and SSO",
-			"complexityScore": 5,
-			"recommendedSubtasks": 3,
-			"expansionPrompt": "Break down this task with a focus on integrate enterprise apis and sso.",
-			"reasoning": "Automatically added due to missing analysis in AI response."
-		},
-		{
-			"taskId": 51,
-			"taskTitle": "Implement Automated Testing and Quality Gates",
-			"complexityScore": 5,
-			"recommendedSubtasks": 3,
-			"expansionPrompt": "Break down this task with a focus on implement automated testing and quality gates.",
-			"reasoning": "Automatically added due to missing analysis in AI response."
-		}
-	]
+  "meta": {
+    "generatedAt": "2025-09-01T21:02:35.351Z",
+    "tasksAnalyzed": 23,
+    "totalTasks": 23,
+    "analysisCount": 23,
+    "thresholdScore": 6,
+    "projectName": "prds",
+    "usedResearch": true
+  },
+  "complexityAnalysis": [
+    {
+      "taskId": 29,
+      "taskTitle": "Initialize Monorepo and Tooling",
+      "complexityScore": 7,
+      "recommendedSubtasks": 7,
+      "expansionPrompt": "Break down monorepo initialization into: (1) pnpm workspace setup, (2) Nuxt.js project inclusion, (3) FastAPI project inclusion, (4) ESLint configuration with TypeScript strict mode, (5) Prettier setup, (6) SonarQube integration for CI, (7) Husky pre-commit hook setup.",
+      "reasoning": "Setting up a modern monorepo with pnpm, code quality tools, and CI integration is moderately complex due to cross-tool configuration, multi-language support, and the need for robust automation. Each tool (pnpm, ESLint, Prettier, SonarQube, Husky) requires separate configuration and validation, and best practices recommend clear separation of concerns and automated enforcement for code quality and CI/CD[1][3][4]."
+    },
+    {
+      "taskId": 31,
+      "taskTitle": "Set Up FastAPI Backend with Async Patterns",
+      "complexityScore": 6,
+      "recommendedSubtasks": 6,
+      "expansionPrompt": "Expand FastAPI backend setup into: (1) project scaffolding, (2) async server configuration with uvicorn, (3) modular microservice architecture, (4) health check endpoint implementation, (5) Pydantic v2+ data validation setup, (6) Pytest-based unit test scaffolding.",
+      "reasoning": "While FastAPI is designed for rapid async API development, establishing a scalable, modular, and testable backend with microservices, validation, and testing requires careful planning and multiple configuration steps. Each aspect (async server, modularity, validation, testing) is a distinct subtask aligned with industry standards."
+    },
+    {
+      "taskId": 30,
+      "taskTitle": "Configure Nuxt.js 4 Frontend with TypeScript",
+      "complexityScore": 6,
+      "recommendedSubtasks": 6,
+      "expansionPrompt": "Decompose Nuxt.js frontend setup into: (1) Nuxt.js 4 project initialization, (2) TypeScript strict mode configuration, (3) Pinia v3+ integration, (4) Tailwind CSS v3+ setup with custom theme, (5) Nuxt UI library installation, (6) Reka UI library installation.",
+      "reasoning": "Bootstrapping a modern Nuxt.js frontend with strict TypeScript, state management, custom theming, and multiple UI libraries is moderately complex. Each integration (TypeScript, Pinia, Tailwind, UI libraries) is a best-practice-aligned subtask requiring separate configuration and validation."
+    },
+    {
+      "taskId": 36,
+      "taskTitle": "Implement OpenRouter LLM Integration",
+      "complexityScore": 7,
+      "recommendedSubtasks": 5,
+      "expansionPrompt": "Split LLM integration into: (1) OpenRouter API v2+ client setup, (2) model selection and routing logic, (3) fallback strategy implementation, (4) interaction logging for audit, (5) test suite for multi-model and fallback scenarios.",
+      "reasoning": "Integrating multi-model LLMs with fallback and audit logging involves API integration, reliability logic, and robust testing. Each component (API, routing, fallback, logging, testing) is a distinct subtask, reflecting best practices for reliability and traceability in AI integrations."
+    },
+    {
+      "taskId": 38,
+      "taskTitle": "Implement Human-in-the-Loop Validation",
+      "complexityScore": 8,
+      "recommendedSubtasks": 6,
+      "expansionPrompt": "Expand human-in-the-loop validation into: (1) UI prompt design and integration, (2) backend event storage, (3) user feedback capture, (4) GraphRAG pipeline override logic, (5) audit log integration, (6) end-to-end validation testing.",
+      "reasoning": "Human-in-the-loop validation in AI workflows is complex due to the need for seamless UI/UX, backend event tracking, integration with AI pipelines, and compliance/audit requirements. Each area is a separate subtask, and industry standards emphasize traceability and override capabilities for critical decisions."
+    },
+    {
+      "taskId": 49,
+      "taskTitle": "Implement Audit Logging and Compliance Reporting",
+      "complexityScore": 8,
+      "recommendedSubtasks": 6,
+      "expansionPrompt": "Break down audit logging into: (1) logging framework selection and setup, (2) authentication and validation event logging, (3) document and agent action logging, (4) secure log storage with retention policies, (5) compliance report generation (SOC 2, regulatory), (6) mock compliance audit testing.",
+      "reasoning": "Comprehensive audit logging and compliance reporting is high complexity due to the breadth of events, secure storage, retention, and regulatory requirements. Each logging and reporting aspect is a best-practice-driven subtask, and compliance testing is essential for industry standards."
+    },
+    {
+      "taskId": 46,
+      "taskTitle": "Develop Multi-Agent Orchestration System",
+      "complexityScore": 9,
+      "recommendedSubtasks": 7,
+      "expansionPrompt": "Decompose agent orchestration into: (1) agent registry definition, (2) context-aware selection logic, (3) asyncio-based parallel execution, (4) integration with GraphRAG validation, (5) agent action logging for QA, (6) error handling and recovery, (7) complex scenario simulation and testing.",
+      "reasoning": "Orchestrating 100+ specialized agents with context-aware selection, parallelism, and validation is highly complex. Each component (registry, selection, parallelism, validation, logging, error handling, testing) is a critical subtask, and robust orchestration is a recognized industry challenge."
+    },
+    {
+      "taskId": 42,
+      "taskTitle": "Build Comment and Annotation System",
+      "complexityScore": 6,
+      "recommendedSubtasks": 5,
+      "expansionPrompt": "Expand comment system into: (1) UI component integration, (2) backend comment storage with references, (3) threaded reply support, (4) notification delivery, (5) permissions and data integrity validation.",
+      "reasoning": "A collaborative comment and annotation system is moderately complex, requiring UI, backend, threading, notifications, and permissions. Each is a standard subtask for such systems, and best practices emphasize data integrity and user experience."
+    },
+    {
+      "taskId": 50,
+      "taskTitle": "Develop Custom Workflow Templates and Policies",
+      "complexityScore": 7,
+      "recommendedSubtasks": 6,
+      "expansionPrompt": "Break down workflow templates into: (1) UI for template creation, (2) backend template storage with policy metadata, (3) policy enforcement logic, (4) planning stage integration, (5) validation stage integration, (6) end-to-end workflow execution testing.",
+      "reasoning": "Enabling custom workflows and policy enforcement involves UI, backend, policy logic, and integration at multiple stages. Each is a distinct subtask, and industry standards require robust enforcement and validation mechanisms."
+    },
+    {
+      "taskId": 35,
+      "taskTitle": "Integrate Neo4j Enterprise Graph Database",
+      "complexityScore": 7,
+      "recommendedSubtasks": 6,
+      "expansionPrompt": "Decompose Neo4j integration into: (1) Neo4j deployment (Docker/cloud), (2) Python neo4j-driver setup, (3) schema definition for entities/relationships/metadata, (4) ACID compliance configuration, (5) backup and restore routines, (6) integration and CRUD operation testing.",
+      "reasoning": "Enterprise graph database integration is moderately high complexity due to deployment, schema design, ACID configuration, and backup requirements. Each area is a standard subtask, and best practices emphasize reliability, integrity, and recoverability."
+    },
+    {
+      "taskId": 32,
+      "taskTitle": "Implement JWT Authentication with RBAC",
+      "complexityScore": 5,
+      "recommendedSubtasks": 3,
+      "expansionPrompt": "Break down this task with a focus on implement jwt authentication with rbac.",
+      "reasoning": "Automatically added due to missing analysis in AI response."
+    },
+    {
+      "taskId": 33,
+      "taskTitle": "Integrate Pinia State Management with Persistence",
+      "complexityScore": 5,
+      "recommendedSubtasks": 3,
+      "expansionPrompt": "Break down this task with a focus on integrate pinia state management with persistence.",
+      "reasoning": "Automatically added due to missing analysis in AI response."
+    },
+    {
+      "taskId": 34,
+      "taskTitle": "Design GraphRAG Validation Pipeline",
+      "complexityScore": 5,
+      "recommendedSubtasks": 3,
+      "expansionPrompt": "Break down this task with a focus on design graphrag validation pipeline.",
+      "reasoning": "Automatically added due to missing analysis in AI response."
+    },
+    {
+      "taskId": 37,
+      "taskTitle": "Develop Conversational Planning Interface",
+      "complexityScore": 5,
+      "recommendedSubtasks": 3,
+      "expansionPrompt": "Break down this task with a focus on develop conversational planning interface.",
+      "reasoning": "Automatically added due to missing analysis in AI response."
+    },
+    {
+      "taskId": 39,
+      "taskTitle": "Develop Document Generation Engine",
+      "complexityScore": 5,
+      "recommendedSubtasks": 3,
+      "expansionPrompt": "Break down this task with a focus on develop document generation engine.",
+      "reasoning": "Automatically added due to missing analysis in AI response."
+    },
+    {
+      "taskId": 40,
+      "taskTitle": "Implement Real-time Collaboration via WebSocket",
+      "complexityScore": 5,
+      "recommendedSubtasks": 3,
+      "expansionPrompt": "Break down this task with a focus on implement real-time collaboration via websocket.",
+      "reasoning": "Automatically added due to missing analysis in AI response."
+    },
+    {
+      "taskId": 41,
+      "taskTitle": "Add Version Control and Change Tracking",
+      "complexityScore": 5,
+      "recommendedSubtasks": 3,
+      "expansionPrompt": "Break down this task with a focus on add version control and change tracking.",
+      "reasoning": "Automatically added due to missing analysis in AI response."
+    },
+    {
+      "taskId": 43,
+      "taskTitle": "Implement Dynamic Knowledge Graph Updates",
+      "complexityScore": 5,
+      "recommendedSubtasks": 3,
+      "expansionPrompt": "Break down this task with a focus on implement dynamic knowledge graph updates.",
+      "reasoning": "Automatically added due to missing analysis in AI response."
+    },
+    {
+      "taskId": 44,
+      "taskTitle": "Integrate Redis Message Queue for Async Processing",
+      "complexityScore": 5,
+      "recommendedSubtasks": 3,
+      "expansionPrompt": "Break down this task with a focus on integrate redis message queue for async processing.",
+      "reasoning": "Automatically added due to missing analysis in AI response."
+    },
+    {
+      "taskId": 45,
+      "taskTitle": "Implement Multi-Tier Caching Strategy",
+      "complexityScore": 5,
+      "recommendedSubtasks": 3,
+      "expansionPrompt": "Break down this task with a focus on implement multi-tier caching strategy.",
+      "reasoning": "Automatically added due to missing analysis in AI response."
+    },
+    {
+      "taskId": 47,
+      "taskTitle": "Implement Risk Assessment and Historical Analysis",
+      "complexityScore": 5,
+      "recommendedSubtasks": 3,
+      "expansionPrompt": "Break down this task with a focus on implement risk assessment and historical analysis.",
+      "reasoning": "Automatically added due to missing analysis in AI response."
+    },
+    {
+      "taskId": 48,
+      "taskTitle": "Integrate Enterprise APIs and SSO",
+      "complexityScore": 5,
+      "recommendedSubtasks": 3,
+      "expansionPrompt": "Break down this task with a focus on integrate enterprise apis and sso.",
+      "reasoning": "Automatically added due to missing analysis in AI response."
+    },
+    {
+      "taskId": 51,
+      "taskTitle": "Implement Automated Testing and Quality Gates",
+      "complexityScore": 5,
+      "recommendedSubtasks": 3,
+      "expansionPrompt": "Break down this task with a focus on implement automated testing and quality gates.",
+      "reasoning": "Automatically added due to missing analysis in AI response."
+    }
+  ]
 }

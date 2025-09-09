@@ -6,7 +6,7 @@ global:
   evaluation_interval: 15s
 
 rule_files:
-  - "alerts.yml"
+  - 'alerts.yml'
 
 alerting:
   alertmanagers:

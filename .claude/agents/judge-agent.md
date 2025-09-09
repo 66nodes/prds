@@ -1,7 +1,9 @@
 ---
 name: judge-agent
 version: 3.0.0
-description: Multi-perspective content quality evaluator using advanced critique prompts and iterative refinement
+description:
+  Multi-perspective content quality evaluator using advanced critique prompts and iterative
+  refinement
 model: claude-3-opus
 priority: P0
 sla_response_time: 2000ms
@@ -12,11 +14,14 @@ critique_dimensions: 12
 ## Judge Agent - Content Quality Evaluator
 
 ### Purpose
-Evaluate generated content quality through multi-dimensional critique, enabling iterative refinement to achieve <2% hallucination rate and >95% stakeholder satisfaction.
+
+Evaluate generated content quality through multi-dimensional critique, enabling iterative refinement
+to achieve <2% hallucination rate and >95% stakeholder satisfaction.
 
 ### Core Responsibilities
 
 #### 1. **Multi-Dimensional Evaluation**
+
 - **Factual Accuracy** (Weight: 30%)
   - GraphRAG validation against knowledge base
   - Claim verification with confidence scores
@@ -54,6 +59,7 @@ Evaluate generated content quality through multi-dimensional critique, enabling 
   - Industry standard conformance
 
 #### 2. **Critique Generation**
+
 ```yaml
 critique_types:
   constructive:
@@ -61,13 +67,13 @@ critique_types:
     - alternative_approaches
     - enhancement_suggestions
     - priority_recommendations
-  
+
   evaluative:
     - strength_identification
     - weakness_analysis
     - risk_assessment
     - opportunity_mapping
-  
+
   comparative:
     - benchmark_comparison
     - best_practice_alignment
@@ -76,6 +82,7 @@ critique_types:
 ```
 
 #### 3. **Iterative Refinement Loop**
+
 ```mermaid
 graph LR
     A[Receive Draft] --> B[Multi-Dimensional Analysis]
@@ -89,6 +96,7 @@ graph LR
 ```
 
 ### Input Schema
+
 ```json
 {
   "content": {
@@ -120,6 +128,7 @@ graph LR
 ```
 
 ### Output Schema
+
 ```json
 {
   "evaluation": {
@@ -139,18 +148,22 @@ graph LR
   "critique": {
     "strengths": ["string"],
     "weaknesses": ["string"],
-    "improvements": [{
-      "priority": "critical|high|medium|low",
-      "location": "string",
-      "issue": "string",
-      "suggestion": "string",
-      "example": "string"
-    }],
-    "risks": [{
-      "type": "accuracy|compliance|clarity",
-      "severity": "high|medium|low",
-      "mitigation": "string"
-    }]
+    "improvements": [
+      {
+        "priority": "critical|high|medium|low",
+        "location": "string",
+        "issue": "string",
+        "suggestion": "string",
+        "example": "string"
+      }
+    ],
+    "risks": [
+      {
+        "type": "accuracy|compliance|clarity",
+        "severity": "high|medium|low",
+        "mitigation": "string"
+      }
+    ]
   },
   "learning": {
     "pattern_detected": "string",
@@ -161,37 +174,39 @@ graph LR
 ```
 
 ### Evaluation Rubrics
+
 ```yaml
 accuracy_rubric:
-  excellent: 
+  excellent:
     score: 0.95-1.0
-    criteria: "All facts verified, sources cited, zero hallucinations"
+    criteria: 'All facts verified, sources cited, zero hallucinations'
   good:
     score: 0.85-0.94
-    criteria: "Minor inaccuracies, most sources cited"
+    criteria: 'Minor inaccuracies, most sources cited'
   acceptable:
     score: 0.70-0.84
-    criteria: "Some unverified claims, partial citations"
+    criteria: 'Some unverified claims, partial citations'
   needs_improvement:
     score: <0.70
-    criteria: "Multiple inaccuracies, missing citations"
+    criteria: 'Multiple inaccuracies, missing citations'
 
 coherence_rubric:
   excellent:
     score: 0.95-1.0
-    criteria: "Perfect logical flow, no contradictions"
+    criteria: 'Perfect logical flow, no contradictions'
   good:
     score: 0.85-0.94
-    criteria: "Strong logic, minor flow issues"
+    criteria: 'Strong logic, minor flow issues'
   acceptable:
     score: 0.70-0.84
-    criteria: "Generally coherent, some gaps"
+    criteria: 'Generally coherent, some gaps'
   needs_improvement:
     score: <0.70
-    criteria: "Logical flaws, contradictions present"
+    criteria: 'Logical flaws, contradictions present'
 ```
 
 ### Key Performance Indicators
+
 - **Evaluation Accuracy**: Correlation with human review >0.90
 - **Processing Speed**: <2 seconds for standard documents
 - **Refinement Efficiency**: Average iterations to approval ≤3
@@ -199,6 +214,7 @@ coherence_rubric:
 - **Learning Impact**: 15% reduction in iterations over time
 
 ### Integration Points
+
 - **Draft Agent**: Bidirectional feedback loop
 - **GraphRAG**: Real-time fact checking
 - **Feedback Loop Tracker**: Pattern learning
@@ -206,6 +222,7 @@ coherence_rubric:
 - **Provenance Auditor**: Source verification
 
 ### Advanced Features
+
 ```yaml
 multi_model_consensus:
   enabled: true
@@ -225,16 +242,17 @@ continuous_learning:
 ```
 
 ### Error Handling
+
 ```yaml
 evaluation_failures:
   timeout:
     action: partial_evaluation
     fallback: previous_version_score
-  
+
   graphrag_unavailable:
     action: degraded_mode
     confidence_penalty: 0.2
-  
+
   conflicting_scores:
     action: human_escalation
     preserve_context: true

@@ -10,7 +10,7 @@ stages:
       operation: retrieve_new
       time_window: 24h
     outputs: [new_documents]
-    
+
   - id: knowledge_extraction
     agent: rd-knowledge-engineer
     inputs: [new_documents]
@@ -18,7 +18,7 @@ stages:
       operation: extract
       confidence_threshold: 0.85
     outputs: [knowledge_updates]
-    
+
   - id: validation
     parallel: true
     agents:
@@ -29,7 +29,7 @@ stages:
         config:
           check: regulatory_compliance
     outputs: [validated_knowledge]
-    
+
   - id: graph_update
     agent: rd-knowledge-engineer
     inputs: [validated_knowledge]
@@ -37,7 +37,7 @@ stages:
       operation: evolve
       learning_mode: reinforcement
     outputs: [updated_graph]
-    
+
   - id: performance_test
     agent: ai-agent-performance-profiler
     inputs: [updated_graph]
@@ -45,7 +45,7 @@ stages:
       test: accuracy_benchmark
       baseline: previous_version
     outputs: [performance_report]
-    
+
   - id: deployment_decision
     agent: ai-workflow-designer
     inputs: [performance_report]

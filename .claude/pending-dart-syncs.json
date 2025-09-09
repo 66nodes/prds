@@ -88,5 +88,35 @@
     "title": "Prds/Project Completion Report",
     "content_preview": "# \ud83d\ude80 AI Agent Platform - Project Completion Report\n\n**Project**: Strategic Planning Platform with Hybrid RAG Architecture  \n**Version**: v2.0.0  \n**Completion Date**: September 3, 2025  \n**Status**: \u2705 ...",
     "timestamp": "2025-09-03T00:14:30.144001"
+  },
+  {
+    "file_path": "/home/jgrewal/projects/website/prds/TASK_29_COMPLETION_SUMMARY.md",
+    "title": "Prds/Task 29 Completion Summary",
+    "content_preview": "# Task 29 Completion Summary\n\n## Date: 2025-01-20\n## Task: Initialize Monorepo and Tooling\n\n### \u2705 All 7 Subtasks Completed\n\n1. **Initialize pnpm Workspace Structure** - DONE\n   - Created pnpm-workspac...",
+    "timestamp": "2025-09-04T01:24:34.733468"
+  },
+  {
+    "file_path": "/home/jgrewal/projects/website/prds/apps/backend/docs/context_aware_agent_selection.md",
+    "title": "Context Aware Agent Selection",
+    "content_preview": "# Context-Aware Agent Selection System\n\n## Overview\n\nThe Context-Aware Agent Selection System is a sophisticated multi-criteria decision-making engine that intelligently selects optimal agents for tas...",
+    "timestamp": "2025-09-04T22:34:34.318909"
+  },
+  {
+    "file_path": "/home/jgrewal/projects/website/prds/apps/backend/COMMENT_SYSTEM_INTEGRATION_REPORT.md",
+    "title": "Backend/Comment System Integration Report",
+    "content_preview": "# Comment System Integration Report\n\n**Date:** January 20, 2025  \n**Task:** Task 42 - Build Comment and Annotation System  \n**Status:** Backend Implementation Complete \u2705\n\n## Executive Summary\n\nThe com...",
+    "timestamp": "2025-09-04T22:51:24.349110"
+  },
+  {
+    "file_path": "/home/jgrewal/projects/website/prds/docs/enterprise_sso_integration_guide.md",
+    "title": "Enterprise Sso Integration Guide",
+    "content_preview": "# Enterprise SSO Integration Guide\n\n## Overview\n\nThe Strategic Planning Platform provides comprehensive Single Sign-On (SSO) integration with enterprise identity providers including Azure AD (Microsof...",
+    "timestamp": "2025-09-05T21:25:19.885921"
+  },
+  {
+    "file_path": "/home/jgrewal/projects/website/prds/docs/risk_assessment_system.md",
+    "title": "Risk Assessment System",
+    "content_preview": "# Risk Assessment and Historical Analysis System\n\n## Overview\n\nThe Risk Assessment and Historical Analysis System provides comprehensive project risk evaluation using machine learning algorithms, hist...",
+    "timestamp": "2025-09-05T22:18:55.939135"
   }
 ]

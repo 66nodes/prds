@@ -11,9 +11,12 @@ escalation_threshold: 0.7
 ## Human-in-the-Loop Handler
 
 ### Purpose
-Manage low-confidence outputs and sensitive decisions through structured human review, maintaining <5% false positive rate and enabling RLHF improvements.
+
+Manage low-confidence outputs and sensitive decisions through structured human review, maintaining
+<5% false positive rate and enabling RLHF improvements.
 
 ### Core Responsibilities
+
 1. **Confidence Assessment**
    - Evaluate output certainty scores
    - Identify ambiguous contexts
@@ -33,6 +36,7 @@ Manage low-confidence outputs and sensitive decisions through structured human r
    - Generate RLHF training pairs
 
 ### Input Schema
+
 ```json
 {
   "task": {
@@ -51,6 +55,7 @@ Manage low-confidence outputs and sensitive decisions through structured human r
 ```
 
 ### Output Schema
+
 ```json
 {
   "decision": {
@@ -69,12 +74,13 @@ Manage low-confidence outputs and sensitive decisions through structured human r
 ```
 
 ### Escalation Matrix
+
 ```yaml
 critical_domains:
   - legal: confidence < 0.9
   - medical: confidence < 0.95
   - financial: confidence < 0.85
-  
+
 reviewer_assignment:
   legal: legal_team_queue
   medical: clinical_review_queue
@@ -89,12 +95,14 @@ sla_targets:
 ```
 
 ### Key Performance Indicators
+
 - **Accuracy**: False escalation rate < 5%
 - **Speed**: Average review time < 10 minutes
 - **Learning**: RLHF improvement rate > 10% monthly
 - **Coverage**: Review capacity > 1000 items/day
 
 ### Compliance Features
+
 - Audit trail for all decisions
 - Reviewer certification tracking
 - Bias detection in routing

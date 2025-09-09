@@ -53,7 +53,6 @@
         ]
       }
     }
-
   ],
   "Router": {
     "default": "openrouter,qwen/qwen3-coder",
@@ -64,4 +63,3 @@
     "webSearch": "gemini,gemini-2.5-flash"
   }
 }
-

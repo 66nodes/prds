@@ -1,19 +1,21 @@
-name: "PRD Creation Agent using PydanticAI - Context-Rich Implementation"
-description: |
+name: "PRD Creation Agent using PydanticAI - Context-Rich Implementation" description: |
 Comprehensive PRD for building an automated PRD creation agent using PydanticAI framework,
 leveraging parallel research capabilities and existing codebase patterns for maximum efficiency.
 
 ## Goal
 
-Build a production-ready PRD creation agent using PydanticAI that can automatically generate comprehensive PRDs by:
+Build a production-ready PRD creation agent using PydanticAI that can automatically generate
+comprehensive PRDs by:
 
 - Analyzing user requirements and context
-- Conducting parallel research (codebase analysis (Analysis of the Current Documents), external documentation, testing patterns)
+- Conducting parallel research (codebase analysis (Analysis of the Current Documents), external
+  documentation, testing patterns)
 - Generating structured PRDs following established templates
 - Validating output quality and completeness
 - Integrating with existing Claude Code infrastructure
 
-**End State**: A Python agent that takes a feature description as input and outputs a complete, validated PRD file ready for implementation.
+**End State**: A Python agent that takes a feature description as input and outputs a complete,
+validated PRD file ready for implementation.
 
 ## Why
 
@@ -28,7 +30,8 @@ Build a production-ready PRD creation agent using PydanticAI that can automatica
 ### Core Functionality
 
 - **Input Processing**: Parse natural language feature descriptions into structured requirements
-- **Parallel Research**: Simultaneously analyze codebase patterns, external documentation, and testing strategies
+- **Parallel Research**: Simultaneously analyze codebase patterns, external documentation, and
+  testing strategies
 - **PRD Generation**: Create comprehensive PRDs using established templates and discovered patterns
 - **Quality Validation**: Score and validate generated PRDs against quality metrics
 - **File Management**: Handle PRD file creation, organization, and versioning
@@ -47,7 +50,8 @@ PRD = await agent.create_PRD("Feature description here")
 
 ### Success Criteria
 
-- [ ] Generate PRDs with 8+ quality score on all metrics (Context, Clarity, Validation, Success Probability)
+- [ ] Generate PRDs with 8+ quality score on all metrics (Context, Clarity, Validation, Success
+      Probability)
 - [ ] Complete PRD generation in under 10 minutes
 - [ ] 95%+ first-pass implementation success rate
 - [ ] Full integration with existing validation gates
@@ -102,7 +106,7 @@ PRD = await agent.create_PRD("Feature description here")
 .
 ├                   # Project conventions and architecture
 ├── PRDs/
-|   |── CLAUDE.md 
+|   |── CLAUDE.md
 │   ├── ai_docs/                 # AI agent documentation
 │   │   ├── build_with_claude_code.md
 │   │   ├── cc_mcp.md
@@ -115,7 +119,7 @@ PRD = await agent.create_PRD("Feature description here")
 |   |__├── .claude/
 │      └── commands/                # Claude Code custom commands
 │        ├── create-base-PRD.md
-│        └── create-base-PRD-parallel.md 
+│        └── create-base-PRD-parallel.md
 ├── pyproject.toml               # Project configuration
 └── uv.lock                      # UV lock file
 ```
@@ -166,22 +170,17 @@ src/
 ```
 
 ## Integrate with MCP Server
+
 - Use Tavily Search MCP Server
-- - **Tools:** 
-    It exposes tools like `tavily-search` for real-time web search and `tavily-extract` for intelligent data extraction from web pages.
-    ```markdown
-    {
-  "mcpServers": {
-    "tavily-remote-mcp": {
-      "command": "npx -y mcp-remote https://mcp.tavily.com/mcp/?tavilyApiKey=${TAVILY_API_KEY}",
-      "env": {}
-    }
-  }
-}
+- - **Tools:**  It exposes tools like `tavily-search` for real-time web search
+    and `tavily-extract` for intelligent data extraction from web pages. ```markdown { "mcpServers":
+    { "tavily-remote-mcp": { "command": "npx -y mcp-remote
+    https://mcp.tavily.com/mcp/?tavilyApiKey=${TAVILY_API_KEY}", "env": {} } } }
 
+    ```
 
-  
-  ```
+    ```
+
 ```python
 from openai import OpenAI
 
@@ -492,9 +491,9 @@ async def fetch_external_documentation(feature_description: str) -> ResearchResu
 
 ```yaml
 DATABASE:
-  - table: "prp_generations"
-  - fields: "id, request_data, result_data, quality_scores, created_at"
-  - index: "CREATE INDEX idx_prp_quality ON prp_generations(quality_scores)"
+  - table: 'prp_generations'
+  - fields: 'id, request_data, result_data, quality_scores, created_at'
+  - index: 'CREATE INDEX idx_prp_quality ON prp_generations(quality_scores)'
 
 CONFIG:
   - add to: src/prp_agent/config.py
@@ -504,13 +503,13 @@ CONFIG:
 
 CLAUDE_CODE:
   - integration: Claude Code SDK for tool access
-  - pattern: "from claude_code import Client"
-  - tools: "Agent,WebFetch,Read,Write,Glob,Grep,Bash"
+  - pattern: 'from claude_code import Client'
+  - tools: 'Agent,WebFetch,Read,Write,Glob,Grep,Bash'
   - allowlist: Specific tools for PRD generation workflow
 
 CLI:
   - add to: pyproject.toml
-  - pattern: "[project.scripts]"
+  - pattern: '[project.scripts]'
   - pattern: "PRD-agent = 'prp_agent.main:main'"
 
 MCP_SERVER:

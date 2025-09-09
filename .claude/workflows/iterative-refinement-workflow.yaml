@@ -10,7 +10,7 @@ stages:
       mode: quick_draft
       time_budget: 30s
     outputs: [draft_v1]
-    
+
   - id: first_review
     agent: judge-agent
     inputs: [draft_v1]
@@ -18,7 +18,7 @@ stages:
       critique_mode: standard
       threshold: 0.70
     outputs: [review_v1, continue_flag]
-    
+
   - id: refinement_loop
     type: loop
     condition: continue_flag == true
@@ -34,12 +34,12 @@ stages:
           critique_mode: iterative
           threshold: 0.90
     outputs: [final_draft]
-    
+
   - id: final_validation
     agent: provenance-auditor
     inputs: [final_draft]
     outputs: [validated_content]
-    
+
   - id: storage
     agent: documentation-librarian
     inputs: [validated_content]
@@ -52,7 +52,7 @@ error_handling:
     action: escalate_to_human
   validation_failure:
     action: rollback_and_retry
-    
+
 monitoring:
   metrics:
     - iteration_count

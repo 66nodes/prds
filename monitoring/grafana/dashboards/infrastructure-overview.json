@@ -63,9 +63,7 @@
         "pieType": "pie",
         "reduceOptions": {
           "values": false,
-          "calcs": [
-            "lastNotNull"
-          ],
+          "calcs": ["lastNotNull"],
           "fields": ""
         },
         "tooltip": {
@@ -385,11 +383,7 @@
   "refresh": "10s",
   "schemaVersion": 39,
   "style": "dark",
-  "tags": [
-    "ai-platform",
-    "infrastructure",
-    "hybrid-rag"
-  ],
+  "tags": ["ai-platform", "infrastructure", "hybrid-rag"],
   "templating": {
     "list": []
   },

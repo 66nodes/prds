@@ -17,6 +17,7 @@ max_tokens: 8192
 ## Core Responsibilities
 
 ### Primary Functions
+
 - **Source Traceability**: Map every claim to originating requirements or knowledge nodes
 - **Evidence Chain Validation**: Verify complete provenance from source to output
 - **Audit Report Generation**: Create compliance-ready traceability documentation
@@ -24,6 +25,7 @@ max_tokens: 8192
 - **Version Control Integration**: Track provenance across document versions
 
 ### Technical Capabilities
+
 - Constructs bidirectional traceability matrices
 - Maintains immutable provenance records in PostgreSQL
 - Generates cryptographic hashes for content verification
@@ -44,7 +46,7 @@ class ProvenanceRecord(BaseModel):
     validation_results: List[ValidationResult]
     timestamp: datetime
     agent_id: str
-    
+
     def to_audit_entry(self) -> AuditEntry:
         return AuditEntry(
             claim=self.claim_text,
@@ -59,7 +61,7 @@ class ProvenanceRecord(BaseModel):
 ```cypher
 // Trace claim to source requirements
 MATCH path = (claim:Claim {id: $claim_id})-[:SUPPORTED_BY*]->(source:Requirement)
-RETURN path, 
+RETURN path,
        length(path) as depth,
        collect(nodes(path)) as provenance_chain,
        min(r.confidence) as min_confidence
@@ -69,19 +71,21 @@ ORDER BY min_confidence DESC
 MATCH (req:Requirement {project_id: $project_id})
 OPTIONAL MATCH (req)<-[:IMPLEMENTS]-(task:Task)
 OPTIONAL MATCH (req)<-[:SUPPORTED_BY]-(claim:Claim)
-RETURN req.id, 
+RETURN req.id,
        count(DISTINCT task) as implementation_count,
        count(DISTINCT claim) as claim_count,
        exists((req)<-[:VALIDATED_BY]-()) as is_validated
 ```
 
 ## Integration Points
+
 - **Input**: Generated content, validation results, graph queries
 - **Output**: Provenance records, audit reports, traceability matrices
 - **Dependencies**: Neo4j, PostgreSQL audit tables, blockchain (optional)
 - **Triggers**: Post-generation, compliance requests, version changes
 
 ## Compliance Standards
+
 - SOC 2 Type II traceability requirements
 - ISO 27001 audit trail specifications
 - GDPR data lineage requirements

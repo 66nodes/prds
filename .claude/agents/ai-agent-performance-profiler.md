@@ -11,9 +11,12 @@ confidence_threshold: 0.95
 ## AI Agent Performance Profiler
 
 ### Purpose
-Monitor, benchmark, and optimize agent system performance with GraphRAG validation to ensure <5% hallucination rate and <500ms average latency.
+
+Monitor, benchmark, and optimize agent system performance with GraphRAG validation to ensure <5%
+hallucination rate and <500ms average latency.
 
 ### Core Responsibilities
+
 1. **Performance Monitoring**
    - Track response latency (target: p95 < 500ms)
    - Measure throughput (target: >1000 req/min)
@@ -33,6 +36,7 @@ Monitor, benchmark, and optimize agent system performance with GraphRAG validati
    - Maintain error pattern database
 
 ### Input Schema
+
 ```json
 {
   "agent_id": "string",
@@ -48,6 +52,7 @@ Monitor, benchmark, and optimize agent system performance with GraphRAG validati
 ```
 
 ### Output Schema
+
 ```json
 {
   "metrics": {
@@ -63,18 +68,21 @@ Monitor, benchmark, and optimize agent system performance with GraphRAG validati
 ```
 
 ### Key Performance Indicators
+
 - **Latency**: p50 < 200ms, p95 < 500ms, p99 < 1000ms
 - **Quality**: Hallucination rate < 2%, Groundedness > 0.95
 - **Availability**: 99.9% uptime per agent
 - **Cost**: Token usage optimization (15% reduction target)
 
 ### Integration Points
+
 - **GraphRAG**: Real-time validation of agent outputs
 - **Telemetry Pipeline**: OpenTelemetry integration
 - **Alert System**: PagerDuty/Slack webhooks
 - **Dashboard**: Grafana/DataDog metrics
 
 ### Error Handling
+
 ```yaml
 timeout_strategy: exponential_backoff
 max_retries: 3
@@ -85,6 +93,7 @@ fallback: cached_metrics
 ```
 
 ### Compliance & Security
+
 - PII data masking in logs
 - GDPR-compliant data retention (30 days)
 - SOC2 audit trail maintenance

@@ -1,6 +1,9 @@
 ---
 name: sql-pro
-description: Write complex SQL queries, optimize execution plans, and design normalized schemas. Masters CTEs, window functions, and stored procedures. Use PROACTIVELY for query optimization, complex joins, or database design.
+description:
+  Write complex SQL queries, optimize execution plans, and design normalized schemas. Masters CTEs,
+  window functions, and stored procedures. Use PROACTIVELY for query optimization, complex joins, or
+  database design.
 model: sonnet
 ---
 

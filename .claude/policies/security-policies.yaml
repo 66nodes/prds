@@ -6,20 +6,20 @@ authentication:
   provider: corporate_sso
   mfa_required: true
   token_lifetime: 8h
-  
+
 authorization:
   rbac:
     enabled: true
     roles:
       - name: admin
-        permissions: ["*"]
+        permissions: ['*']
       - name: developer
-        permissions: ["read", "write", "execute"]
+        permissions: ['read', 'write', 'execute']
       - name: analyst
-        permissions: ["read", "execute"]
+        permissions: ['read', 'execute']
       - name: viewer
-        permissions: ["read"]
-        
+        permissions: ['read']
+
   agent_access:
     default: authenticated_users
     restricted:
@@ -32,12 +32,12 @@ encryption:
     enabled: true
     algorithm: AES-256-GCM
     key_rotation: monthly
-    
+
   in_transit:
     enabled: true
     protocol: TLS 1.3
     cipher_suites: [TLS_AES_256_GCM_SHA384]
-    
+
   secrets_management:
     provider: hashicorp_vault
     path: /agents/secrets
@@ -49,23 +49,23 @@ compliance:
     - GDPR
     - HIPAA
     - ISO27001
-    
+
   data_governance:
     classification:
       - public
       - internal
       - confidential
       - restricted
-      
+
     retention:
       default: 90_days
       audit_logs: 7_years
       financial: 10_years
-      
+
     deletion:
       soft_delete: true
       hard_delete_after: 30_days
-      
+
   audit:
     enabled: true
     events:
@@ -73,7 +73,7 @@ compliance:
       - data_access
       - configuration_change
       - error_occurrence
-      
+
     storage:
       immutable: true
       encrypted: true
@@ -85,12 +85,12 @@ network_security:
     allowed_sources:
       - internal_network
       - vpn_gateway
-      
+
   network_policies:
     agent_to_agent: allow
     external_access: restricted
     egress_filtering: enabled
-    
+
   ddos_protection:
     enabled: true
     provider: cloudflare

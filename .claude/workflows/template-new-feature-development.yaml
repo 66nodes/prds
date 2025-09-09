@@ -20,7 +20,7 @@ stages:
       - context-manager
       - business-analyst
     outputs: [refined_requirements, acceptance_criteria]
-    
+
   - id: technical_design
     agents:
       - backend-architect
@@ -28,14 +28,14 @@ stages:
       - ui-designer
     parallel: true
     outputs: [api_spec, database_schema, ui_mockups]
-    
+
   - id: task_breakdown
     agents:
       - task-orchestrator
       - wbs-structuring-agent
     inputs: [refined_requirements, technical_design]
     outputs: [task_list, dependencies, estimates]
-    
+
   - id: development
     parallel: true
     branches:
@@ -48,14 +48,14 @@ stages:
       - name: testing
         agents: [test-automator]
         outputs: [test_suite]
-        
+
   - id: integration
     agents:
       - fullstack-developer
       - devops-troubleshooter
     inputs: [api_implementation, ui_implementation]
     outputs: [integrated_application]
-    
+
   - id: quality_assurance
     parallel: true
     agents:
@@ -64,14 +64,14 @@ stages:
       - performance-engineer
     inputs: [integrated_application, test_suite]
     outputs: [qa_report, security_report, performance_metrics]
-    
+
   - id: deployment_preparation
     agents:
       - deployment-engineer
       - terraform-specialist
     inputs: [integrated_application, deployment_target]
     outputs: [deployment_package, infrastructure_config]
-    
+
   - id: production_deployment
     agents:
       - deployment-engineer

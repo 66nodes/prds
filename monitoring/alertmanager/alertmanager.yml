@@ -41,13 +41,13 @@ receivers:
         subject: '🚨 CRITICAL Alert: {{ .GroupLabels.alertname }}'
         body: |
           🚨 CRITICAL ALERT - Immediate attention required!
-          
+
           {{ range .Alerts }}
           Alert: {{ .Annotations.summary }}
           Description: {{ .Annotations.description }}
           Instance: {{ .Labels.instance }}
           Timestamp: {{ .StartsAt.Format "2006-01-02 15:04:05" }}
-          
+
           Runbook: https://docs.aiplatform.example.com/runbooks/{{ .Labels.alertname }}
           Dashboard: https://monitoring.aiplatform.example.com/d/overview
           {{ end }}
@@ -63,13 +63,13 @@ receivers:
         subject: '⚠️ Warning: {{ .GroupLabels.alertname }}'
         body: |
           ⚠️ Warning Alert
-          
+
           {{ range .Alerts }}
           Alert: {{ .Annotations.summary }}
           Description: {{ .Annotations.description }}
           Instance: {{ .Labels.instance }}
           Timestamp: {{ .StartsAt.Format "2006-01-02 15:04:05" }}
-          
+
           Dashboard: https://monitoring.aiplatform.example.com/d/overview
           {{ end }}
 

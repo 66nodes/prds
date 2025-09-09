@@ -20,6 +20,7 @@ import structlog
 from services.agent_orchestrator import AgentType, AgentTask, WorkflowContext
 from services.agent_registry import get_agent_registry, AgentRegistry
 from services.context_aware_agent_selector import get_context_aware_selector
+from services.error_handling_service import ErrorHandlingService, ErrorContext, ErrorSeverity, ErrorCategory
 
 logger = structlog.get_logger(__name__)
 
@@ -139,6 +140,9 @@ class EnhancedParallelExecutor:
         self.agent_registry: Optional[AgentRegistry] = None
         self.agent_selector = None
         
+        # Error handling service
+        self.error_handler: Optional[ErrorHandlingService] = None
+        
         # Execution management
         self.active_tasks: Dict[str, ExecutionMetrics] = {}
         self.completed_tasks: deque = deque(maxlen=1000)  # Keep last 1000 completed tasks
@@ -181,6 +185,10 @@ class EnhancedParallelExecutor:
             self.agent_selector = await get_context_aware_selector()
             self.semaphore = asyncio.Semaphore(self.max_concurrent_tasks)
             
+            # Initialize error handling service
+            self.error_handler = ErrorHandlingService()
+            await self.error_handler.initialize()
+            
             # Initialize circuit breakers for all agent types
             if self.enable_circuit_breakers:
                 for agent_type in AgentType:
@@ -196,6 +204,17 @@ class EnhancedParallelExecutor:
             logger.info("Enhanced parallel executor initialized successfully")
             
         except Exception as e:
+            error_context = ErrorContext(
+                source="enhanced_parallel_executor",
+                operation="initialize",
+                agent_type="system",
+                task_id="initialization",
+                metadata={"error": str(e)}
+            )
+            
+            if self.error_handler:
+                await self.error_handler.handle_error(e, error_context)
+            
             logger.error(f"Failed to initialize enhanced parallel executor: {str(e)}")
             raise
 
@@ -266,8 +285,24 @@ class EnhancedParallelExecutor:
                 "circuit_breaker_status": self._get_circuit_breaker_status()
             }
             
-        except asyncio.TimeoutError:
+        except asyncio.TimeoutError as e:
             logger.warning("Parallel execution timed out", timeout=timeout)
+            
+            # Handle timeout with error handling service
+            if self.error_handler:
+                error_context = ErrorContext(
+                    source="enhanced_parallel_executor",
+                    operation="execute_parallel",
+                    agent_type="system",
+                    task_id="parallel_execution",
+                    metadata={
+                        "timeout": timeout,
+                        "task_count": len(tasks),
+                        "completed_tasks": len([t for t in self.completed_tasks if t.status == ExecutionStatus.COMPLETED])
+                    }
+                )
+                await self.error_handler.handle_error(e, error_context)
+            
             return {
                 "results": {},
                 "error": "Execution timeout",
@@ -275,6 +310,18 @@ class EnhancedParallelExecutor:
             }
         except Exception as e:
             logger.error(f"Enhanced parallel execution failed: {str(e)}")
+            
+            # Handle general execution failure
+            if self.error_handler:
+                error_context = ErrorContext(
+                    source="enhanced_parallel_executor",
+                    operation="execute_parallel",
+                    agent_type="system",
+                    task_id="parallel_execution",
+                    metadata={"task_count": len(tasks), "error": str(e)}
+                )
+                await self.error_handler.handle_error(e, error_context)
+            
             raise
 
     async def _prepare_tasks_with_priority(
@@ -458,13 +505,23 @@ class EnhancedParallelExecutor:
         metrics: ExecutionMetrics,
         max_retries: int = 3
     ) -> Any:
-        """Execute task with exponential backoff retry logic."""
+        """Execute task with comprehensive error handling and recovery."""
         
-        last_exception = None
+        error_context = ErrorContext(
+            source="enhanced_parallel_executor",
+            operation="_execute_with_retry",
+            agent_type=task.agent_type.value,
+            task_id=task.task_id,
+            metadata={
+                "attempt_limit": max_retries,
+                "workflow_id": getattr(workflow, 'id', 'unknown')
+            }
+        )
         
         for attempt in range(max_retries + 1):
             try:
                 metrics.execution_attempts = attempt + 1
+                error_context.metadata["current_attempt"] = attempt + 1
                 
                 # Progressive timeout (increase timeout on retries)
                 timeout = 30 + (attempt * 10)  # 30, 40, 50, 60 seconds
@@ -474,35 +531,66 @@ class EnhancedParallelExecutor:
                     timeout=timeout
                 )
                 
+                # Record successful execution if we had previous failures
+                if attempt > 0 and self.error_handler:
+                    await self.error_handler.record_recovery(
+                        task.agent_type.value,
+                        "retry_success",
+                        {"attempts_required": attempt + 1}
+                    )
+                
                 return result
                 
-            except asyncio.TimeoutError as e:
-                last_exception = e
-                if attempt < max_retries:
-                    wait_time = (2 ** attempt) + (time.time() % 1)  # Exponential backoff with jitter
-                    logger.warning(
-                        f"Task {task.task_id} attempt {attempt + 1} timed out, retrying in {wait_time:.2f}s"
-                    )
-                    await asyncio.sleep(wait_time)
-                    continue
-                else:
-                    metrics.status = ExecutionStatus.TIMEOUT
-                    raise
-                    
             except Exception as e:
-                last_exception = e
-                if attempt < max_retries and self._is_retryable_error(e):
-                    wait_time = (2 ** attempt) + (time.time() % 1)
-                    logger.warning(
-                        f"Task {task.task_id} attempt {attempt + 1} failed with retryable error, retrying in {wait_time:.2f}s"
-                    )
-                    await asyncio.sleep(wait_time)
-                    continue
+                error_context.metadata.update({
+                    "error_type": type(e).__name__,
+                    "error_message": str(e),
+                    "attempt": attempt + 1,
+                    "timeout_used": timeout
+                })
+                
+                # Use comprehensive error handling service
+                if self.error_handler:
+                    try:
+                        recovery_result = await self.error_handler.handle_error(e, error_context)
+                        
+                        # Check if we should retry based on recovery strategy
+                        if recovery_result.should_retry and attempt < max_retries:
+                            wait_time = recovery_result.retry_delay or ((2 ** attempt) + (time.time() % 1))
+                            
+                            logger.warning(
+                                f"Task {task.task_id} attempt {attempt + 1} failed, retrying in {wait_time:.2f}s",
+                                error=str(e),
+                                recovery_strategy=recovery_result.strategy.value
+                            )
+                            
+                            await asyncio.sleep(wait_time)
+                            continue
+                        else:
+                            # No retry recommended or max retries reached
+                            if isinstance(e, asyncio.TimeoutError):
+                                metrics.status = ExecutionStatus.TIMEOUT
+                            raise e
+                    except Exception as handler_error:
+                        # If error handler fails, fall back to basic retry logic
+                        logger.error(f"Error handler failed: {handler_error}")
+                        if attempt < max_retries and self._is_retryable_error(e):
+                            wait_time = (2 ** attempt) + (time.time() % 1)
+                            await asyncio.sleep(wait_time)
+                            continue
+                        else:
+                            raise e
                 else:
-                    raise
+                    # Fallback to basic retry logic if no error handler
+                    if attempt < max_retries and self._is_retryable_error(e):
+                        wait_time = (2 ** attempt) + (time.time() % 1)
+                        await asyncio.sleep(wait_time)
+                        continue
+                    else:
+                        raise e
         
-        # If we get here, all retries failed
-        raise last_exception
+        # Should not reach here with current logic
+        raise RuntimeError(f"Task {task.task_id} failed after all retry attempts")
 
     def _is_retryable_error(self, error: Exception) -> bool:
         """Determine if an error is retryable."""
@@ -592,8 +680,20 @@ class EnhancedParallelExecutor:
         self.agent_loads[agent_type] = max(0, self.agent_loads[agent_type] - 1)
 
     async def _check_circuit_breaker(self, circuit_breaker: CircuitBreaker) -> bool:
-        """Check if circuit breaker allows execution."""
+        """Check if circuit breaker allows execution with enhanced error handling integration."""
         now = datetime.utcnow()
+        agent_type_str = circuit_breaker.agent_type.value
+        
+        # Check with error handling service if available
+        if self.error_handler:
+            is_healthy = await self.error_handler.check_agent_health(agent_type_str)
+            if not is_healthy:
+                # If error handler says agent is unhealthy, respect that
+                if circuit_breaker.state == CircuitState.CLOSED:
+                    circuit_breaker.state = CircuitState.OPEN
+                    circuit_breaker.last_failure_time = now
+                    logger.warning(f"Circuit breaker for {agent_type_str} opened due to health check failure")
+                return False
         
         if circuit_breaker.state == CircuitState.CLOSED:
             return True
@@ -603,7 +703,13 @@ class EnhancedParallelExecutor:
                 (now - circuit_breaker.last_failure_time).total_seconds() >= circuit_breaker.recovery_timeout):
                 circuit_breaker.state = CircuitState.HALF_OPEN
                 circuit_breaker.half_open_calls = 0
-                logger.info(f"Circuit breaker for {circuit_breaker.agent_type.value} moved to HALF_OPEN")
+                logger.info(f"Circuit breaker for {agent_type_str} moved to HALF_OPEN")
+                
+                # Notify error handler of state change
+                if self.error_handler:
+                    await self.error_handler.update_circuit_breaker_state(
+                        agent_type_str, "half_open", {"recovery_timeout": circuit_breaker.recovery_timeout}
+                    )
                 return True
             return False
         elif circuit_breaker.state == CircuitState.HALF_OPEN:
@@ -615,27 +721,44 @@ class EnhancedParallelExecutor:
         return False
 
     async def _record_circuit_breaker_success(self, agent_type: AgentType) -> None:
-        """Record successful execution for circuit breaker."""
+        """Record successful execution for circuit breaker with error handling integration."""
         circuit_breaker = self.circuit_breakers.get(agent_type)
         if not circuit_breaker:
             return
+        
+        agent_type_str = agent_type.value
+        
+        # Notify error handling service of success
+        if self.error_handler:
+            await self.error_handler.record_recovery(
+                agent_type_str, 
+                "circuit_breaker_success",
+                {"previous_state": circuit_breaker.state.value}
+            )
         
         if circuit_breaker.state == CircuitState.HALF_OPEN:
             # If we've had enough successful calls, close the circuit
             if circuit_breaker.half_open_calls >= circuit_breaker.half_open_max_calls:
                 circuit_breaker.state = CircuitState.CLOSED
                 circuit_breaker.failure_count = 0
-                logger.info(f"Circuit breaker for {agent_type.value} moved to CLOSED")
+                logger.info(f"Circuit breaker for {agent_type_str} moved to CLOSED")
+                
+                # Notify error handler of state change
+                if self.error_handler:
+                    await self.error_handler.update_circuit_breaker_state(
+                        agent_type_str, "closed", {"successful_calls": circuit_breaker.half_open_calls}
+                    )
         
         # Reset failure count on success
         circuit_breaker.failure_count = max(0, circuit_breaker.failure_count - 1)
 
     async def _record_circuit_breaker_failure(self, agent_type: AgentType) -> None:
-        """Record failed execution for circuit breaker."""
+        """Record failed execution for circuit breaker with error handling integration."""
         circuit_breaker = self.circuit_breakers.get(agent_type)
         if not circuit_breaker:
             return
         
+        agent_type_str = agent_type.value
         circuit_breaker.failure_count += 1
         circuit_breaker.last_failure_time = datetime.utcnow()
         
@@ -643,11 +766,27 @@ class EnhancedParallelExecutor:
         if (circuit_breaker.state == CircuitState.CLOSED and 
             circuit_breaker.failure_count >= circuit_breaker.failure_threshold):
             circuit_breaker.state = CircuitState.OPEN
-            logger.warning(f"Circuit breaker for {agent_type.value} moved to OPEN")
+            logger.warning(f"Circuit breaker for {agent_type_str} moved to OPEN")
+            
+            # Notify error handler of state change
+            if self.error_handler:
+                await self.error_handler.update_circuit_breaker_state(
+                    agent_type_str, "open", {
+                        "failure_count": circuit_breaker.failure_count,
+                        "threshold": circuit_breaker.failure_threshold
+                    }
+                )
         elif circuit_breaker.state == CircuitState.HALF_OPEN:
             # Go back to open state
             circuit_breaker.state = CircuitState.OPEN
             circuit_breaker.half_open_calls = 0
+            logger.warning(f"Circuit breaker for {agent_type_str} moved back to OPEN from HALF_OPEN")
+            
+            # Notify error handler of state change
+            if self.error_handler:
+                await self.error_handler.update_circuit_breaker_state(
+                    agent_type_str, "open", {"reason": "half_open_failure"}
+                )
 
     async def _monitor_resources(self) -> None:
         """Monitor system resources and adjust concurrency."""
@@ -833,9 +972,121 @@ class EnhancedParallelExecutor:
             }
         }
 
+    async def enable_graceful_degradation(self) -> bool:
+        """Enable graceful degradation mode during high error rates or resource constraints."""
+        if not self.error_handler:
+            return False
+            
+        try:
+            # Check system health and enable degradation if needed
+            system_health = await self._assess_system_health()
+            
+            if system_health["error_rate"] > 20 or system_health["resource_usage"] > 85:
+                # Reduce concurrency to 50% of current optimal
+                degraded_concurrency = max(1, self.optimal_concurrency // 2)
+                self.optimal_concurrency = degraded_concurrency
+                self.semaphore = asyncio.Semaphore(degraded_concurrency)
+                
+                logger.warning(
+                    "Graceful degradation enabled",
+                    error_rate=system_health["error_rate"],
+                    resource_usage=system_health["resource_usage"],
+                    new_concurrency=degraded_concurrency
+                )
+                
+                # Notify error handler
+                await self.error_handler.trigger_degradation(
+                    "enhanced_parallel_executor",
+                    "high_error_rate_or_resource_usage",
+                    {
+                        "error_rate": system_health["error_rate"],
+                        "resource_usage": system_health["resource_usage"],
+                        "new_concurrency": degraded_concurrency
+                    }
+                )
+                
+                return True
+        except Exception as e:
+            logger.error(f"Failed to enable graceful degradation: {e}")
+            
+        return False
+
+    async def _assess_system_health(self) -> Dict[str, float]:
+        """Assess current system health metrics."""
+        # Calculate error rate from recent executions
+        total = self.execution_analytics["total_executions"]
+        failed = self.execution_analytics["failed_executions"]
+        error_rate = (failed / total * 100) if total > 0 else 0
+        
+        # Get current resource usage
+        resource_usage = 0.0
+        if self.resource_usage_history:
+            latest = self.resource_usage_history[-1]
+            resource_usage = (latest.cpu_percent + latest.memory_percent) / 2
+        
+        return {
+            "error_rate": error_rate,
+            "resource_usage": resource_usage,
+            "active_tasks": len(self.active_tasks),
+            "circuit_breakers_open": len([
+                cb for cb in self.circuit_breakers.values() 
+                if cb.state == CircuitState.OPEN
+            ])
+        }
+
+    async def get_error_handling_status(self) -> Dict[str, Any]:
+        """Get comprehensive error handling status."""
+        status = {
+            "error_handler_active": self.error_handler is not None,
+            "circuit_breakers": self._get_circuit_breaker_status(),
+            "system_health": await self._assess_system_health(),
+            "degradation_active": self.optimal_concurrency < self.max_concurrent_tasks
+        }
+        
+        if self.error_handler:
+            status.update({
+                "error_analytics": await self.error_handler.get_error_analytics(),
+                "recovery_status": await self.error_handler.get_recovery_status()
+            })
+            
+        return status
+
+    async def force_recovery_attempt(self, agent_type: str) -> bool:
+        """Force a recovery attempt for a specific agent type."""
+        if not self.error_handler:
+            return False
+            
+        try:
+            # Reset circuit breaker if it exists
+            for agent_enum_type, circuit_breaker in self.circuit_breakers.items():
+                if agent_enum_type.value == agent_type and circuit_breaker.state == CircuitState.OPEN:
+                    circuit_breaker.state = CircuitState.HALF_OPEN
+                    circuit_breaker.half_open_calls = 0
+                    circuit_breaker.failure_count = 0
+                    
+                    logger.info(f"Forced recovery attempt for {agent_type}")
+                    
+                    await self.error_handler.record_recovery(
+                        agent_type, "forced_recovery", {"initiated_by": "admin"}
+                    )
+                    
+                    return True
+            
+            return False
+        except Exception as e:
+            logger.error(f"Failed to force recovery for {agent_type}: {e}")
+            return False
+
     async def shutdown(self) -> None:
         """Gracefully shutdown the executor."""
         logger.info("Shutting down enhanced parallel executor")
+        
+        # Shutdown error handling service first
+        if self.error_handler:
+            try:
+                await self.error_handler.shutdown()
+            except Exception as e:
+                logger.error(f"Error shutting down error handler: {e}")
         
         # Cancel resource monitoring
         if self.resource_monitor_task:
@@ -866,11 +1117,31 @@ enhanced_executor: Optional[EnhancedParallelExecutor] = None
 
 
 async def get_enhanced_executor() -> EnhancedParallelExecutor:
-    """Get the global enhanced parallel executor instance."""
+    """Get the global enhanced parallel executor instance with comprehensive error handling."""
     global enhanced_executor
     
     if not enhanced_executor:
-        enhanced_executor = EnhancedParallelExecutor()
+        enhanced_executor = EnhancedParallelExecutor(
+            max_concurrent_tasks=20,  # Increased for production workloads
+            enable_circuit_breakers=True,
+            enable_agent_pooling=True,
+            resource_monitoring_interval=3.0  # More frequent monitoring
+        )
         await enhanced_executor.initialize()
+        
+        # Enable automatic graceful degradation monitoring
+        async def _monitor_degradation():
+            while True:
+                try:
+                    await enhanced_executor.enable_graceful_degradation()
+                    await asyncio.sleep(30)  # Check every 30 seconds
+                except asyncio.CancelledError:
+                    break
+                except Exception as e:
+                    logger.error(f"Degradation monitoring error: {e}")
+                    await asyncio.sleep(30)
+        
+        # Start degradation monitoring task
+        asyncio.create_task(_monitor_degradation())
     
     return enhanced_executor

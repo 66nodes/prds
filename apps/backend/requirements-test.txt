@@ -1,0 +1,69 @@
+# Testing Dependencies for Strategic Planning Platform
+
+# Core testing framework - Updated to v8+
+pytest==8.3.0
+pytest-asyncio==0.24.0
+pytest-cov==6.0.0
+pytest-mock==3.14.0
+pytest-xdist==3.6.0
+pytest-benchmark==4.0.0
+pytest-timeout==2.3.1
+
+# HTTP testing
+httpx==0.26.0
+requests==2.31.0
+responses==0.24.1
+aioresponses==0.7.6
+
+# Database testing
+pytest-postgresql==5.0.0
+pytest-redis==3.1.0
+sqlalchemy-utils==0.41.1
+factory-boy==3.3.0
+
+# Mocking and fixtures  
+faker==22.2.0
+freezegun==1.4.0
+testcontainers==3.7.1
+
+# Load/Performance testing
+locust==2.20.0
+
+# Security testing
+bandit==1.7.5
+safety==2.3.5
+semgrep==1.55.2
+truffleHog==3.63.2
+
+# E2E and browser testing
+playwright==1.40.0
+selenium==4.16.0
+
+# Monitoring and reporting
+allure-pytest==2.13.2
+pytest-html==4.1.1
+coverage==7.4.0
+codecov==2.1.13
+
+# API testing
+tavern==2.3.3
+schemathesis==3.19.7
+hypothesis==6.96.1
+
+# Quality and linting
+flake8-pytest-style==1.7.2
+pytest-clarity==1.0.1
+pytest-sugar==0.9.7
+
+# Memory and profiling
+memory-profiler==0.61.0
+py-spy==0.3.14
+pytest-profiling==1.7.0
+
+# Parallel execution
+pytest-parallel==0.1.1
+pytest-concurrent==0.1.0
+
+# Data validation testing
+jsonschema==4.20.0
+pydantic==2.5.3

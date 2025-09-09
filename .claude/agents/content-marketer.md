@@ -1,6 +1,8 @@
 ---
 name: content-marketer
-description: Write blog posts, social media content, and email newsletters. Optimizes for SEO and creates content calendars. Use PROACTIVELY for marketing content or social media posts.
+description:
+  Write blog posts, social media content, and email newsletters. Optimizes for SEO and creates
+  content calendars. Use PROACTIVELY for marketing content or social media posts.
 model: haiku
 ---
 

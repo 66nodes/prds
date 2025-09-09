@@ -16,12 +16,12 @@ task-master complexity-report [--file=<path>]
 
 ## Report Location
 
-Default: `.taskmaster/reports/complexity-analysis.md`
-Custom: Specify with --file parameter
+Default: `.taskmaster/reports/complexity-analysis.md` Custom: Specify with --file parameter
 
 ## Report Contents
 
 ### 1. **Executive Summary**
+
 ```
 Complexity Analysis Summary
 ━━━━━━━━━━━━━━━━━━━━━━━━
@@ -38,7 +38,9 @@ Critical Findings:
 ```
 
 ### 2. **Detailed Task Analysis**
+
 For each complex task:
+
 - Complexity score breakdown
 - Contributing factors
 - Specific risks identified
@@ -46,7 +48,9 @@ For each complex task:
 - Similar completed tasks
 
 ### 3. **Risk Matrix**
+
 Visual representation:
+
 ```
 Risk vs Complexity Matrix
 ━━━━━━━━━━━━━━━━━━━━━━━
@@ -59,11 +63,13 @@ Low Risk   | #78(8)       | [15 tasks]
 ### 4. **Recommendations**
 
 **Immediate Actions:**
+
 1. Expand task #5 - Critical path + high complexity
 2. Expand task #12 - High risk + dependencies
 3. Review task #34 - Consider splitting
 
 **Sprint Planning:**
+
 - Don't schedule multiple high-complexity tasks together
 - Ensure expertise available for complex tasks
 - Build in buffer time for unknowns
@@ -71,6 +77,7 @@ Low Risk   | #78(8)       | [15 tasks]
 ## Interactive Features
 
 When viewing report:
+
 1. **Quick Actions**
    - Press 'e' to expand a task
    - Press 'd' for task details
@@ -96,6 +103,7 @@ When viewing report:
 ## Integration
 
 Use report for:
+
 - Sprint planning sessions
 - Resource allocation
 - Risk assessment

@@ -1,7 +1,7 @@
 name: Task Validation
 on:
   schedule:
-    - cron: '0 */6 * * *'  # Every 6 hours
+    - cron: '0 */6 * * *' # Every 6 hours
   workflow_dispatch:
 
 jobs:
@@ -9,19 +9,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Validate Task Structure
         run: |
           python scripts/validate_tasks.py
-          
+
       - name: Check Task Progression
         run: |
           python scripts/check_progression.py
-          
+
       - name: Generate Metrics
         run: |
           python scripts/generate_metrics.py > metrics.json
-          
+
       - name: Update Dashboard
         run: |
           python scripts/update_dashboard.py

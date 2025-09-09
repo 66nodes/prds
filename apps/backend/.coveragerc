@@ -1,0 +1,124 @@
+# Coverage configuration for Strategic Planning Platform Backend
+
+[run]
+source = .
+branch = true
+parallel = true
+concurrency = multiprocessing
+omit = 
+    # Test files
+    tests/*
+    */tests/*
+    */*test*.py
+    
+    # Virtual environments
+    venv/*
+    env/*
+    .venv/*
+    */venv/*
+    */virtualenvs/*
+    
+    # Dependencies
+    */node_modules/*
+    */site-packages/*
+    */dist-packages/*
+    
+    # Build and cache directories
+    */__pycache__/*
+    .tox/*
+    */htmlcov/*
+    */coverage/*
+    .pytest_cache/*
+    
+    # Configuration files
+    setup.py
+    conftest.py
+    */conftest.py
+    
+    # Database migrations
+    */migrations/*
+    */alembic/*
+    
+    # Settings and configuration
+    */settings/*
+    config.py
+    */config.py
+    
+    # Main/entry points
+    main.py
+    */main.py
+    manage.py
+
+[report]
+fail_under = 90
+show_missing = true
+skip_covered = false
+skip_empty = true
+sort = cover
+precision = 2
+
+# Exclude lines from coverage
+exclude_lines =
+    # Standard pragma
+    pragma: no cover
+    
+    # Don't complain about missing debug-only code
+    def __repr__
+    if self\.debug
+    if settings\.DEBUG
+    
+    # Don't complain if tests don't hit defensive assertion code
+    raise AssertionError
+    raise NotImplementedError
+    
+    # Don't complain if non-runnable code isn't run
+    if 0:
+    if False:
+    if __name__ == .__main__.:
+    
+    # Type checking blocks
+    if TYPE_CHECKING:
+    
+    # Abstract methods
+    @(abc\.)?abstractmethod
+    class .*\bProtocol\):
+    
+    # Platform specific code
+    if sys.platform
+    
+    # Exception handling that shouldn't be tested
+    except ImportError
+    except KeyboardInterrupt
+    
+    # Logging that doesn't need coverage
+    logger\..*
+    log\..*
+
+[html]
+directory = htmlcov
+title = Strategic Planning Platform - Backend Test Coverage
+show_contexts = true
+
+[xml]
+output = coverage.xml
+
+[lcov]
+output = coverage.lcov
+
+# Coverage thresholds by module
+[coverage:paths]
+source = 
+    ./
+    /app/
+    */apps/backend/
+
+# Module-specific coverage requirements
+[coverage:report]
+# Enforce high coverage on critical modules
+fail_under = 90
+
+# Display coverage summary by module
+show_missing = true
+
+# Sort by coverage percentage (ascending)
+sort = cover

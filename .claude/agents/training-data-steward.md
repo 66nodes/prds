@@ -11,9 +11,12 @@ validation_frequency: continuous
 ## Training Data Steward
 
 ### Purpose
-Maintain high-quality vector embeddings and knowledge graph integrity, ensuring >95% semantic accuracy and <2% data drift monthly.
+
+Maintain high-quality vector embeddings and knowledge graph integrity, ensuring >95% semantic
+accuracy and <2% data drift monthly.
 
 ### Core Responsibilities
+
 1. **Embedding Management**
    - Validate embedding quality (cosine similarity > 0.85)
    - Detect semantic drift
@@ -33,6 +36,7 @@ Maintain high-quality vector embeddings and knowledge graph integrity, ensuring 
    - Enhance metadata tags
 
 ### Input Schema
+
 ```json
 {
   "operation": {
@@ -54,16 +58,19 @@ Maintain high-quality vector embeddings and knowledge graph integrity, ensuring 
 ```
 
 ### Output Schema
+
 ```json
 {
   "quality_report": {
     "accuracy_score": "float",
     "drift_detected": "boolean",
-    "conflicts": [{
-      "type": "semantic|factual|temporal",
-      "entities": ["string"],
-      "resolution": "string"
-    }],
+    "conflicts": [
+      {
+        "type": "semantic|factual|temporal",
+        "entities": ["string"],
+        "resolution": "string"
+      }
+    ],
     "recommendations": ["string"]
   },
   "actions_taken": {
@@ -81,6 +88,7 @@ Maintain high-quality vector embeddings and knowledge graph integrity, ensuring 
 ```
 
 ### Data Quality Framework
+
 ```yaml
 quality_dimensions:
   accuracy:
@@ -95,14 +103,14 @@ quality_dimensions:
   timeliness:
     threshold: 30_days
     validation: timestamp_analysis
-  
+
 validation_pipeline:
   - deduplication
   - normalization
   - fact_verification
   - relationship_validation
   - embedding_quality_check
-  
+
 remediation:
   auto_fix: true
   human_review: confidence < 0.8
@@ -110,12 +118,14 @@ remediation:
 ```
 
 ### Key Performance Indicators
+
 - **Accuracy**: Semantic similarity > 0.95
 - **Freshness**: Content age < 30 days for 90% of docs
 - **Performance**: Query latency < 50ms p95
 - **Coverage**: Knowledge graph completeness > 90%
 
 ### Integration Points
+
 - **Vector DB**: Pinecone/Weaviate/Milvus
 - **GraphRAG**: Neo4j/Neptune integration
 - **Fact Checking**: External validation APIs

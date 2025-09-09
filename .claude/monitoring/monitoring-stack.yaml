@@ -13,7 +13,7 @@ metrics:
       - job: infrastructure
         path: /metrics
         port: 9100
-        
+
   custom_metrics:
     - name: agent_request_duration
       type: histogram
@@ -42,14 +42,14 @@ dashboards:
           - P95 latency by workflow
           - Token usage by model
           - Cost tracking
-          
+
       - name: Quality Metrics
         panels:
           - Hallucination rate trend
           - Iteration count distribution
           - Judge approval rate
           - GraphRAG validation scores
-          
+
       - name: Infrastructure Health
         panels:
           - CPU utilization by node
@@ -65,7 +65,7 @@ tracing:
     exporters:
       - jaeger
       - zipkin
-    
+
   spans:
     - agent_execution
     - workflow_stage
@@ -82,7 +82,7 @@ logging:
       - workflow-logs
       - error-logs
       - audit-logs
-      
+
   log_levels:
     default: INFO
     development: DEBUG
@@ -93,28 +93,28 @@ alerting:
   pagerduty:
     enabled: true
     integration_key: ${PAGERDUTY_KEY}
-    
+
   rules:
     - name: high_error_rate
       condition: error_rate > 0.05
       severity: critical
       escalation: immediate
-      
+
     - name: high_latency
       condition: p95_latency > 5000ms
       severity: warning
       escalation: 5_minutes
-      
+
     - name: low_cache_hit
       condition: cache_hit_ratio < 0.3
       severity: info
       escalation: none
-      
+
     - name: budget_exceeded
       condition: daily_cost > daily_budget * 0.9
       severity: critical
       escalation: immediate
-      
+
     - name: hallucination_spike
       condition: hallucination_rate > 0.05
       severity: critical
@@ -126,7 +126,7 @@ sla_monitoring:
     latency_p95: 2000ms
     error_rate: <1%
     hallucination_rate: <2%
-    
+
   reporting:
     frequency: daily
     recipients: [sre-team, product-team]

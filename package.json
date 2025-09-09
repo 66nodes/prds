@@ -1,5 +1,35 @@
 {
-  "dependencies": {
-    "task-master-ai": "^0.25.1"
-  }
+  "name": "prds-monorepo",
+  "version": "1.0.0",
+  "description": "Monorepo for PRDS project with Nuxt.js frontend and FastAPI backend",
+  "private": true,
+  "scripts": {
+    "dev:frontend": "pnpm --filter frontend dev",
+    "dev:backend": "pnpm --filter backend dev",
+    "dev": "pnpm run --parallel dev:*",
+    "build:frontend": "pnpm --filter frontend build",
+    "build:backend": "pnpm --filter backend build",
+    "build": "pnpm run --parallel build:*",
+    "test:frontend": "pnpm --filter frontend test",
+    "test:backend": "pnpm --filter backend test",
+    "test": "pnpm run --parallel test:*",
+    "lint:frontend": "pnpm --filter frontend lint",
+    "lint:backend": "pnpm --filter backend lint",
+    "lint": "pnpm run --parallel lint:*",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "install:all": "pnpm install",
+    "prepare": "husky install"
+  },
+  "devDependencies": {
+    "husky": "^8.0.0",
+    "lint-staged": "^15.0.0",
+    "prettier": "^3.0.0",
+    "typescript": "^5.9.2"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "packageManager": "pnpm@10.13.1"
 }

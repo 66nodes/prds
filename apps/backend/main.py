@@ -18,7 +18,7 @@ from opentelemetry.sdk.resources import SERVICE_NAME, Resource
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
 
-from api.endpoints import auth, dashboard, llm, prd, validation, websocket, queue, documents, human_validation, version_control, graph, benchmarks
+from api.endpoints import auth, dashboard, llm, prd, validation, websocket, queue, documents, human_validation, version_control, graph, benchmarks, enterprise_api, risk_assessment
 from core.config import get_settings
 from core.database import init_all_databases, close_all_databases, check_all_databases_health
 from core.logging_config import setup_logging
@@ -26,6 +26,8 @@ from core.middleware import LoggingMiddleware, RateLimitMiddleware
 from core.redis import initialize_redis, close_redis, get_redis_manager
 from services.llm import close_llm_service
 from services.queue import get_worker_manager
+from services.cache_service import initialize_cache_service
+from services.cache_invalidation_service import initialize_invalidation_service, get_invalidation_service
 
 # Initialize settings and logging
 settings = get_settings()
@@ -44,6 +46,11 @@ async def lifespan(app: FastAPI):
     # Initialize Redis and message queue
     await initialize_redis()
     logger.info("Redis and message queue initialized")
+    
+    # Initialize caching services
+    await initialize_cache_service()
+    await initialize_invalidation_service()
+    logger.info("Cache services initialized with multi-tier strategy")
     
     # Start queue workers
     worker_manager = get_worker_manager()
@@ -66,6 +73,11 @@ async def lifespan(app: FastAPI):
     # Stop queue workers
     await worker_manager.stop_all()
     logger.info("Queue workers stopped")
+    
+    # Shutdown cache invalidation service
+    invalidation_service = get_invalidation_service()
+    await invalidation_service.shutdown()
+    logger.info("Cache invalidation service shutdown")
     
     # Close services
     await close_all_databases()
@@ -193,6 +205,18 @@ app.include_router(
 app.include_router(
     benchmarks.router,
     tags=["Performance Benchmarking"]
+)
+
+app.include_router(
+    enterprise_api.router,
+    prefix="/api/v1/enterprise",
+    tags=["Enterprise SSO & API Integration"]
+)
+
+app.include_router(
+    risk_assessment.router,
+    prefix="/api/v1",
+    tags=["Risk Assessment & Historical Analysis"]
 )
 
 

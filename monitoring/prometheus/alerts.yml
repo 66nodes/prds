@@ -8,8 +8,8 @@ groups:
         labels:
           severity: critical
         annotations:
-          summary: "Service {{ $labels.instance }} is down"
-          description: "{{ $labels.instance }} has been down for more than 30 seconds."
+          summary: 'Service {{ $labels.instance }} is down'
+          description: '{{ $labels.instance }} has been down for more than 30 seconds.'
 
       - alert: HighErrorRate
         expr: rate(http_requests_total{status=~"5.."}[5m]) > 0.1
@@ -17,8 +17,8 @@ groups:
         labels:
           severity: critical
         annotations:
-          summary: "High error rate on {{ $labels.instance }}"
-          description: "Error rate is {{ $value }} errors per second on {{ $labels.instance }}"
+          summary: 'High error rate on {{ $labels.instance }}'
+          description: 'Error rate is {{ $value }} errors per second on {{ $labels.instance }}'
 
       # Database Alerts
       - alert: PostgreSQLDown
@@ -27,8 +27,8 @@ groups:
         labels:
           severity: critical
         annotations:
-          summary: "PostgreSQL is down"
-          description: "PostgreSQL database is not responding"
+          summary: 'PostgreSQL is down'
+          description: 'PostgreSQL database is not responding'
 
       - alert: PostgreSQLHighConnections
         expr: pg_stat_database_numbackends > 80
@@ -36,8 +36,8 @@ groups:
         labels:
           severity: warning
         annotations:
-          summary: "PostgreSQL high connection count"
-          description: "PostgreSQL has {{ $value }} active connections"
+          summary: 'PostgreSQL high connection count'
+          description: 'PostgreSQL has {{ $value }} active connections'
 
       - alert: Neo4jDown
         expr: up{job="neo4j"} == 0
@@ -45,8 +45,8 @@ groups:
         labels:
           severity: critical
         annotations:
-          summary: "Neo4j is down"
-          description: "Neo4j graph database is not responding"
+          summary: 'Neo4j is down'
+          description: 'Neo4j graph database is not responding'
 
       - alert: RedisDown
         expr: up{job="redis"} == 0
@@ -54,8 +54,8 @@ groups:
         labels:
           severity: critical
         annotations:
-          summary: "Redis is down"
-          description: "Redis cache is not responding"
+          summary: 'Redis is down'
+          description: 'Redis cache is not responding'
 
       - alert: RedisHighMemoryUsage
         expr: redis_memory_used_bytes / redis_memory_max_bytes > 0.9
@@ -63,8 +63,8 @@ groups:
         labels:
           severity: warning
         annotations:
-          summary: "Redis high memory usage"
-          description: "Redis memory usage is {{ $value | humanizePercentage }}"
+          summary: 'Redis high memory usage'
+          description: 'Redis memory usage is {{ $value | humanizePercentage }}'
 
       # Vector Database Alerts
       - alert: MilvusDown
@@ -73,8 +73,8 @@ groups:
         labels:
           severity: critical
         annotations:
-          summary: "Milvus vector database is down"
-          description: "Milvus vector database is not responding"
+          summary: 'Milvus vector database is down'
+          description: 'Milvus vector database is not responding'
 
       # Application Performance Alerts
       - alert: HighResponseTime
@@ -83,8 +83,8 @@ groups:
         labels:
           severity: warning
         annotations:
-          summary: "High response time on {{ $labels.instance }}"
-          description: "95th percentile response time is {{ $value }}s on {{ $labels.instance }}"
+          summary: 'High response time on {{ $labels.instance }}'
+          description: '95th percentile response time is {{ $value }}s on {{ $labels.instance }}'
 
       - alert: HighMemoryUsage
         expr: (node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / node_memory_MemTotal_bytes > 0.9
@@ -92,8 +92,8 @@ groups:
         labels:
           severity: warning
         annotations:
-          summary: "High memory usage on {{ $labels.instance }}"
-          description: "Memory usage is {{ $value | humanizePercentage }} on {{ $labels.instance }}"
+          summary: 'High memory usage on {{ $labels.instance }}'
+          description: 'Memory usage is {{ $value | humanizePercentage }} on {{ $labels.instance }}'
 
       - alert: HighCPUUsage
         expr: 100 - (avg by(instance) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 80
@@ -101,8 +101,8 @@ groups:
         labels:
           severity: warning
         annotations:
-          summary: "High CPU usage on {{ $labels.instance }}"
-          description: "CPU usage is {{ $value }}% on {{ $labels.instance }}"
+          summary: 'High CPU usage on {{ $labels.instance }}'
+          description: 'CPU usage is {{ $value }}% on {{ $labels.instance }}'
 
       - alert: DiskSpaceLow
         expr: (node_filesystem_avail_bytes / node_filesystem_size_bytes) < 0.1
@@ -110,8 +110,8 @@ groups:
         labels:
           severity: critical
         annotations:
-          summary: "Low disk space on {{ $labels.instance }}"
-          description: "Disk space is {{ $value | humanizePercentage }} full on {{ $labels.instance }}"
+          summary: 'Low disk space on {{ $labels.instance }}'
+          description: 'Disk space is {{ $value | humanizePercentage }} full on {{ $labels.instance }}'
 
       # AI/GraphRAG Specific Alerts
       - alert: HighHallucinationRate
@@ -120,8 +120,8 @@ groups:
         labels:
           severity: critical
         annotations:
-          summary: "High hallucination rate detected"
-          description: "Hallucination rate is {{ $value | humanizePercentage }} (threshold: 2%)"
+          summary: 'High hallucination rate detected'
+          description: 'Hallucination rate is {{ $value | humanizePercentage }} (threshold: 2%)'
 
       - alert: GraphRAGValidationFailure
         expr: increase(graphrag_validation_failures_total[5m]) > 5
@@ -129,8 +129,8 @@ groups:
         labels:
           severity: warning
         annotations:
-          summary: "Multiple GraphRAG validation failures"
-          description: "{{ $value }} GraphRAG validation failures in the last 5 minutes"
+          summary: 'Multiple GraphRAG validation failures'
+          description: '{{ $value }} GraphRAG validation failures in the last 5 minutes'
 
       - alert: AgentResponseTimeout
         expr: increase(agent_response_timeouts_total[5m]) > 3
@@ -138,8 +138,8 @@ groups:
         labels:
           severity: warning
         annotations:
-          summary: "Agent response timeouts"
-          description: "{{ $value }} agent response timeouts in the last 5 minutes"
+          summary: 'Agent response timeouts'
+          description: '{{ $value }} agent response timeouts in the last 5 minutes'
 
       # Business Logic Alerts
       - alert: LowPRDGenerationRate
@@ -148,8 +148,8 @@ groups:
         labels:
           severity: warning
         annotations:
-          summary: "Low PRD generation rate"
-          description: "PRD generation rate is {{ $value }} per hour (expected > 1)"
+          summary: 'Low PRD generation rate'
+          description: 'PRD generation rate is {{ $value }} per hour (expected > 1)'
 
       - alert: HighAPILatency
         expr: histogram_quantile(0.99, rate(api_request_duration_seconds_bucket{endpoint=~"/api/.*"}[5m])) > 2
@@ -157,8 +157,8 @@ groups:
         labels:
           severity: warning
         annotations:
-          summary: "High API latency"
-          description: "99th percentile API latency is {{ $value }}s"
+          summary: 'High API latency'
+          description: '99th percentile API latency is {{ $value }}s'
 
       # Container and Orchestration Alerts
       - alert: ContainerRestarting
@@ -166,8 +166,8 @@ groups:
         labels:
           severity: warning
         annotations:
-          summary: "Container restarting"
-          description: "Container {{ $labels.container }} in pod {{ $labels.pod }} has restarted {{ $value }} times in the last 15 minutes"
+          summary: 'Container restarting'
+          description: 'Container {{ $labels.container }} in pod {{ $labels.pod }} has restarted {{ $value }} times in the last 15 minutes'
 
       - alert: NodeNotReady
         expr: kube_node_status_ready{condition="Ready"} == 0
@@ -175,5 +175,5 @@ groups:
         labels:
           severity: critical
         annotations:
-          summary: "Node not ready"
-          description: "Node {{ $labels.node }} is not ready for more than 5 minutes"
+          summary: 'Node not ready'
+          description: 'Node {{ $labels.node }} is not ready for more than 5 minutes'

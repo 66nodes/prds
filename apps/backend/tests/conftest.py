@@ -111,7 +111,7 @@ def sample_user():
     """Create a sample user for testing."""
     return {
         "id": str(uuid4()),
-        "email": f"user-{uuid4()}@example.com",
+        "email": f"user-{uuid4()}example.com",
         "full_name": f"User {uuid4()}",
         "is_active": True,
         "is_superuser": False,
@@ -124,7 +124,7 @@ def sample_admin_user():
     """Create a sample admin user for testing."""
     return {
         "id": str(uuid4()),
-        "email": f"admin-{uuid4()}@example.com",
+        "email": f"admin-{uuid4()}example.com",
         "full_name": f"Admin {uuid4()}",
         "is_active": True,
         "is_superuser": True,

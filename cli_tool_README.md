@@ -2,12 +2,13 @@ Here’s a complete README.md for your Plan Runner CLI utility:
 
 ⸻
 
-
 # 🧠 Plan Runner CLI
 
-**Plan Runner CLI** is a lightweight command-line tool for executing and resuming structured multi-step workflows (called *plans*) with checkpointing and context tracking.
+**Plan Runner CLI** is a lightweight command-line tool for executing and resuming structured
+multi-step workflows (called _plans_) with checkpointing and context tracking.
 
-Ideal for AI-driven development teams using Claude Code, this tool helps structure task decomposition, ensure resumability, and support "Plan Mode" best practices.
+Ideal for AI-driven development teams using Claude Code, this tool helps structure task
+decomposition, ensure resumability, and support "Plan Mode" best practices.
 
 ---
 
@@ -113,3 +114,4 @@ Pull requests, bug reports, and new ideas welcome! Fork and contribute, or open 
 Would you like me to:
 - Add a CLI flag for saving output logs?
 - Include example Claude/Agent YAML integration?
+```

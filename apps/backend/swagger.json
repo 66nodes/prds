@@ -1,0 +1,681 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Strategic Planning Platform API",
+    "description": "AI-Powered Strategic Planning Platform with GraphRAG validation",
+    "version": "1.0.0",
+    "contact": {
+      "name": "Strategic Planning Platform Team",
+      "email": "support@strategicplanning.ai"
+    },
+    "license": {
+      "name": "Proprietary"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8000",
+      "description": "Development server"
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/api/v1/enterprise/sso/initiate": {
+      "post": {
+        "summary": "Initiate SSO authentication",
+        "description": "Initiates SSO authentication with an enterprise identity provider",
+        "tags": ["Enterprise SSO & API Integration"],
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SSOInitiateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Authorization URL for redirect",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthorizationUrlResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/enterprise/sso/callback/{provider}": {
+      "get": {
+        "summary": "Handle SSO callback",
+        "description": "Processes authorization code from identity provider and authenticates user",
+        "tags": ["Enterprise SSO & API Integration"],
+        "security": [],
+        "parameters": [
+          {
+            "name": "provider",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Identity provider name (azure_ad, okta)"
+          },
+          {
+            "name": "code",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Authorization code from identity provider"
+          },
+          {
+            "name": "state",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "State parameter for CSRF protection"
+          },
+          {
+            "name": "redirect_uri",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Original redirect URI"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Authentication successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SSOCallbackResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/enterprise/sso/providers": {
+      "get": {
+        "summary": "List identity providers",
+        "description": "Returns all configured SSO identity providers",
+        "tags": ["Enterprise SSO & API Integration"],
+        "responses": {
+          "200": {
+            "description": "List of identity providers",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProviderInfo"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/enterprise/sso/providers/{provider_name}": {
+      "get": {
+        "summary": "Get provider details",
+        "description": "Returns detailed information about a specific identity provider",
+        "tags": ["Enterprise SSO & API Integration"],
+        "parameters": [
+          {
+            "name": "provider_name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Identity provider name"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Provider information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProviderInfo"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/enterprise/projects": {
+      "get": {
+        "summary": "List enterprise projects",
+        "description": "Lists projects from enterprise project management systems (Azure DevOps, Jira, etc.)",
+        "tags": ["Enterprise SSO & API Integration"],
+        "parameters": [
+          {
+            "name": "provider",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter by SSO provider"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of enterprise projects",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectListResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/enterprise/users": {
+      "get": {
+        "summary": "List enterprise users",
+        "description": "Lists users from enterprise directory services (Azure AD, Okta, LDAP)",
+        "tags": ["Enterprise SSO & API Integration"],
+        "parameters": [
+          {
+            "name": "provider",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter by SSO provider"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000,
+              "default": 50
+            },
+            "description": "Maximum number of users to return"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0
+            },
+            "description": "Number of users to skip"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of enterprise users",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserListResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/enterprise/audit/events": {
+      "get": {
+        "summary": "Get audit events",
+        "description": "Retrieves audit events for compliance and monitoring",
+        "tags": ["Enterprise SSO & API Integration"],
+        "parameters": [
+          {
+            "name": "event_type",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter by event type"
+          },
+          {
+            "name": "start_date",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "Start date (ISO format)"
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date"
+            },
+            "description": "End date (ISO format)"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1000,
+              "default": 100
+            },
+            "description": "Maximum events to return"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of audit events",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AuditEvent"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/enterprise/audit/summary": {
+      "get": {
+        "summary": "Get audit summary",
+        "description": "Provides aggregated statistics on authentication events and system access",
+        "tags": ["Enterprise SSO & API Integration"],
+        "responses": {
+          "200": {
+            "description": "Audit event summary statistics",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuditSummary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/enterprise/health": {
+      "get": {
+        "summary": "Enterprise API health check",
+        "description": "Health status of SSO providers and enterprise API connections",
+        "tags": ["Enterprise SSO & API Integration"],
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Enterprise API health status",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthCheck"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/enterprise/config/test-provider": {
+      "post": {
+        "summary": "Test provider connection",
+        "description": "Tests connection to an identity provider without performing authentication",
+        "tags": ["Enterprise SSO & API Integration"],
+        "parameters": [
+          {
+            "name": "provider_name",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Name of the provider to test"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Connection test results",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProviderTestResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "SSOInitiateRequest": {
+        "type": "object",
+        "required": ["provider", "redirect_uri"],
+        "properties": {
+          "provider": {
+            "type": "string",
+            "description": "Identity provider name (azure_ad, okta)"
+          },
+          "redirect_uri": {
+            "type": "string",
+            "description": "Redirect URI after authentication"
+          },
+          "state": {
+            "type": "string",
+            "description": "Optional state parameter for CSRF protection"
+          }
+        }
+      },
+      "AuthorizationUrlResponse": {
+        "type": "object",
+        "properties": {
+          "authorization_url": {
+            "type": "string",
+            "description": "URL to redirect user to for authentication"
+          },
+          "state": {
+            "type": "string",
+            "description": "CSRF protection state parameter"
+          },
+          "provider": {
+            "type": "string"
+          },
+          "expires_in": {
+            "type": "integer",
+            "description": "State expiration time in seconds"
+          }
+        }
+      },
+      "SSOCallbackResponse": {
+        "type": "object",
+        "properties": {
+          "access_token": {
+            "type": "string"
+          },
+          "refresh_token": {
+            "type": "string"
+          },
+          "token_type": {
+            "type": "string",
+            "enum": ["bearer"]
+          },
+          "expires_in": {
+            "type": "integer"
+          },
+          "user": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "User information from the identity provider"
+          },
+          "provider": {
+            "type": "string"
+          }
+        }
+      },
+      "ProviderInfo": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "scopes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "configured": {
+            "type": "boolean"
+          }
+        }
+      },
+      "AuditEvent": {
+        "type": "object",
+        "properties": {
+          "event_id": {
+            "type": "string"
+          },
+          "event_type": {
+            "type": "string"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "event_data": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      },
+      "ProjectListResponse": {
+        "type": "object",
+        "properties": {
+          "projects": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string"
+                },
+                "created_date": {
+                  "type": "string"
+                },
+                "owner": {
+                  "type": "string"
+                },
+                "source": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "total": {
+            "type": "integer"
+          },
+          "user": {
+            "type": "string",
+            "description": "Requesting user email"
+          },
+          "filtered_by_provider": {
+            "type": "string"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "UserListResponse": {
+        "type": "object",
+        "properties": {
+          "users": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string"
+                },
+                "full_name": {
+                  "type": "string"
+                },
+                "department": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "manager": {
+                  "type": "string"
+                },
+                "source": {
+                  "type": "string"
+                },
+                "last_login": {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "active": {
+                  "type": "boolean"
+                }
+              }
+            }
+          },
+          "total": {
+            "type": "integer"
+          },
+          "limit": {
+            "type": "integer"
+          },
+          "offset": {
+            "type": "integer"
+          },
+          "filtered_by_provider": {
+            "type": "string"
+          },
+          "requested_by": {
+            "type": "string",
+            "description": "Admin user email"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "AuditSummary": {
+        "type": "object",
+        "properties": {
+          "total_events": {
+            "type": "integer"
+          },
+          "recent_events_24h": {
+            "type": "integer"
+          },
+          "event_types": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "integer"
+            }
+          },
+          "providers": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "integer"
+            }
+          },
+          "top_event_types": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": ["string", "integer"]
+              }
+            }
+          },
+          "summary_generated_by": {
+            "type": "string"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "HealthCheck": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": ["healthy", "unhealthy"]
+          },
+          "enterprise_sso": {
+            "type": "object",
+            "description": "SSO service health information"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "version": {
+            "type": "string"
+          }
+        }
+      },
+      "ProviderTestResult": {
+        "type": "object",
+        "properties": {
+          "provider": {
+            "type": "string"
+          },
+          "configured": {
+            "type": "boolean"
+          },
+          "endpoints_accessible": {
+            "type": "boolean"
+          },
+          "configuration_valid": {
+            "type": "boolean"
+          },
+          "tested_by": {
+            "type": "string"
+          },
+          "test_timestamp": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

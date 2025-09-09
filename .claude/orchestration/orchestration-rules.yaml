@@ -22,7 +22,7 @@ orchestration_patterns:
         agents: [deployment-engineer, devops-troubleshooter]
         parallel: false
     sla: 4_hours
-    
+
   # Pattern 2: AI/ML Pipeline
   ml_pipeline:
     trigger: "project.type == 'machine_learning'"
@@ -41,7 +41,7 @@ orchestration_patterns:
         parallel: false
     sla: 8_hours
     requires_gpu: true
-    
+
   # Pattern 3: GraphRAG Document Generation
   graphrag_document:
     trigger: "project.type == 'document' && project.graphrag == true"
@@ -63,7 +63,7 @@ orchestration_patterns:
         agents: [provenance-auditor, documentation-librarian]
         parallel: false
     sla: 2_hours
-    
+
   # Pattern 4: Infrastructure Automation
   infrastructure_automation:
     trigger: "project.type == 'infrastructure'"
@@ -81,7 +81,7 @@ orchestration_patterns:
         agents: [deployment-engineer, devops-troubleshooter]
         parallel: false
     sla: 6_hours
-    
+
   # Pattern 5: SEO Content Pipeline
   seo_content:
     trigger: "project.type == 'content' && project.seo == true"
@@ -114,7 +114,7 @@ routing_rules:
       max_wait: 10_minutes
       preferred_agents: [available]
       escalation: after_3_retries
-      
+
   load_balancing:
     strategy: weighted_round_robin
     weights:
@@ -126,7 +126,7 @@ routing_rules:
         idle: 3
         busy: 1
         overloaded: 0
-        
+
   failover:
     retry_policy:
       max_retries: 3
@@ -144,17 +144,17 @@ coordination:
     serialization: protobuf
     compression: gzip
     encryption: tls_1_3
-    
+
   state_management:
     backend: redis_cluster
     persistence: true
     ttl: 24_hours
-    
+
   context_sharing:
     method: shared_memory
     max_size: 1GB
     format: json
-    
+
   synchronization:
     locks: distributed
     timeout: 30_seconds

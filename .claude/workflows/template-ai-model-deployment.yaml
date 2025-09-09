@@ -13,7 +13,7 @@ stages:
       - Optimize for inference
       - Create serving container
     outputs: [model_container, serving_config]
-    
+
   - id: infrastructure_setup
     agents:
       - cloud-architect
@@ -23,7 +23,7 @@ stages:
       - Setup model registry
       - Configure load balancing
     outputs: [infrastructure_ready]
-    
+
   - id: deployment
     agents:
       - mlops-engineer
@@ -33,7 +33,7 @@ stages:
       - Run inference tests
       - Setup A/B testing
     outputs: [staging_endpoint]
-    
+
   - id: validation
     agents:
       - ml-engineer
@@ -43,7 +43,7 @@ stages:
       - Check performance metrics
       - Monitor drift
     outputs: [validation_report]
-    
+
   - id: production_rollout
     agents:
       - mlops-engineer

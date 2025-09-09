@@ -3,17 +3,17 @@ info:
   title: Strategic Planning Platform API
   description: |
     AI-Powered Strategic Planning Platform with GraphRAG validation.
-    
+
     ## Features
-    
+
     * **4-Phase PRD Creation Workflow**: From concept to comprehensive document
     * **GraphRAG Validation**: <2% hallucination rate through three-tier validation
     * **PydanticAI Agents**: Intelligent PRD processing and task generation
     * **GitHub Integration**: Automated project setup and task management
     * **Enterprise Security**: JWT auth, RBAC, and comprehensive audit logging
-    
+
     ## Performance Targets
-    
+
     * API Response Time: <200ms P95
     * Document Generation: <60 seconds
     * Concurrent Users: 100+ with stable performance

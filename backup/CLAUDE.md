@@ -1,11 +1,14 @@
-
 ## title: Claude Version: "3.1" Author: Jatinder Grewal
 
 # CLAUDE.md: AI Assistant Integration Guide for AI-Powered Strategic Planning Platform
 
 ## Executive Summary
 
-This guide optimizes Claude's capabilities for the AI-Powered Strategic Planning Platform, providing structured patterns for technical implementation, strategic decision-making, and operational excellence. The platform combines Nuxt.js 4 frontend with Python FastAPI backend, leveraging Neo4j GraphRAG and Microsoft's GraphRAG framework for hallucination-free PRD generation and strategic planning.
+This guide optimizes Claude's capabilities for the AI-Powered Strategic Planning Platform, providing
+structured patterns for technical implementation, strategic decision-making, and operational
+excellence. The platform combines Nuxt.js 4 frontend with Python FastAPI backend, leveraging Neo4j
+GraphRAG and Microsoft's GraphRAG framework for hallucination-free PRD generation and strategic
+planning.
 
 **Key Value Drivers:**
 
@@ -18,7 +21,8 @@ This guide optimizes Claude's capabilities for the AI-Powered Strategic Planning
 
 ### Agent Hierarchy & Coordination
 
-The platform employs a sophisticated multi-agent system coordinated by the **Context Manager** (Claude Opus) to ensure coherent, scalable development and maintenance processes.
+The platform employs a sophisticated multi-agent system coordinated by the **Context Manager**
+(Claude Opus) to ensure coherent, scalable development and maintenance processes.
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────┐
@@ -53,9 +57,12 @@ The platform employs a sophisticated multi-agent system coordinated by the **Con
 
 #### Technical Development Agents
 
-- **ai-engineer.md**: Specializes in GraphRAG implementation, LLM integration, and hallucination prevention
-- **backend-architect.md**: Designs and implements FastAPI services, API contracts, and system architecture
-- **frontend-developer.md**: Develops Nuxt.js 4 components, TypeScript implementations, and UI interactions
+- **ai-engineer.md**: Specializes in GraphRAG implementation, LLM integration, and hallucination
+  prevention
+- **backend-architect.md**: Designs and implements FastAPI services, API contracts, and system
+  architecture
+- **frontend-developer.md**: Develops Nuxt.js 4 components, TypeScript implementations, and UI
+  interactions
 - fullstack
 - **database-admin.md**: Manages Neo4j operations, query optimization, and data modeling
 - **data-engineer.md**: Handles data pipelines, ETL processes, and integration workflows
@@ -77,7 +84,7 @@ sequenceDiagram
     participant CM as Context Manager
     participant TO as Task Orchestrator
     participant Agent as Specialized Agent
-    
+
     User->>CM: Complex requirement or feature request
     CM->>CM: Analyze complexity and scope (>10k tokens check)
     CM->>TO: Create orchestrated workflow plan
@@ -95,7 +102,7 @@ sequenceDiagram
 ```
 For each specialized agent, Context Manager provides:
 - Current task objective
-- Relevant architectural constraints  
+- Relevant architectural constraints
 - Integration points with other components
 - Immediate dependencies and blockers
 ```
@@ -139,7 +146,7 @@ Context Manager → task-orchestrator.md
 ├── Plans: Multi-agent coordination
 ├── Delegates to:
 │   ├── backend-architect.md (API design)
-│   ├── frontend-developer.md (UI components)  
+│   ├── frontend-developer.md (UI components)
 │   ├── database-admin.md (data layer)
 │   └── ai-engineer.md (AI integration)
 ├── Coordinates: Integration testing
@@ -163,7 +170,7 @@ Context Manager → task-orchestrator.md
 │  ┌─────────────────────────────────────────┐│
 │  │  Current Sprint (Rolling 7-day window) ││
 │  │  • Active tasks and blockers            ││
-│  │  • Recent decisions                     ││  
+│  │  • Recent decisions                     ││
 │  │  • Integration points                   ││
 │  └─────────────────────────────────────────┘│
 └─────────────────────────────────────────────┘
@@ -258,7 +265,7 @@ Output: 3-5 targeted questions
 
 Requirements:
 - Business problem identification
-- Target audience definition  
+- Target audience definition
 - Technical constraints discovery
 - Success metrics definition
 - GraphRAG validation for each question
@@ -406,7 +413,7 @@ Provide:
 ```
 Implement design token for platform:
 Token type: [color/spacing/typography]
-Values: 
+Values:
   - Black scale: #f7f7f7 to #1a1a1a
   - Semantic: indigo-500, emerald-500, etc.
 Requirements:
@@ -431,7 +438,7 @@ Dependencies: [technical and business dependencies]
 Workflow:
 1. Context preparation by Context Manager
 2. Parallel agent task assignment
-3. Integration checkpoint validation  
+3. Integration checkpoint validation
 4. Quality assurance and testing
 5. Context update and documentation
 
@@ -519,7 +526,7 @@ Include timeline and success criteria.
 ```
 Coordinate testing across agents:
 Test Types:
-- Unit tests (per agent responsibility)  
+- Unit tests (per agent responsibility)
 - Integration tests (multi-agent workflows)
 - E2E tests (complete user journeys)
 - Performance tests (scalability validation)
@@ -578,7 +585,7 @@ Agent Assignments:
 **Development Agents**:
 
 - @.claude/agents/ai-engineer.md - GraphRAG implementation and hallucination prevention
-- @.claude/agents/backend-architect.md - API design and microservices architecture  
+- @.claude/agents/backend-architect.md - API design and microservices architecture
 - @.claude/agents/backend-developer.md - Scalable server-side development
 - @.claude/agents/frontend-developer.md - Modern UI development with Nuxt.js 4
 - @.claude/agents/fullstack-developer.md - End-to-end feature development
@@ -624,7 +631,7 @@ Agent Assignments:
 **Language Specialists**:
 
 - @.claude/agents/python-pro.md - Advanced Python development and optimization
-- @.claude/agents/javascript-pro.md - Modern JavaScript and Node.js development  
+- @.claude/agents/javascript-pro.md - Modern JavaScript and Node.js development
 - @.claude/agents/golang-pro.md - Go concurrency and microservices patterns
 - @.claude/agents/rust-pro.md - Systems programming with Rust
 - @.claude/agents/java-pro.md - Enterprise Java development
@@ -648,7 +655,7 @@ Agent Assignments:
 **Business & Analytics**:
 
 - @.claude/agents/business-analyst.md - Metrics analysis and KPI tracking
-- @.claude/agents/content-marketer.md - Marketing content and growth strategies  
+- @.claude/agents/content-marketer.md - Marketing content and growth strategies
 - @.claude/agents/customer-support.md - Support documentation and help systems
 - @.claude/agents/sales-automator.md - Sales process automation
 - @.claude/agents/hr-pro.md - HR processes and policy development
@@ -698,12 +705,17 @@ Agent Assignments:
 - @./.taskmaster/CLAUDE.md
 
 See @README for project overview and @package.json for available npm commands for this project.
+
 # Additional Instructions
+
 - git workflow @docs/git-instructions.md
 
 ## Conclusion
 
-This enhanced guide establishes Claude as the strategic technical partner within a sophisticated multi-agent ecosystem for building an enterprise-grade AI-powered strategic planning platform. The Context Manager ensures coherent coordination across all specialized agents while maintaining project context and quality standards.
+This enhanced guide establishes Claude as the strategic technical partner within a sophisticated
+multi-agent ecosystem for building an enterprise-grade AI-powered strategic planning platform. The
+Context Manager ensures coherent coordination across all specialized agents while maintaining
+project context and quality standards.
 
 **Critical Success Factors:**
 
@@ -713,4 +725,5 @@ This enhanced guide establishes Claude as the strategic technical partner within
 - Maintain <2% hallucination rate through coordinated GraphRAG validation
 - Achieve enterprise scalability with coordinated infrastructure management
 
-The platform's success depends on seamless agent coordination, consistent context management, and continuous quality validation across the entire development
+The platform's success depends on seamless agent coordination, consistent context management, and
+continuous quality validation across the entire development

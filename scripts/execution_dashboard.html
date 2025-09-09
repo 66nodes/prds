@@ -1,368 +1,425 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Project Execution Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/vue@3"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        body {
-            font-family: system-ui, -apple-system, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-        }
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid #e5e7eb;
-        }
-        .progress-ring {
-            width: 120px;
-            height: 120px;
-        }
-        .progress-ring circle {
-            transition: stroke-dashoffset 0.35s;
-            transform: rotate(-90deg);
-            transform-origin: 50% 50%;
-        }
-        .phase-card {
-            background: #f9fafb;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-left: 4px solid #667eea;
-        }
-        .task-item {
-            display: flex;
-            align-items: center;
-            padding: 10px;
-            margin: 5px 0;
-            background: white;
-            border-radius: 8px;
-            transition: all 0.3s;
-        }
-        .task-item:hover {
-            transform: translateX(5px);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-        .status-badge {
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-        .status-pending { background: #fef3c7; color: #92400e; }
-        .status-in_progress { background: #dbeafe; color: #1e40af; }
-        .status-completed { background: #d1fae5; color: #065f46; }
-        .status-blocked { background: #fee2e2; color: #991b1b; }
-        .btn {
-            padding: 10px 20px;
-            border-radius: 8px;
-            border: none;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .btn-primary {
-            background: #667eea;
-            color: white;
-        }
-        .btn-primary:hover {
-            background: #5a67d8;
-            transform: translateY(-2px);
-        }
-        .prompt-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.5);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-        }
-        .prompt-content {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            max-width: 800px;
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin: 20px 0;
-        }
-        .metric-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 12px;
-            text-align: center;
-        }
-        .metric-value {
-            font-size: 36px;
-            font-weight: bold;
-        }
-        .metric-label {
-            opacity: 0.9;
-            margin-top: 5px;
-        }
+      body {
+        font-family:
+          system-ui,
+          -apple-system,
+          sans-serif;
+        margin: 0;
+        padding: 20px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      }
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      }
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 2px solid #e5e7eb;
+      }
+      .progress-ring {
+        width: 120px;
+        height: 120px;
+      }
+      .progress-ring circle {
+        transition: stroke-dashoffset 0.35s;
+        transform: rotate(-90deg);
+        transform-origin: 50% 50%;
+      }
+      .phase-card {
+        background: #f9fafb;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 20px;
+        border-left: 4px solid #667eea;
+      }
+      .task-item {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        margin: 5px 0;
+        background: white;
+        border-radius: 8px;
+        transition: all 0.3s;
+      }
+      .task-item:hover {
+        transform: translateX(5px);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+      .status-badge {
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+      }
+      .status-pending {
+        background: #fef3c7;
+        color: #92400e;
+      }
+      .status-in_progress {
+        background: #dbeafe;
+        color: #1e40af;
+      }
+      .status-completed {
+        background: #d1fae5;
+        color: #065f46;
+      }
+      .status-blocked {
+        background: #fee2e2;
+        color: #991b1b;
+      }
+      .btn {
+        padding: 10px 20px;
+        border-radius: 8px;
+        border: none;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+      .btn-primary {
+        background: #667eea;
+        color: white;
+      }
+      .btn-primary:hover {
+        background: #5a67d8;
+        transform: translateY(-2px);
+      }
+      .prompt-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+      }
+      .prompt-content {
+        background: white;
+        padding: 30px;
+        border-radius: 12px;
+        max-width: 800px;
+        max-height: 80vh;
+        overflow-y: auto;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+        margin: 20px 0;
+      }
+      .metric-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 20px;
+        border-radius: 12px;
+        text-align: center;
+      }
+      .metric-value {
+        font-size: 36px;
+        font-weight: bold;
+      }
+      .metric-label {
+        opacity: 0.9;
+        margin-top: 5px;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div id="app">
-        <div class="container">
-            <div class="header">
-                <div>
-                    <h1>🚀 AI Agent Platform - Execution Dashboard</h1>
-                    <p>Ensuring no aspect is left untouched</p>
-                </div>
-                <div style="text-align: center;">
-                    <svg class="progress-ring">
-                        <circle
-                            stroke="#e5e7eb"
-                            stroke-width="8"
-                            fill="transparent"
-                            r="52"
-                            cx="60"
-                            cy="60"
-                        />
-                        <circle
-                            :stroke="progressColor"
-                            stroke-width="8"
-                            fill="transparent"
-                            r="52"
-                            cx="60"
-                            cy="60"
-                            :stroke-dasharray="circumference + ' ' + circumference"
-                            :stroke-dashoffset="strokeDashoffset"
-                        />
-                    </svg>
-                    <div style="margin-top: 10px;">
-                        <div class="metric-value">{{ completionPercentage }}%</div>
-                        <div>Complete</div>
-                    </div>
-                </div>
+      <div class="container">
+        <div class="header">
+          <div>
+            <h1>🚀 AI Agent Platform - Execution Dashboard</h1>
+            <p>Ensuring no aspect is left untouched</p>
+          </div>
+          <div style="text-align: center">
+            <svg class="progress-ring">
+              <circle
+                stroke="#e5e7eb"
+                stroke-width="8"
+                fill="transparent"
+                r="52"
+                cx="60"
+                cy="60"
+              />
+              <circle
+                :stroke="progressColor"
+                stroke-width="8"
+                fill="transparent"
+                r="52"
+                cx="60"
+                cy="60"
+                :stroke-dasharray="circumference + ' ' + circumference"
+                :stroke-dashoffset="strokeDashoffset"
+              />
+            </svg>
+            <div style="margin-top: 10px">
+              <div class="metric-value">{{ completionPercentage }}%</div>
+              <div>Complete</div>
             </div>
-
-            <div class="grid">
-                <div class="metric-card">
-                    <div class="metric-value">{{ tracking.total_tasks }}</div>
-                    <div class="metric-label">Total Tasks</div>
-                </div>
-                <div class="metric-card">
-                    <div class="metric-value">{{ tracking.completed }}</div>
-                    <div class="metric-label">Completed</div>
-                </div>
-                <div class="metric-card">
-                    <div class="metric-value">{{ tracking.in_progress }}</div>
-                    <div class="metric-label">In Progress</div>
-                </div>
-                <div class="metric-card">
-                    <div class="metric-value">{{ tracking.blocked }}</div>
-                    <div class="metric-label">Blocked</div>
-                </div>
-            </div>
-
-            <div style="margin: 30px 0;">
-                <button class="btn btn-primary" @click="executeNext">
-                    Execute Next Task
-                </button>
-                <button class="btn btn-primary" @click="validateAll" style="margin-left: 10px;">
-                    Validate All
-                </button>
-                <button class="btn btn-primary" @click="generateReport" style="margin-left: 10px;">
-                    Generate Report
-                </button>
-            </div>
-
-            <div v-for="(phase, phaseName) in phases" :key="phaseName" class="phase-card">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <h3>{{ phaseName.toUpperCase() }}</h3>
-                    <span :class="'status-badge status-' + phase.status">
-                        {{ phase.status }}
-                    </span>
-                </div>
-                
-                <div v-for="(task, index) in phase.checklist" :key="index" class="task-item">
-                    <div style="flex: 1;">
-                        <strong>{{ task.task }}</strong>
-                        <div style="font-size: 12px; color: #6b7280; margin-top: 5px;">
-                            {{ task.artifacts.join(', ') }}
-                        </div>
-                    </div>
-                    <span :class="'status-badge status-' + task.status">
-                        {{ task.status }}
-                    </span>
-                    <button class="btn btn-primary" 
-                            @click="showPrompt(task)" 
-                            style="margin-left: 10px;">
-                        View Prompt
-                    </button>
-                </div>
-            </div>
+          </div>
         </div>
 
-        <div v-if="showModal" class="prompt-modal" @click="showModal = false">
-            <div class="prompt-content" @click.stop>
-                <h2>Execution Prompt</h2>
-                <pre style="background: #f3f4f6; padding: 20px; border-radius: 8px;">{{ currentPrompt }}</pre>
-                <div style="margin-top: 20px;">
-                    <strong>Validation Command:</strong>
-                    <pre style="background: #f3f4f6; padding: 10px; border-radius: 4px;">{{ currentValidation }}</pre>
-                </div>
-                <button class="btn btn-primary" @click="copyPrompt" style="margin-top: 20px;">
-                    Copy Prompt
-                </button>
-                <button class="btn btn-primary" @click="showModal = false" style="margin-left: 10px;">
-                    Close
-                </button>
-            </div>
+        <div class="grid">
+          <div class="metric-card">
+            <div class="metric-value">{{ tracking.total_tasks }}</div>
+            <div class="metric-label">Total Tasks</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value">{{ tracking.completed }}</div>
+            <div class="metric-label">Completed</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value">{{ tracking.in_progress }}</div>
+            <div class="metric-label">In Progress</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value">{{ tracking.blocked }}</div>
+            <div class="metric-label">Blocked</div>
+          </div>
         </div>
+
+        <div style="margin: 30px 0">
+          <button class="btn btn-primary" @click="executeNext">
+            Execute Next Task
+          </button>
+          <button
+            class="btn btn-primary"
+            @click="validateAll"
+            style="margin-left: 10px"
+          >
+            Validate All
+          </button>
+          <button
+            class="btn btn-primary"
+            @click="generateReport"
+            style="margin-left: 10px"
+          >
+            Generate Report
+          </button>
+        </div>
+
+        <div
+          v-for="(phase, phaseName) in phases"
+          :key="phaseName"
+          class="phase-card"
+        >
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+            "
+          >
+            <h3>{{ phaseName.toUpperCase() }}</h3>
+            <span :class="'status-badge status-' + phase.status">
+              {{ phase.status }}
+            </span>
+          </div>
+
+          <div
+            v-for="(task, index) in phase.checklist"
+            :key="index"
+            class="task-item"
+          >
+            <div style="flex: 1">
+              <strong>{{ task.task }}</strong>
+              <div style="font-size: 12px; color: #6b7280; margin-top: 5px">
+                {{ task.artifacts.join(', ') }}
+              </div>
+            </div>
+            <span :class="'status-badge status-' + task.status">
+              {{ task.status }}
+            </span>
+            <button
+              class="btn btn-primary"
+              @click="showPrompt(task)"
+              style="margin-left: 10px"
+            >
+              View Prompt
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div v-if="showModal" class="prompt-modal" @click="showModal = false">
+        <div class="prompt-content" @click.stop>
+          <h2>Execution Prompt</h2>
+          <pre style="background: #f3f4f6; padding: 20px; border-radius: 8px">
+{{ currentPrompt }}</pre
+          >
+          <div style="margin-top: 20px">
+            <strong>Validation Command:</strong>
+            <pre style="background: #f3f4f6; padding: 10px; border-radius: 4px">
+{{ currentValidation }}</pre
+            >
+          </div>
+          <button
+            class="btn btn-primary"
+            @click="copyPrompt"
+            style="margin-top: 20px"
+          >
+            Copy Prompt
+          </button>
+          <button
+            class="btn btn-primary"
+            @click="showModal = false"
+            style="margin-left: 10px"
+          >
+            Close
+          </button>
+        </div>
+      </div>
     </div>
 
     <script>
-        const { createApp } = Vue;
+      const { createApp } = Vue;
 
-        createApp({
-            data() {
-                return {
-                    phases: {},
-                    tracking: {
-                        total_tasks: 0,
-                        completed: 0,
-                        in_progress: 0,
-                        blocked: 0
-                    },
-                    showModal: false,
-                    currentPrompt: '',
-                    currentValidation: '',
-                    circumference: 2 * Math.PI * 52
-                }
+      createApp({
+        data() {
+          return {
+            phases: {},
+            tracking: {
+              total_tasks: 0,
+              completed: 0,
+              in_progress: 0,
+              blocked: 0,
             },
-            computed: {
-                completionPercentage() {
-                    if (this.tracking.total_tasks === 0) return 0;
-                    return Math.round((this.tracking.completed / this.tracking.total_tasks) * 100);
-                },
-                strokeDashoffset() {
-                    const progress = this.completionPercentage / 100;
-                    return this.circumference - (progress * this.circumference);
-                },
-                progressColor() {
-                    const percentage = this.completionPercentage;
-                    if (percentage < 30) return '#ef4444';
-                    if (percentage < 60) return '#f59e0b';
-                    if (percentage < 90) return '#3b82f6';
-                    return '#10b981';
+            showModal: false,
+            currentPrompt: '',
+            currentValidation: '',
+            circumference: 2 * Math.PI * 52,
+          };
+        },
+        computed: {
+          completionPercentage() {
+            if (this.tracking.total_tasks === 0) return 0;
+            return Math.round(
+              (this.tracking.completed / this.tracking.total_tasks) * 100
+            );
+          },
+          strokeDashoffset() {
+            const progress = this.completionPercentage / 100;
+            return this.circumference - progress * this.circumference;
+          },
+          progressColor() {
+            const percentage = this.completionPercentage;
+            if (percentage < 30) return '#ef4444';
+            if (percentage < 60) return '#f59e0b';
+            if (percentage < 90) return '#3b82f6';
+            return '#10b981';
+          },
+        },
+        methods: {
+          async loadManifest() {
+            // In production, this would fetch from the server
+            // For now, using mock data
+            this.phases = {
+              infrastructure: {
+                status: 'in_progress',
+                checklist: [
+                  {
+                    task: 'Docker Swarm initialization',
+                    status: 'completed',
+                    prompt: 'Initialize Docker Swarm with Milvus + Neo4j stack',
+                    validation: 'docker stack services graphrag | grep Running',
+                    artifacts: ['docker-stack.yml', '.env.production'],
+                  },
+                  {
+                    task: 'Milvus cluster setup',
+                    status: 'pending',
+                    prompt: 'Deploy and validate Milvus distributed cluster',
+                    validation: 'curl http://localhost:19530/health',
+                    artifacts: ['milvus-config.yaml'],
+                  },
+                ],
+              },
+              backend: {
+                status: 'pending',
+                checklist: [
+                  {
+                    task: 'FastAPI gateway',
+                    status: 'pending',
+                    prompt:
+                      'Create FastAPI gateway with auth and rate limiting',
+                    validation: 'pytest tests/test_gateway.py -v',
+                    artifacts: ['backend/main.py', 'backend/api/gateway.py'],
+                  },
+                ],
+              },
+            };
+
+            this.updateTracking();
+          },
+          updateTracking() {
+            let total = 0,
+              completed = 0,
+              inProgress = 0,
+              blocked = 0;
+
+            Object.values(this.phases).forEach(phase => {
+              phase.checklist.forEach(task => {
+                total++;
+                if (task.status === 'completed') completed++;
+                else if (task.status === 'in_progress') inProgress++;
+                else if (task.status === 'blocked') blocked++;
+              });
+            });
+
+            this.tracking = {
+              total_tasks: total,
+              completed: completed,
+              in_progress: inProgress,
+              blocked: blocked,
+            };
+          },
+          showPrompt(task) {
+            this.currentPrompt = task.prompt;
+            this.currentValidation = task.validation;
+            this.showModal = true;
+          },
+          copyPrompt() {
+            navigator.clipboard.writeText(this.currentPrompt);
+            alert('Prompt copied to clipboard!');
+          },
+          async executeNext() {
+            // Find next pending task
+            for (const [phaseName, phase] of Object.entries(this.phases)) {
+              for (const task of phase.checklist) {
+                if (task.status === 'pending') {
+                  task.status = 'in_progress';
+                  this.showPrompt(task);
+                  this.updateTracking();
+                  return;
                 }
-            },
-            methods: {
-                async loadManifest() {
-                    // In production, this would fetch from the server
-                    // For now, using mock data
-                    this.phases = {
-                        infrastructure: {
-                            status: 'in_progress',
-                            checklist: [
-                                {
-                                    task: 'Docker Swarm initialization',
-                                    status: 'completed',
-                                    prompt: 'Initialize Docker Swarm with Milvus + Neo4j stack',
-                                    validation: 'docker stack services graphrag | grep Running',
-                                    artifacts: ['docker-stack.yml', '.env.production']
-                                },
-                                {
-                                    task: 'Milvus cluster setup',
-                                    status: 'pending',
-                                    prompt: 'Deploy and validate Milvus distributed cluster',
-                                    validation: 'curl http://localhost:19530/health',
-                                    artifacts: ['milvus-config.yaml']
-                                }
-                            ]
-                        },
-                        backend: {
-                            status: 'pending',
-                            checklist: [
-                                {
-                                    task: 'FastAPI gateway',
-                                    status: 'pending',
-                                    prompt: 'Create FastAPI gateway with auth and rate limiting',
-                                    validation: 'pytest tests/test_gateway.py -v',
-                                    artifacts: ['backend/main.py', 'backend/api/gateway.py']
-                                }
-                            ]
-                        }
-                    };
-                    
-                    this.updateTracking();
-                },
-                updateTracking() {
-                    let total = 0, completed = 0, inProgress = 0, blocked = 0;
-                    
-                    Object.values(this.phases).forEach(phase => {
-                        phase.checklist.forEach(task => {
-                            total++;
-                            if (task.status === 'completed') completed++;
-                            else if (task.status === 'in_progress') inProgress++;
-                            else if (task.status === 'blocked') blocked++;
-                        });
-                    });
-                    
-                    this.tracking = {
-                        total_tasks: total,
-                        completed: completed,
-                        in_progress: inProgress,
-                        blocked: blocked
-                    };
-                },
-                showPrompt(task) {
-                    this.currentPrompt = task.prompt;
-                    this.currentValidation = task.validation;
-                    this.showModal = true;
-                },
-                copyPrompt() {
-                    navigator.clipboard.writeText(this.currentPrompt);
-                    alert('Prompt copied to clipboard!');
-                },
-                async executeNext() {
-                    // Find next pending task
-                    for (const [phaseName, phase] of Object.entries(this.phases)) {
-                        for (const task of phase.checklist) {
-                            if (task.status === 'pending') {
-                                task.status = 'in_progress';
-                                this.showPrompt(task);
-                                this.updateTracking();
-                                return;
-                            }
-                        }
-                    }
-                    alert('All tasks are either completed or in progress!');
-                },
-                async validateAll() {
-                    // In production, this would run validation commands
-                    alert('Running validation for all completed tasks...');
-                },
-                async generateReport() {
-                    const report = `
+              }
+            }
+            alert('All tasks are either completed or in progress!');
+          },
+          async validateAll() {
+            // In production, this would run validation commands
+            alert('Running validation for all completed tasks...');
+          },
+          async generateReport() {
+            const report = `
 AI Agent Platform - Execution Report
 =====================================
 Completion: ${this.completionPercentage}%
@@ -372,18 +429,18 @@ In Progress: ${this.tracking.in_progress}
 Blocked: ${this.tracking.blocked}
 =====================================
                     `;
-                    console.log(report);
-                    alert('Report generated! Check console for details.');
-                }
-            },
-            mounted() {
-                this.loadManifest();
-                // Auto-refresh every 5 seconds
-                setInterval(() => {
-                    this.loadManifest();
-                }, 5000);
-            }
-        }).mount('#app');
+            console.log(report);
+            alert('Report generated! Check console for details.');
+          },
+        },
+        mounted() {
+          this.loadManifest();
+          // Auto-refresh every 5 seconds
+          setInterval(() => {
+            this.loadManifest();
+          }, 5000);
+        },
+      }).mount('#app');
     </script>
-</body>
+  </body>
 </html>

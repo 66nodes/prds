@@ -1,0 +1,13 @@
+{
+  "name": "@prds/prettier-config",
+  "version": "1.0.0",
+  "description": "Shared Prettier configuration for PRDS monorepo",
+  "private": true,
+  "main": "index.js",
+  "files": [
+    "index.js"
+  ],
+  "devDependencies": {
+    "prettier": "^3.0.0"
+  }
+}

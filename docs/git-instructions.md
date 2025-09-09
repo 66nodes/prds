@@ -2,7 +2,10 @@
 
 ## Overview
 
-This document provides comprehensive instructions for setting up and using GitHub Actions workflows for the AI-Powered Strategic Planning Platform. The workflows integrate with the Task Master AI system for automated code reviews, dependency management, workflow debugging, and technical debt analysis.
+This document provides comprehensive instructions for setting up and using GitHub Actions workflows
+for the AI-Powered Strategic Planning Platform. The workflows integrate with the Task Master AI
+system for automated code reviews, dependency management, workflow debugging, and technical debt
+analysis.
 
 ## Table of Contents
 
@@ -20,9 +23,11 @@ This document provides comprehensive instructions for setting up and using GitHu
 
 ### Required Secrets & API Keys
 
-Before setting up the workflows, you must configure the following secrets in your GitHub repository at **Settings > Secrets and variables > Actions**:
+Before setting up the workflows, you must configure the following secrets in your GitHub repository
+at **Settings > Secrets and variables > Actions**:
 
 #### Primary AI Service Keys
+
 ```bash
 # At least ONE of the following AI service keys:
 GITHUB_TOKEN              # Automatically provided by GitHub Actions
@@ -38,6 +43,7 @@ OLLAMA_API_KEY          # For local Ollama models
 ```
 
 #### Task Master Database Keys (if using MCP)
+
 ```bash
 SUPABASE_URL             # Supabase project URL
 SUPABASE_ANON_KEY       # Supabase anonymous key
@@ -47,6 +53,7 @@ NEO4J_PASSWORD          # Neo4j password
 ```
 
 #### Optional Notification Keys
+
 ```bash
 SLACK_WEBHOOK_URL       # Slack notifications
 DISCORD_WEBHOOK_URL     # Discord notifications
@@ -149,31 +156,37 @@ notifications:
 # Code Review Guidelines
 
 ## Security Checklist
+
 - [x] SQL injection prevention
 - [x] XSS vulnerability checks
 - [x] Authentication/authorization validation
 - [x] Data exposure risks
 
 ## Code Quality Standards
+
 - SOLID principles compliance
 - Clean code practices
 - Readability and maintainability
 - Error handling robustness
 
 ## Performance Considerations
+
 - Algorithm efficiency
 - Memory management
 - Database query optimization
 - Proper caching implementation
 
 ## Best Practices
+
 - Comprehensive testing coverage
 - Adequate documentation
 - Consistent coding style
 - Proper logging implementation
 
 ## Review Format
+
 Rate issues as:
+
 - 🔴 Critical: Must fix immediately
 - 🟡 Warning: Should address soon
 - 🔵 Suggestion: Optional improvement
@@ -185,18 +198,22 @@ Rate issues as:
 # AI Assistant Integration for Strategic Planning Platform
 
 ## Current Context
+
 - Project: AI-Powered Strategic Planning Platform
 - Tech Stack: Nuxt.js 4, FastAPI, Neo4j, GraphRAG
 - Status: MVP Development Phase
 
 ## Integration Points
+
 - Frontend: /frontend - Nuxt.js components and pages
 - Backend: /backend - FastAPI services and GraphRAG validation
 - Workflows: /.github/workflows - GitHub Actions automation
 - Scripts: /scripts - Automation and task processing
 
 ## Workflow Directory
+
 Location: .github/workflows/
+
 - AI Code Review: Automatic pull request analysis
 - Dependency Updates: Automated package management
 - Technical Debt Analysis: Code quality monitoring
@@ -214,6 +231,7 @@ Copy the content from your workflow files to create these scripts.
 ### Step 4: Test Workflow Setup
 
 1. **Push changes to trigger workflows:**
+
 ```bash
 git add .
 git commit -m "feat: add GitHub Actions workflows and configuration"
@@ -221,6 +239,7 @@ git push origin main
 ```
 
 2. **Verify workflow execution:**
+
 - Go to **Actions** tab in GitHub
 - Review workflow runs for any errors
 - Fix configuration issues based on logs
@@ -229,36 +248,36 @@ git push origin main
 
 ### Available Workflows
 
-| Workflow | Trigger | Purpose | Key Features |
-|----------|---------|---------|-------------|
-| **AI Code Review** | PR events | Automated code analysis | DeepSeek/OpenAI integration, custom guidelines |
-| **Dependency Updates** | Weekly/scheduled | Package management | Security fixes, update automation, PR creation |
-| **Tech Debt Analysis** | Weekly/manual | Code quality monitoring | ESLint, Bandit, complexity analysis, issue creation |
-| **Workflow Debugging** | On workflow failure | Failure diagnosis | AI-powered root cause analysis, issue generation |
-| **Debt Monitoring** | Weekly | Progress tracking | Dashboard updates, version control |
+| Workflow               | Trigger             | Purpose                 | Key Features                                        |
+| ---------------------- | ------------------- | ----------------------- | --------------------------------------------------- |
+| **AI Code Review**     | PR events           | Automated code analysis | DeepSeek/OpenAI integration, custom guidelines      |
+| **Dependency Updates** | Weekly/scheduled    | Package management      | Security fixes, update automation, PR creation      |
+| **Tech Debt Analysis** | Weekly/manual       | Code quality monitoring | ESLint, Bandit, complexity analysis, issue creation |
+| **Workflow Debugging** | On workflow failure | Failure diagnosis       | AI-powered root cause analysis, issue generation    |
+| **Debt Monitoring**    | Weekly              | Progress tracking       | Dashboard updates, version control                  |
 
 ### Workflow Architecture
 
 ```mermaid
 graph TB
     A[GitHub Event] --> B{Workflow Router}
-    B --> C[Code Review] 
+    B --> C[Code Review]
     B --> D[Dependency Updates]
     B --> E[Debt Analysis]
     B --> F[Debugging]
-    
+
     C --> G[AI Analysis]
     G --> H[PR Comments]
     G --> I[Labels & Artifacts]
-    
+
     D --> J[Update Analysis]
     J --> K[PR Creation]
     J --> L[Report Generation]
-    
+
     E --> M[Code Analysis]
     M --> N[Issue Creation]
     M --> P[Dashboards]
-    
+
     F --> Q[Log Analysis]
     Q --> R[AI Debug]
     Q --> S[Issue & Comments]
@@ -269,13 +288,16 @@ graph TB
 ### 1. AI Code Review Workflow
 
 #### Purpose
+
 Automates intelligent code review using AI models (DeepSeek, OpenAI, etc.) with focus on:
+
 - Code quality and security
 - Performance optimization
 - Best practices adherence
 - Custom review guidelines
 
 #### Configuration
+
 ```yaml
 # .github/workflows/ai-code-review.yml
 on:
@@ -290,12 +312,14 @@ jobs:
 ```
 
 #### Customization Options
+
 - **File size limits**: `MAX_FILES_PER_REVIEW: 20`
 - **Line length limits**: `MAX_LINES_PER_REVIEW: 2000`
 - **Review focus**: Security, performance, quality, comprehensive
 - **AI provider selection**: Auto-selects based on available API keys
 
 #### Output
+
 - **PR Comments**: Detailed review feedback with severity ratings
 - **Applied Labels**: Automatic issue categorization
 - **Artifacts**: JSON reports and markdown summaries
@@ -304,7 +328,9 @@ jobs:
 ### 2. Automated Dependency Updates
 
 #### Purpose
+
 Manages package dependencies with different update strategies:
+
 - Security updates (most conservative)
 - Patch updates (backward compatible)
 - Minor updates (new features)
@@ -312,19 +338,19 @@ Manages package dependencies with different update strategies:
 
 #### Configuration Matrix
 
-| Update Type | Security Focus | Auto-Merge | Target Scope |
-|-------------|---------------|------------|--------------|
-| `security` | ✅ High | ✅ Yes | Security patches only |
-| `patch` | ⚠️ Medium | ⚠️ Sometimes | Patch versions |
-| `minor` | 🔸 Low | 🔸 Rarely | Minor versions |
-| `major` | 🚫 None | 🚫 No | Major versions (requires review) |
+| Update Type | Security Focus | Auto-Merge   | Target Scope                     |
+| ----------- | -------------- | ------------ | -------------------------------- |
+| `security`  | ✅ High        | ✅ Yes       | Security patches only            |
+| `patch`     | ⚠️ Medium      | ⚠️ Sometimes | Patch versions                   |
+| `minor`     | 🔸 Low         | 🔸 Rarely    | Minor versions                   |
+| `major`     | 🚫 None        | 🚫 No        | Major versions (requires review) |
 
 #### Workflow Jobs
 
 ```
 1. CheckPermissions         # Role and actor validation
 2. UpdateFrontendDeps      # NPM/Node.js package updates
-3. UpdateBackendDeps       # Python/PyPI package updates  
+3. UpdateBackendDeps       # Python/PyPI package updates
 4. DependencyReview        # AI-driven compatibility analysis
 5. NotifyResults           # Slack/Discord/Teams notifications
 ```
@@ -334,7 +360,7 @@ Manages package dependencies with different update strategies:
 ```yaml
 on:
   schedule:
-    - cron: '0 10 * * 1'  # Weekly on Monday at 10 AM UTC
+    - cron: '0 10 * * 1' # Weekly on Monday at 10 AM UTC
   workflow_dispatch:
     inputs:
       update-type:
@@ -349,19 +375,21 @@ on:
 ### 3. Technical Debt Analysis Workflow
 
 #### Purpose
+
 Performs comprehensive code quality analysis across:
+
 - **Frontend**: ESLint, TypeScript, duplication analysis
 - **Backend**: Bandit (security), Pylint (quality), MyPy (types)
 - **Infrastructure**: Dockerfile and deployment security
 
 #### Analysis Categories
 
-| Category | Frontend Tool | Backend Tool | Priority |
-|----------|---------------|--------------|----------|
-| **Security** | Security linting | Bandit scanner | Critical |
-| **Code Quality** | ESLint rules | Pylint checks | High |
-| **Type Safety** | TypeScript checks | MyPy validation | High |
-| **Performance** | Bundle analysis | Complexity checks | Medium |
+| Category         | Frontend Tool     | Backend Tool      | Priority |
+| ---------------- | ----------------- | ----------------- | -------- |
+| **Security**     | Security linting  | Bandit scanner    | Critical |
+| **Code Quality** | ESLint rules      | Pylint checks     | High     |
+| **Type Safety**  | TypeScript checks | MyPy validation   | High     |
+| **Performance**  | Bundle analysis   | Complexity checks | Medium   |
 
 #### SLA Enforcement
 
@@ -369,19 +397,20 @@ Performs comprehensive code quality analysis across:
 debt-categories:
   critical:
     labels: ['security', 'crash']
-    sla-days: 3        # Fix within 3 days
+    sla-days: 3 # Fix within 3 days
   high:
     labels: ['performance', 'type-errors']
-    sla-days: 7        # Fix within 1 week
+    sla-days: 7 # Fix within 1 week
   medium:
     labels: ['maintainability']
-    sla-days: 14       # Fix within 2 weeks
+    sla-days: 14 # Fix within 2 weeks
   low:
     labels: ['documentation', 'style']
-    sla-days: 30       # Fix within 1 month
+    sla-days: 30 # Fix within 1 month
 ```
 
 #### Issue Creation
+
 - Automated GitHub issue generation for critical/high-severity items
 - Sprint planning integration with effort estimation
 - Assignee assignment based on code ownership
@@ -390,7 +419,9 @@ debt-categories:
 ### 4. Workflow Debugging Assistant
 
 #### Purpose
+
 Provides intelligent workflow failure diagnosis using:
+
 - **Pattern Recognition**: Automated error categorization
 - **AI Analysis**: DeepSeek/OpenAI-powered root cause identification
 - **Log Processing**: Structured log analysis and correlation
@@ -401,14 +432,14 @@ Provides intelligent workflow failure diagnosis using:
 ```yaml
 on:
   workflow_run:
-    workflows: ["*"]          # Trigger on any workflow failure
+    workflows: ['*'] # Trigger on any workflow failure
     types: [completed]
 ```
 
 #### Analysis Depth Options
 
 - **Basic**: npm/python/docker error counts
-- **Standard**: Error pattern recognition and categorization  
+- **Standard**: Error pattern recognition and categorization
 - **Deep**: Full AI-powered analysis with action recommendations
 
 #### Automatic Response Logic
@@ -523,6 +554,7 @@ task-master complexity-report                           # Planning dashboard
 ### Common Issues & Solutions
 
 #### 1. Missing API Keys
+
 ```bash
 # Check available secrets
 gh secret list
@@ -532,24 +564,28 @@ gh secret set OPENAI_API_KEY --body "$(cat ~/openai-key.txt)"
 ```
 
 #### 2. Workflow Not Triggering
+
 - **Check branch protection**: Ensure workflows run on protected branches
 - **Verify workflow syntax**: Use GitHub's workflow validation
 - **Check permissions**: Ensure appropriate repository permissions
 - **Test with manual dispatch**: Use workflow_dispatch to test manually
 
 #### 3. Dependency Update Failures
+
 - **Check package versions**: Ensure compatibility with Node.js/Python versions
 - **Review lock files**: Update package-lock.json and poetry.lock files
 - **Test builds locally**: Run npm run build/test locally before committing
 - **Update workflow paths**: Ensure correct directory paths for your project structure
 
 #### 4. AI Analysis Timeout
+
 - **Increase timeout**: Adjust TIMEOUT_MINUTES in workflow configuration
 - **Reduce analysis scope**: Use basic/standard analysis instead of deep
 - **Check API limits**: Monitor rate limits for your AI provider
 - **Optimize prompts**: Simplify prompts for faster response times
 
 #### 5. Permission Issues
+
 ```bash
 # Grant workflow permissions
 gh secret set GITHUB_TOKEN --body "${{ secrets.GITHUB_TOKEN }}"
@@ -568,6 +604,7 @@ permissions:
 ### Error Recovery Procedures
 
 1. **Restart Failed Workflows**:
+
 ```bash
 # From GitHub Actions UI
 # -> Actions tab -> Failed workflow -> Re-run workflows
@@ -577,6 +614,7 @@ gh workflow run WORKFLOW_NAME
 ```
 
 2. **Redeploy Failed Commits**:
+
 ```bash
 # Force push to trigger workflows
 git commit --allow-empty -m "Trigger CI: fix"
@@ -584,6 +622,7 @@ git push
 ```
 
 3. **Rollback Changes**:
+
 ```bash
 # Create revert commit
 git revert COMMIT_HASH
@@ -593,12 +632,14 @@ git push
 ### Log Analysis
 
 1. **Download Workflow Logs**:
+
 ```bash
 # See job commands section
 gh run view <run_id> --job <job_id>
 ```
 
 2. **Enable Debug Logging**:
+
 ```yaml
 env:
   ACTIONS_STEP_DEBUG: true
@@ -606,6 +647,7 @@ env:
 ```
 
 3. **Use SSH Debug**:
+
 ```yaml
 # Add to workflow for SSH access on failure
 - name: Setup tmate session
@@ -633,12 +675,12 @@ env:
 
 ```yaml
 permissions:
-  contents: read          # Default - read repository contents
-  pull-requests: write    # For PR comments and updates
-  issues: write          # For issue creation and updates
-  checks: read           # For status checks
+  contents: read # Default - read repository contents
+  pull-requests: write # For PR comments and updates
+  issues: write # For issue creation and updates
+  checks: read # For status checks
   security-events: write # For dependency review
-  actions: read          # For workflow execution
+  actions: read # For workflow execution
 ```
 
 ### Compliance Controls
@@ -709,4 +751,3 @@ permissions:
 - **VARIABLES**: Environment variables available to all jobs in a workflow
 
 ---
-

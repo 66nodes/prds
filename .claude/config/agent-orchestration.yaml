@@ -5,12 +5,12 @@ environment: production
 orchestration:
   mode: distributed
   scheduler: kubernetes
-  
+
   routing:
     strategy: intelligent
     load_balancing: weighted_round_robin
     fallback_cascade: true
-    
+
   resource_allocation:
     cpu_shares:
       performance_profiler: 2
@@ -18,7 +18,7 @@ orchestration:
       human_handler: 3
       schema_migrator: 2
       data_steward: 4
-      
+
   priority_queue:
     P0: immediate
     P1: 1_minute
@@ -28,16 +28,16 @@ monitoring:
   metrics_backend: prometheus
   tracing: opentelemetry
   logging: structured_json
-  
+
   alerts:
     channels: [pagerduty, slack, email]
     escalation_policy: tiered
-    
+
 inter_agent_communication:
   protocol: grpc
   encryption: tls_1_3
   authentication: mtls
-  
+
   message_queue:
     type: kafka
     retention_hours: 168

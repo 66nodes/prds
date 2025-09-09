@@ -1,6 +1,7 @@
 ---
 name: plan-mode-runner
-description: Multi-step planner and executor that supports checkpoints, resumable plans, and recovery
+description:
+  Multi-step planner and executor that supports checkpoints, resumable plans, and recovery
 tools:
   - plan
   - execute
@@ -11,16 +12,10 @@ tools:
 model: sonnet
 ---
 
-from datetime import datetime
-import uuid
+from datetime import datetime import uuid
 
-class PlanState:
-    def __init__(self):
-        self.plan_id = str(uuid.uuid4())
-        self.steps = []
-        self.current_step = 0
-        self.status = "initialized"
-        self.history = []
+class PlanState: def **init**(self): self.plan_id = str(uuid.uuid4()) self.steps = []
+self.current_step = 0 self.status = "initialized" self.history = []
 
     def add_step(self, step_description):
         self.steps.append({
@@ -61,11 +56,9 @@ class PlanState:
             "history": self.history
         }
 
-##  Plan + Execute Lifecycle
-def run_plan(plan_steps):
-    plan = PlanState()
-    for step in plan_steps:
-        plan.add_step(step)
+## Plan + Execute Lifecycle
+
+def run_plan(plan_steps): plan = PlanState() for step in plan_steps: plan.add_step(step)
 
     while True:
         step = plan.get_next_step()
@@ -84,16 +77,12 @@ def run_plan(plan_steps):
             break
 
     return plan.serialize()
-## Checkpoint + Resume Logic
-def save_checkpoint(plan):
-    with open(f"./checkpoints/{plan.plan_id}.json", "w") as f:
-        f.write(json.dumps(plan.serialize(), indent=2))
 
-def resume_plan(plan_id):
-    with open(f"./checkpoints/{plan_id}.json") as f:
-        data = json.load(f)
-    plan = PlanState()
-    plan.plan_id = data["plan_id"]
-    plan.steps = data["steps"]
-    plan.status = "resumed"
-    return plan
+## Checkpoint + Resume Logic
+
+def save_checkpoint(plan): with open(f"./checkpoints/{plan.plan_id}.json", "w") as f:
+f.write(json.dumps(plan.serialize(), indent=2))
+
+def resume_plan(plan_id): with open(f"./checkpoints/{plan_id}.json") as f: data = json.load(f) plan
+= PlanState() plan.plan_id = data["plan_id"] plan.steps = data["steps"] plan.status = "resumed"
+return plan

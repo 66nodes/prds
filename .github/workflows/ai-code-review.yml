@@ -23,18 +23,18 @@ jobs:
       contents: read
       pull-requests: write
       issues: write
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          
+
       - name: Get changed files
         id: changed-files
         uses: tj-actions/changed-files@v40
         with:
-          separator: ","
+          separator: ','
           files_ignore: |
             *.md
             *.txt
@@ -43,26 +43,26 @@ jobs:
             *.yaml
             package-lock.json
             yarn.lock
-            
+
       - name: Count changes
         id: count-changes
         run: |
           FILES_COUNT=$(echo "${{ steps.changed-files.outputs.all_changed_files }}" | tr ',' '\n' | wc -l)
           echo "files_count=$FILES_COUNT" >> $GITHUB_OUTPUT
-          
+
           if [ $FILES_COUNT -gt ${{ env.MAX_FILES_PER_REVIEW }} ]; then
             echo "warning=Too many files changed ($FILES_COUNT). Review will be limited." >> $GITHUB_OUTPUT
           fi
-          
+
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-          
+
       - name: Install dependencies
         run: |
           pip install requests PyGithub python-dotenv pyyaml
-          
+
       - name: Run DeepSeek/AI Code Review
         id: ai-review
         env:
@@ -74,7 +74,7 @@ jobs:
           CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
         run: |
           python .github/scripts/ai_code_review.py
-          
+
       - name: Post review summary
         if: always()
         uses: actions/github-script@v7
@@ -85,14 +85,14 @@ jobs:
             const reviewOutput = fs.existsSync('review-output.json') 
               ? JSON.parse(fs.readFileSync('review-output.json', 'utf8'))
               : { summary: 'Review completed but no output generated.' };
-            
+
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.issue.number,
               body: reviewOutput.summary || '✅ Code review completed'
             });
-            
+
       - name: Apply review labels
         if: success()
         uses: actions/github-script@v7
@@ -111,7 +111,7 @@ jobs:
                 });
               }
             }
-            
+
       - name: Upload review artifacts
         if: always()
         uses: actions/upload-artifact@v4

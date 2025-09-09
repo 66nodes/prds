@@ -1,0 +1,2683 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="50" failures="43" errors="0" time="0.185274384">
+    <testsuite name="tests/e2e/auth.spec.ts" timestamp="2025-09-06T01:53:29.386Z" hostname="k305.tailfffca.ts.net" tests="1" failures="1" errors="0" skipped="0" time="0">
+        <testcase classname="tests/e2e/auth.spec.ts" name="tests/e2e/auth.spec.ts" time="0">
+            <failure message="Playwright Test did not expect test.describe() to be called here.
+Most common reasons include:
+- You are calling test.describe() in a configuration file.
+- You are calling test.describe() in a file that is imported by the configuration file.
+- You have two different versions of @playwright/test. This usually happens
+  when one of the dependencies in your package.json depends on @playwright/test." type="Error">
+Error: Playwright Test did not expect test.describe() to be called here.
+Most common reasons include:
+- You are calling test.describe() in a configuration file.
+- You are calling test.describe() in a file that is imported by the configuration file.
+- You have two different versions of @playwright/test. This usually happens
+  when one of the dependencies in your package.json depends on @playwright/test.
+ ❯ TestTypeImpl._currentSuite ../../node_modules/.pnpm/playwright@1.55.0/node_modules/playwright/lib/common/testType.js:74:13
+ ❯ TestTypeImpl._describe ../../node_modules/.pnpm/playwright@1.55.0/node_modules/playwright/lib/common/testType.js:114:24
+ ❯ Function.describe ../../node_modules/.pnpm/playwright@1.55.0/node_modules/playwright/lib/transform/transform.js:275:12
+ ❯ tests/e2e/auth.spec.ts:3:6
+            </failure>
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/e2e/conversation-interface.spec.ts" timestamp="2025-09-06T01:53:29.388Z" hostname="k305.tailfffca.ts.net" tests="1" failures="1" errors="0" skipped="0" time="0">
+        <testcase classname="tests/e2e/conversation-interface.spec.ts" name="tests/e2e/conversation-interface.spec.ts" time="0">
+            <failure message="Playwright Test did not expect test.describe() to be called here.
+Most common reasons include:
+- You are calling test.describe() in a configuration file.
+- You are calling test.describe() in a file that is imported by the configuration file.
+- You have two different versions of @playwright/test. This usually happens
+  when one of the dependencies in your package.json depends on @playwright/test." type="Error">
+Error: Playwright Test did not expect test.describe() to be called here.
+Most common reasons include:
+- You are calling test.describe() in a configuration file.
+- You are calling test.describe() in a file that is imported by the configuration file.
+- You have two different versions of @playwright/test. This usually happens
+  when one of the dependencies in your package.json depends on @playwright/test.
+ ❯ TestTypeImpl._currentSuite ../../node_modules/.pnpm/playwright@1.55.0/node_modules/playwright/lib/common/testType.js:74:13
+ ❯ TestTypeImpl._describe ../../node_modules/.pnpm/playwright@1.55.0/node_modules/playwright/lib/common/testType.js:114:24
+ ❯ Function.describe ../../node_modules/.pnpm/playwright@1.55.0/node_modules/playwright/lib/transform/transform.js:275:12
+ ❯ tests/e2e/conversation-interface.spec.ts:16:6
+            </failure>
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/e2e/human-validation-workflow.spec.ts" timestamp="2025-09-06T01:53:29.388Z" hostname="k305.tailfffca.ts.net" tests="1" failures="1" errors="0" skipped="0" time="0">
+        <testcase classname="tests/e2e/human-validation-workflow.spec.ts" name="tests/e2e/human-validation-workflow.spec.ts" time="0">
+            <failure message="Playwright Test did not expect test.describe() to be called here.
+Most common reasons include:
+- You are calling test.describe() in a configuration file.
+- You are calling test.describe() in a file that is imported by the configuration file.
+- You have two different versions of @playwright/test. This usually happens
+  when one of the dependencies in your package.json depends on @playwright/test." type="Error">
+Error: Playwright Test did not expect test.describe() to be called here.
+Most common reasons include:
+- You are calling test.describe() in a configuration file.
+- You are calling test.describe() in a file that is imported by the configuration file.
+- You have two different versions of @playwright/test. This usually happens
+  when one of the dependencies in your package.json depends on @playwright/test.
+ ❯ TestTypeImpl._currentSuite ../../node_modules/.pnpm/playwright@1.55.0/node_modules/playwright/lib/common/testType.js:74:13
+ ❯ TestTypeImpl._describe ../../node_modules/.pnpm/playwright@1.55.0/node_modules/playwright/lib/common/testType.js:114:24
+ ❯ Function.describe ../../node_modules/.pnpm/playwright@1.55.0/node_modules/playwright/lib/transform/transform.js:275:12
+ ❯ tests/e2e/human-validation-workflow.spec.ts:7:6
+            </failure>
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/unit/components/ValidationPrompt.test.ts" timestamp="2025-09-06T01:53:29.389Z" hostname="k305.tailfffca.ts.net" tests="30" failures="30" errors="0" skipped="0" time="0.146539942">
+        <testcase classname="tests/unit/components/ValidationPrompt.test.ts" name="ValidationPrompt &gt; Approval Type Validation &gt; should render approval validation prompt correctly" time="0.027357246">
+            <system-err>
+[Vue warn]: Failed to resolve component: UIcon
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-approval-id&apos;[39m,
+  type: [32m&apos;approval&apos;[39m,
+  question: [32m&apos;Do you approve this approach?&apos;[39m,
+  context: [32m&apos;We are implementing a new feature that requires user approval.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UButton
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-approval-id&apos;[39m,
+  type: [32m&apos;approval&apos;[39m,
+  question: [32m&apos;Do you approve this approach?&apos;[39m,
+  context: [32m&apos;We are implementing a new feature that requires user approval.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UTextarea
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-approval-id&apos;[39m,
+  type: [32m&apos;approval&apos;[39m,
+  question: [32m&apos;Do you approve this approach?&apos;[39m,
+  context: [32m&apos;We are implementing a new feature that requires user approval.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: URadioGroup
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-approval-id&apos;[39m,
+  type: [32m&apos;approval&apos;[39m,
+  question: [32m&apos;Do you approve this approach?&apos;[39m,
+  context: [32m&apos;We are implementing a new feature that requires user approval.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UCheckbox
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-approval-id&apos;[39m,
+  type: [32m&apos;approval&apos;[39m,
+  question: [32m&apos;Do you approve this approach?&apos;[39m,
+  context: [32m&apos;We are implementing a new feature that requires user approval.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+
+            </system-err>
+            <failure message="ref is not defined" type="ReferenceError">
+ReferenceError: ref is not defined
+ ❯ setup components/conversation/ValidationPrompt.vue:197:22
+ ❯ callWithErrorHandling ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:200:19
+ ❯ setupStatefulComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:7936:25
+ ❯ setupComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:7897:36
+ ❯ mountComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5227:7
+ ❯ processComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5193:9
+ ❯ patch ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:4720:11
+ ❯ ReactiveEffect.componentUpdateFn [as fn] ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5339:11
+ ❯ ReactiveEffect.run ../../node_modules/.pnpm/@vue+reactivity@3.5.21/node_modules/@vue/reactivity/dist/reactivity.cjs.js:241:19
+ ❯ setupRenderEffect ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5467:5
+            </failure>
+        </testcase>
+        <testcase classname="tests/unit/components/ValidationPrompt.test.ts" name="ValidationPrompt &gt; Approval Type Validation &gt; should show approve and reject buttons for approval type" time="0.006053783">
+            <system-err>
+[Vue warn]: Failed to resolve component: UIcon
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-approval-id&apos;[39m,
+  type: [32m&apos;approval&apos;[39m,
+  question: [32m&apos;Do you approve this approach?&apos;[39m,
+  context: [32m&apos;We are implementing a new feature that requires user approval.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UButton
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-approval-id&apos;[39m,
+  type: [32m&apos;approval&apos;[39m,
+  question: [32m&apos;Do you approve this approach?&apos;[39m,
+  context: [32m&apos;We are implementing a new feature that requires user approval.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UTextarea
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-approval-id&apos;[39m,
+  type: [32m&apos;approval&apos;[39m,
+  question: [32m&apos;Do you approve this approach?&apos;[39m,
+  context: [32m&apos;We are implementing a new feature that requires user approval.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: URadioGroup
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-approval-id&apos;[39m,
+  type: [32m&apos;approval&apos;[39m,
+  question: [32m&apos;Do you approve this approach?&apos;[39m,
+  context: [32m&apos;We are implementing a new feature that requires user approval.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UCheckbox
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-approval-id&apos;[39m,
+  type: [32m&apos;approval&apos;[39m,
+  question: [32m&apos;Do you approve this approach?&apos;[39m,
+  context: [32m&apos;We are implementing a new feature that requires user approval.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+
+            </system-err>
+            <failure message="ref is not defined" type="ReferenceError">
+ReferenceError: ref is not defined
+ ❯ setup components/conversation/ValidationPrompt.vue:197:22
+ ❯ callWithErrorHandling ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:200:19
+ ❯ setupStatefulComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:7936:25
+ ❯ setupComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:7897:36
+ ❯ mountComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5227:7
+ ❯ processComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5193:9
+ ❯ patch ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:4720:11
+ ❯ ReactiveEffect.componentUpdateFn [as fn] ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5339:11
+ ❯ ReactiveEffect.run ../../node_modules/.pnpm/@vue+reactivity@3.5.21/node_modules/@vue/reactivity/dist/reactivity.cjs.js:241:19
+ ❯ setupRenderEffect ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5467:5
+            </failure>
+        </testcase>
+        <testcase classname="tests/unit/components/ValidationPrompt.test.ts" name="ValidationPrompt &gt; Approval Type Validation &gt; should emit approve event when approve button is clicked" time="0.004589417">
+            <system-err>
+[Vue warn]: Failed to resolve component: UIcon
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-approval-id&apos;[39m,
+  type: [32m&apos;approval&apos;[39m,
+  question: [32m&apos;Do you approve this approach?&apos;[39m,
+  context: [32m&apos;We are implementing a new feature that requires user approval.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UButton
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-approval-id&apos;[39m,
+  type: [32m&apos;approval&apos;[39m,
+  question: [32m&apos;Do you approve this approach?&apos;[39m,
+  context: [32m&apos;We are implementing a new feature that requires user approval.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UTextarea
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-approval-id&apos;[39m,
+  type: [32m&apos;approval&apos;[39m,
+  question: [32m&apos;Do you approve this approach?&apos;[39m,
+  context: [32m&apos;We are implementing a new feature that requires user approval.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: URadioGroup
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-approval-id&apos;[39m,
+  type: [32m&apos;approval&apos;[39m,
+  question: [32m&apos;Do you approve this approach?&apos;[39m,
+  context: [32m&apos;We are implementing a new feature that requires user approval.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UCheckbox
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-approval-id&apos;[39m,
+  type: [32m&apos;approval&apos;[39m,
+  question: [32m&apos;Do you approve this approach?&apos;[39m,
+  context: [32m&apos;We are implementing a new feature that requires user approval.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+
+            </system-err>
+            <failure message="ref is not defined" type="ReferenceError">
+ReferenceError: ref is not defined
+ ❯ setup components/conversation/ValidationPrompt.vue:197:22
+ ❯ callWithErrorHandling ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:200:19
+ ❯ setupStatefulComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:7936:25
+ ❯ setupComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:7897:36
+ ❯ mountComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5227:7
+ ❯ processComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5193:9
+ ❯ patch ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:4720:11
+ ❯ ReactiveEffect.componentUpdateFn [as fn] ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5339:11
+ ❯ ReactiveEffect.run ../../node_modules/.pnpm/@vue+reactivity@3.5.21/node_modules/@vue/reactivity/dist/reactivity.cjs.js:241:19
+ ❯ setupRenderEffect ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5467:5
+            </failure>
+        </testcase>
+        <testcase classname="tests/unit/components/ValidationPrompt.test.ts" name="ValidationPrompt &gt; Approval Type Validation &gt; should include feedback in approval response" time="0.003777484">
+            <system-err>
+[Vue warn]: Failed to resolve component: UIcon
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-approval-id&apos;[39m,
+  type: [32m&apos;approval&apos;[39m,
+  question: [32m&apos;Do you approve this approach?&apos;[39m,
+  context: [32m&apos;We are implementing a new feature that requires user approval.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UButton
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-approval-id&apos;[39m,
+  type: [32m&apos;approval&apos;[39m,
+  question: [32m&apos;Do you approve this approach?&apos;[39m,
+  context: [32m&apos;We are implementing a new feature that requires user approval.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UTextarea
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-approval-id&apos;[39m,
+  type: [32m&apos;approval&apos;[39m,
+  question: [32m&apos;Do you approve this approach?&apos;[39m,
+  context: [32m&apos;We are implementing a new feature that requires user approval.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: URadioGroup
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-approval-id&apos;[39m,
+  type: [32m&apos;approval&apos;[39m,
+  question: [32m&apos;Do you approve this approach?&apos;[39m,
+  context: [32m&apos;We are implementing a new feature that requires user approval.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UCheckbox
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-approval-id&apos;[39m,
+  type: [32m&apos;approval&apos;[39m,
+  question: [32m&apos;Do you approve this approach?&apos;[39m,
+  context: [32m&apos;We are implementing a new feature that requires user approval.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+
+            </system-err>
+            <failure message="ref is not defined" type="ReferenceError">
+ReferenceError: ref is not defined
+ ❯ setup components/conversation/ValidationPrompt.vue:197:22
+ ❯ callWithErrorHandling ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:200:19
+ ❯ setupStatefulComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:7936:25
+ ❯ setupComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:7897:36
+ ❯ mountComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5227:7
+ ❯ processComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5193:9
+ ❯ patch ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:4720:11
+ ❯ ReactiveEffect.componentUpdateFn [as fn] ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5339:11
+ ❯ ReactiveEffect.run ../../node_modules/.pnpm/@vue+reactivity@3.5.21/node_modules/@vue/reactivity/dist/reactivity.cjs.js:241:19
+ ❯ setupRenderEffect ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5467:5
+            </failure>
+        </testcase>
+        <testcase classname="tests/unit/components/ValidationPrompt.test.ts" name="ValidationPrompt &gt; Choice Type Validation &gt; should render choice validation prompt correctly" time="0.0056412">
+            <system-err>
+[Vue warn]: Failed to resolve component: UIcon
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-choice-id&apos;[39m,
+  type: [32m&apos;choice&apos;[39m,
+  question: [32m&apos;Which approach should we use?&apos;[39m,
+  context: [32m&apos;Please select the best implementation approach.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [
+    { label: [32m&apos;Option A&apos;[39m, value: [32m&apos;a&apos;[39m, description: [32m&apos;First approach&apos;[39m },
+    { label: [32m&apos;Option B&apos;[39m, value: [32m&apos;b&apos;[39m, description: [32m&apos;Second approach&apos;[39m }
+  ],
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UButton
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-choice-id&apos;[39m,
+  type: [32m&apos;choice&apos;[39m,
+  question: [32m&apos;Which approach should we use?&apos;[39m,
+  context: [32m&apos;Please select the best implementation approach.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [
+    { label: [32m&apos;Option A&apos;[39m, value: [32m&apos;a&apos;[39m, description: [32m&apos;First approach&apos;[39m },
+    { label: [32m&apos;Option B&apos;[39m, value: [32m&apos;b&apos;[39m, description: [32m&apos;Second approach&apos;[39m }
+  ],
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UTextarea
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-choice-id&apos;[39m,
+  type: [32m&apos;choice&apos;[39m,
+  question: [32m&apos;Which approach should we use?&apos;[39m,
+  context: [32m&apos;Please select the best implementation approach.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [
+    { label: [32m&apos;Option A&apos;[39m, value: [32m&apos;a&apos;[39m, description: [32m&apos;First approach&apos;[39m },
+    { label: [32m&apos;Option B&apos;[39m, value: [32m&apos;b&apos;[39m, description: [32m&apos;Second approach&apos;[39m }
+  ],
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: URadioGroup
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-choice-id&apos;[39m,
+  type: [32m&apos;choice&apos;[39m,
+  question: [32m&apos;Which approach should we use?&apos;[39m,
+  context: [32m&apos;Please select the best implementation approach.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [
+    { label: [32m&apos;Option A&apos;[39m, value: [32m&apos;a&apos;[39m, description: [32m&apos;First approach&apos;[39m },
+    { label: [32m&apos;Option B&apos;[39m, value: [32m&apos;b&apos;[39m, description: [32m&apos;Second approach&apos;[39m }
+  ],
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UCheckbox
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-choice-id&apos;[39m,
+  type: [32m&apos;choice&apos;[39m,
+  question: [32m&apos;Which approach should we use?&apos;[39m,
+  context: [32m&apos;Please select the best implementation approach.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [
+    { label: [32m&apos;Option A&apos;[39m, value: [32m&apos;a&apos;[39m, description: [32m&apos;First approach&apos;[39m },
+    { label: [32m&apos;Option B&apos;[39m, value: [32m&apos;b&apos;[39m, description: [32m&apos;Second approach&apos;[39m }
+  ],
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+
+            </system-err>
+            <failure message="ref is not defined" type="ReferenceError">
+ReferenceError: ref is not defined
+ ❯ setup components/conversation/ValidationPrompt.vue:197:22
+ ❯ callWithErrorHandling ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:200:19
+ ❯ setupStatefulComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:7936:25
+ ❯ setupComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:7897:36
+ ❯ mountComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5227:7
+ ❯ processComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5193:9
+ ❯ patch ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:4720:11
+ ❯ ReactiveEffect.componentUpdateFn [as fn] ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5339:11
+ ❯ ReactiveEffect.run ../../node_modules/.pnpm/@vue+reactivity@3.5.21/node_modules/@vue/reactivity/dist/reactivity.cjs.js:241:19
+ ❯ setupRenderEffect ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5467:5
+            </failure>
+        </testcase>
+        <testcase classname="tests/unit/components/ValidationPrompt.test.ts" name="ValidationPrompt &gt; Choice Type Validation &gt; should show radio group for choices" time="0.004725432">
+            <system-err>
+[Vue warn]: Failed to resolve component: UIcon
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-choice-id&apos;[39m,
+  type: [32m&apos;choice&apos;[39m,
+  question: [32m&apos;Which approach should we use?&apos;[39m,
+  context: [32m&apos;Please select the best implementation approach.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [
+    { label: [32m&apos;Option A&apos;[39m, value: [32m&apos;a&apos;[39m, description: [32m&apos;First approach&apos;[39m },
+    { label: [32m&apos;Option B&apos;[39m, value: [32m&apos;b&apos;[39m, description: [32m&apos;Second approach&apos;[39m }
+  ],
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UButton
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-choice-id&apos;[39m,
+  type: [32m&apos;choice&apos;[39m,
+  question: [32m&apos;Which approach should we use?&apos;[39m,
+  context: [32m&apos;Please select the best implementation approach.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [
+    { label: [32m&apos;Option A&apos;[39m, value: [32m&apos;a&apos;[39m, description: [32m&apos;First approach&apos;[39m },
+    { label: [32m&apos;Option B&apos;[39m, value: [32m&apos;b&apos;[39m, description: [32m&apos;Second approach&apos;[39m }
+  ],
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UTextarea
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-choice-id&apos;[39m,
+  type: [32m&apos;choice&apos;[39m,
+  question: [32m&apos;Which approach should we use?&apos;[39m,
+  context: [32m&apos;Please select the best implementation approach.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [
+    { label: [32m&apos;Option A&apos;[39m, value: [32m&apos;a&apos;[39m, description: [32m&apos;First approach&apos;[39m },
+    { label: [32m&apos;Option B&apos;[39m, value: [32m&apos;b&apos;[39m, description: [32m&apos;Second approach&apos;[39m }
+  ],
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: URadioGroup
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-choice-id&apos;[39m,
+  type: [32m&apos;choice&apos;[39m,
+  question: [32m&apos;Which approach should we use?&apos;[39m,
+  context: [32m&apos;Please select the best implementation approach.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [
+    { label: [32m&apos;Option A&apos;[39m, value: [32m&apos;a&apos;[39m, description: [32m&apos;First approach&apos;[39m },
+    { label: [32m&apos;Option B&apos;[39m, value: [32m&apos;b&apos;[39m, description: [32m&apos;Second approach&apos;[39m }
+  ],
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UCheckbox
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-choice-id&apos;[39m,
+  type: [32m&apos;choice&apos;[39m,
+  question: [32m&apos;Which approach should we use?&apos;[39m,
+  context: [32m&apos;Please select the best implementation approach.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [
+    { label: [32m&apos;Option A&apos;[39m, value: [32m&apos;a&apos;[39m, description: [32m&apos;First approach&apos;[39m },
+    { label: [32m&apos;Option B&apos;[39m, value: [32m&apos;b&apos;[39m, description: [32m&apos;Second approach&apos;[39m }
+  ],
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+
+            </system-err>
+            <failure message="ref is not defined" type="ReferenceError">
+ReferenceError: ref is not defined
+ ❯ setup components/conversation/ValidationPrompt.vue:197:22
+ ❯ callWithErrorHandling ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:200:19
+ ❯ setupStatefulComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:7936:25
+ ❯ setupComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:7897:36
+ ❯ mountComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5227:7
+ ❯ processComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5193:9
+ ❯ patch ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:4720:11
+ ❯ ReactiveEffect.componentUpdateFn [as fn] ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5339:11
+ ❯ ReactiveEffect.run ../../node_modules/.pnpm/@vue+reactivity@3.5.21/node_modules/@vue/reactivity/dist/reactivity.cjs.js:241:19
+ ❯ setupRenderEffect ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5467:5
+            </failure>
+        </testcase>
+        <testcase classname="tests/unit/components/ValidationPrompt.test.ts" name="ValidationPrompt &gt; Choice Type Validation &gt; should show submit button for choices" time="0.007921214">
+            <system-err>
+[Vue warn]: Failed to resolve component: UIcon
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-choice-id&apos;[39m,
+  type: [32m&apos;choice&apos;[39m,
+  question: [32m&apos;Which approach should we use?&apos;[39m,
+  context: [32m&apos;Please select the best implementation approach.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [
+    { label: [32m&apos;Option A&apos;[39m, value: [32m&apos;a&apos;[39m, description: [32m&apos;First approach&apos;[39m },
+    { label: [32m&apos;Option B&apos;[39m, value: [32m&apos;b&apos;[39m, description: [32m&apos;Second approach&apos;[39m }
+  ],
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UButton
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-choice-id&apos;[39m,
+  type: [32m&apos;choice&apos;[39m,
+  question: [32m&apos;Which approach should we use?&apos;[39m,
+  context: [32m&apos;Please select the best implementation approach.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [
+    { label: [32m&apos;Option A&apos;[39m, value: [32m&apos;a&apos;[39m, description: [32m&apos;First approach&apos;[39m },
+    { label: [32m&apos;Option B&apos;[39m, value: [32m&apos;b&apos;[39m, description: [32m&apos;Second approach&apos;[39m }
+  ],
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UTextarea
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-choice-id&apos;[39m,
+  type: [32m&apos;choice&apos;[39m,
+  question: [32m&apos;Which approach should we use?&apos;[39m,
+  context: [32m&apos;Please select the best implementation approach.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [
+    { label: [32m&apos;Option A&apos;[39m, value: [32m&apos;a&apos;[39m, description: [32m&apos;First approach&apos;[39m },
+    { label: [32m&apos;Option B&apos;[39m, value: [32m&apos;b&apos;[39m, description: [32m&apos;Second approach&apos;[39m }
+  ],
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: URadioGroup
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-choice-id&apos;[39m,
+  type: [32m&apos;choice&apos;[39m,
+  question: [32m&apos;Which approach should we use?&apos;[39m,
+  context: [32m&apos;Please select the best implementation approach.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [
+    { label: [32m&apos;Option A&apos;[39m, value: [32m&apos;a&apos;[39m, description: [32m&apos;First approach&apos;[39m },
+    { label: [32m&apos;Option B&apos;[39m, value: [32m&apos;b&apos;[39m, description: [32m&apos;Second approach&apos;[39m }
+  ],
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UCheckbox
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-choice-id&apos;[39m,
+  type: [32m&apos;choice&apos;[39m,
+  question: [32m&apos;Which approach should we use?&apos;[39m,
+  context: [32m&apos;Please select the best implementation approach.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [
+    { label: [32m&apos;Option A&apos;[39m, value: [32m&apos;a&apos;[39m, description: [32m&apos;First approach&apos;[39m },
+    { label: [32m&apos;Option B&apos;[39m, value: [32m&apos;b&apos;[39m, description: [32m&apos;Second approach&apos;[39m }
+  ],
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+
+            </system-err>
+            <failure message="ref is not defined" type="ReferenceError">
+ReferenceError: ref is not defined
+ ❯ setup components/conversation/ValidationPrompt.vue:197:22
+ ❯ callWithErrorHandling ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:200:19
+ ❯ setupStatefulComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:7936:25
+ ❯ setupComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:7897:36
+ ❯ mountComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5227:7
+ ❯ processComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5193:9
+ ❯ patch ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:4720:11
+ ❯ ReactiveEffect.componentUpdateFn [as fn] ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5339:11
+ ❯ ReactiveEffect.run ../../node_modules/.pnpm/@vue+reactivity@3.5.21/node_modules/@vue/reactivity/dist/reactivity.cjs.js:241:19
+ ❯ setupRenderEffect ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5467:5
+            </failure>
+        </testcase>
+        <testcase classname="tests/unit/components/ValidationPrompt.test.ts" name="ValidationPrompt &gt; Choice Type Validation &gt; should emit approve event with selected choice" time="0.006210979">
+            <system-err>
+[Vue warn]: Failed to resolve component: UIcon
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-choice-id&apos;[39m,
+  type: [32m&apos;choice&apos;[39m,
+  question: [32m&apos;Which approach should we use?&apos;[39m,
+  context: [32m&apos;Please select the best implementation approach.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [
+    { label: [32m&apos;Option A&apos;[39m, value: [32m&apos;a&apos;[39m, description: [32m&apos;First approach&apos;[39m },
+    { label: [32m&apos;Option B&apos;[39m, value: [32m&apos;b&apos;[39m, description: [32m&apos;Second approach&apos;[39m }
+  ],
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UButton
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-choice-id&apos;[39m,
+  type: [32m&apos;choice&apos;[39m,
+  question: [32m&apos;Which approach should we use?&apos;[39m,
+  context: [32m&apos;Please select the best implementation approach.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [
+    { label: [32m&apos;Option A&apos;[39m, value: [32m&apos;a&apos;[39m, description: [32m&apos;First approach&apos;[39m },
+    { label: [32m&apos;Option B&apos;[39m, value: [32m&apos;b&apos;[39m, description: [32m&apos;Second approach&apos;[39m }
+  ],
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UTextarea
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-choice-id&apos;[39m,
+  type: [32m&apos;choice&apos;[39m,
+  question: [32m&apos;Which approach should we use?&apos;[39m,
+  context: [32m&apos;Please select the best implementation approach.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [
+    { label: [32m&apos;Option A&apos;[39m, value: [32m&apos;a&apos;[39m, description: [32m&apos;First approach&apos;[39m },
+    { label: [32m&apos;Option B&apos;[39m, value: [32m&apos;b&apos;[39m, description: [32m&apos;Second approach&apos;[39m }
+  ],
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: URadioGroup
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-choice-id&apos;[39m,
+  type: [32m&apos;choice&apos;[39m,
+  question: [32m&apos;Which approach should we use?&apos;[39m,
+  context: [32m&apos;Please select the best implementation approach.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [
+    { label: [32m&apos;Option A&apos;[39m, value: [32m&apos;a&apos;[39m, description: [32m&apos;First approach&apos;[39m },
+    { label: [32m&apos;Option B&apos;[39m, value: [32m&apos;b&apos;[39m, description: [32m&apos;Second approach&apos;[39m }
+  ],
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UCheckbox
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-choice-id&apos;[39m,
+  type: [32m&apos;choice&apos;[39m,
+  question: [32m&apos;Which approach should we use?&apos;[39m,
+  context: [32m&apos;Please select the best implementation approach.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [
+    { label: [32m&apos;Option A&apos;[39m, value: [32m&apos;a&apos;[39m, description: [32m&apos;First approach&apos;[39m },
+    { label: [32m&apos;Option B&apos;[39m, value: [32m&apos;b&apos;[39m, description: [32m&apos;Second approach&apos;[39m }
+  ],
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+
+            </system-err>
+            <failure message="ref is not defined" type="ReferenceError">
+ReferenceError: ref is not defined
+ ❯ setup components/conversation/ValidationPrompt.vue:197:22
+ ❯ callWithErrorHandling ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:200:19
+ ❯ setupStatefulComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:7936:25
+ ❯ setupComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:7897:36
+ ❯ mountComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5227:7
+ ❯ processComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5193:9
+ ❯ patch ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:4720:11
+ ❯ ReactiveEffect.componentUpdateFn [as fn] ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5339:11
+ ❯ ReactiveEffect.run ../../node_modules/.pnpm/@vue+reactivity@3.5.21/node_modules/@vue/reactivity/dist/reactivity.cjs.js:241:19
+ ❯ setupRenderEffect ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5467:5
+            </failure>
+        </testcase>
+        <testcase classname="tests/unit/components/ValidationPrompt.test.ts" name="ValidationPrompt &gt; Input Type Validation &gt; should render input validation prompt correctly" time="0.015141215">
+            <system-err>
+[Vue warn]: Failed to resolve component: UIcon
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-input-id&apos;[39m,
+  type: [32m&apos;input&apos;[39m,
+  question: [32m&apos;Please provide additional details&apos;[39m,
+  context: [32m&apos;We need more information to proceed.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UButton
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-input-id&apos;[39m,
+  type: [32m&apos;input&apos;[39m,
+  question: [32m&apos;Please provide additional details&apos;[39m,
+  context: [32m&apos;We need more information to proceed.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UTextarea
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-input-id&apos;[39m,
+  type: [32m&apos;input&apos;[39m,
+  question: [32m&apos;Please provide additional details&apos;[39m,
+  context: [32m&apos;We need more information to proceed.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: URadioGroup
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-input-id&apos;[39m,
+  type: [32m&apos;input&apos;[39m,
+  question: [32m&apos;Please provide additional details&apos;[39m,
+  context: [32m&apos;We need more information to proceed.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UCheckbox
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-input-id&apos;[39m,
+  type: [32m&apos;input&apos;[39m,
+  question: [32m&apos;Please provide additional details&apos;[39m,
+  context: [32m&apos;We need more information to proceed.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+
+            </system-err>
+            <failure message="ref is not defined" type="ReferenceError">
+ReferenceError: ref is not defined
+ ❯ setup components/conversation/ValidationPrompt.vue:197:22
+ ❯ callWithErrorHandling ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:200:19
+ ❯ setupStatefulComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:7936:25
+ ❯ setupComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:7897:36
+ ❯ mountComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5227:7
+ ❯ processComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5193:9
+ ❯ patch ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:4720:11
+ ❯ ReactiveEffect.componentUpdateFn [as fn] ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5339:11
+ ❯ ReactiveEffect.run ../../node_modules/.pnpm/@vue+reactivity@3.5.21/node_modules/@vue/reactivity/dist/reactivity.cjs.js:241:19
+ ❯ setupRenderEffect ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5467:5
+            </failure>
+        </testcase>
+        <testcase classname="tests/unit/components/ValidationPrompt.test.ts" name="ValidationPrompt &gt; Input Type Validation &gt; should show textarea for input" time="0.003256268">
+            <system-err>
+[Vue warn]: Failed to resolve component: UIcon
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-input-id&apos;[39m,
+  type: [32m&apos;input&apos;[39m,
+  question: [32m&apos;Please provide additional details&apos;[39m,
+  context: [32m&apos;We need more information to proceed.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UButton
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-input-id&apos;[39m,
+  type: [32m&apos;input&apos;[39m,
+  question: [32m&apos;Please provide additional details&apos;[39m,
+  context: [32m&apos;We need more information to proceed.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UTextarea
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-input-id&apos;[39m,
+  type: [32m&apos;input&apos;[39m,
+  question: [32m&apos;Please provide additional details&apos;[39m,
+  context: [32m&apos;We need more information to proceed.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: URadioGroup
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-input-id&apos;[39m,
+  type: [32m&apos;input&apos;[39m,
+  question: [32m&apos;Please provide additional details&apos;[39m,
+  context: [32m&apos;We need more information to proceed.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UCheckbox
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-input-id&apos;[39m,
+  type: [32m&apos;input&apos;[39m,
+  question: [32m&apos;Please provide additional details&apos;[39m,
+  context: [32m&apos;We need more information to proceed.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+
+            </system-err>
+            <failure message="ref is not defined" type="ReferenceError">
+ReferenceError: ref is not defined
+ ❯ setup components/conversation/ValidationPrompt.vue:197:22
+ ❯ callWithErrorHandling ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:200:19
+ ❯ setupStatefulComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:7936:25
+ ❯ setupComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:7897:36
+ ❯ mountComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5227:7
+ ❯ processComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5193:9
+ ❯ patch ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:4720:11
+ ❯ ReactiveEffect.componentUpdateFn [as fn] ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5339:11
+ ❯ ReactiveEffect.run ../../node_modules/.pnpm/@vue+reactivity@3.5.21/node_modules/@vue/reactivity/dist/reactivity.cjs.js:241:19
+ ❯ setupRenderEffect ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5467:5
+            </failure>
+        </testcase>
+        <testcase classname="tests/unit/components/ValidationPrompt.test.ts" name="ValidationPrompt &gt; Input Type Validation &gt; should emit approve event with input value" time="0.007469007">
+            <system-err>
+[Vue warn]: Failed to resolve component: UIcon
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-input-id&apos;[39m,
+  type: [32m&apos;input&apos;[39m,
+  question: [32m&apos;Please provide additional details&apos;[39m,
+  context: [32m&apos;We need more information to proceed.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UButton
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-input-id&apos;[39m,
+  type: [32m&apos;input&apos;[39m,
+  question: [32m&apos;Please provide additional details&apos;[39m,
+  context: [32m&apos;We need more information to proceed.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UTextarea
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-input-id&apos;[39m,
+  type: [32m&apos;input&apos;[39m,
+  question: [32m&apos;Please provide additional details&apos;[39m,
+  context: [32m&apos;We need more information to proceed.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: URadioGroup
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-input-id&apos;[39m,
+  type: [32m&apos;input&apos;[39m,
+  question: [32m&apos;Please provide additional details&apos;[39m,
+  context: [32m&apos;We need more information to proceed.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UCheckbox
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-input-id&apos;[39m,
+  type: [32m&apos;input&apos;[39m,
+  question: [32m&apos;Please provide additional details&apos;[39m,
+  context: [32m&apos;We need more information to proceed.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+
+            </system-err>
+            <failure message="ref is not defined" type="ReferenceError">
+ReferenceError: ref is not defined
+ ❯ setup components/conversation/ValidationPrompt.vue:197:22
+ ❯ callWithErrorHandling ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:200:19
+ ❯ setupStatefulComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:7936:25
+ ❯ setupComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:7897:36
+ ❯ mountComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5227:7
+ ❯ processComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5193:9
+ ❯ patch ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:4720:11
+ ❯ ReactiveEffect.componentUpdateFn [as fn] ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5339:11
+ ❯ ReactiveEffect.run ../../node_modules/.pnpm/@vue+reactivity@3.5.21/node_modules/@vue/reactivity/dist/reactivity.cjs.js:241:19
+ ❯ setupRenderEffect ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5467:5
+            </failure>
+        </testcase>
+        <testcase classname="tests/unit/components/ValidationPrompt.test.ts" name="ValidationPrompt &gt; Input Type Validation &gt; should disable submit if required and input is empty" time="0.002718678">
+            <system-err>
+[Vue warn]: Failed to resolve component: UIcon
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-input-id&apos;[39m,
+  type: [32m&apos;input&apos;[39m,
+  question: [32m&apos;Please provide additional details&apos;[39m,
+  context: [32m&apos;We need more information to proceed.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UButton
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-input-id&apos;[39m,
+  type: [32m&apos;input&apos;[39m,
+  question: [32m&apos;Please provide additional details&apos;[39m,
+  context: [32m&apos;We need more information to proceed.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UTextarea
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-input-id&apos;[39m,
+  type: [32m&apos;input&apos;[39m,
+  question: [32m&apos;Please provide additional details&apos;[39m,
+  context: [32m&apos;We need more information to proceed.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: URadioGroup
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-input-id&apos;[39m,
+  type: [32m&apos;input&apos;[39m,
+  question: [32m&apos;Please provide additional details&apos;[39m,
+  context: [32m&apos;We need more information to proceed.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UCheckbox
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-input-id&apos;[39m,
+  type: [32m&apos;input&apos;[39m,
+  question: [32m&apos;Please provide additional details&apos;[39m,
+  context: [32m&apos;We need more information to proceed.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+
+            </system-err>
+            <failure message="ref is not defined" type="ReferenceError">
+ReferenceError: ref is not defined
+ ❯ setup components/conversation/ValidationPrompt.vue:197:22
+ ❯ callWithErrorHandling ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:200:19
+ ❯ setupStatefulComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:7936:25
+ ❯ setupComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:7897:36
+ ❯ mountComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5227:7
+ ❯ processComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5193:9
+ ❯ patch ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:4720:11
+ ❯ ReactiveEffect.componentUpdateFn [as fn] ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5339:11
+ ❯ ReactiveEffect.run ../../node_modules/.pnpm/@vue+reactivity@3.5.21/node_modules/@vue/reactivity/dist/reactivity.cjs.js:241:19
+ ❯ setupRenderEffect ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5467:5
+            </failure>
+        </testcase>
+        <testcase classname="tests/unit/components/ValidationPrompt.test.ts" name="ValidationPrompt &gt; Review Type Validation &gt; should render review validation prompt correctly" time="0.005350575">
+            <system-err>
+[Vue warn]: Failed to resolve component: UIcon
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-review-id&apos;[39m,
+  type: [32m&apos;review&apos;[39m,
+  question: [32m&apos;Please review the generated content&apos;[39m,
+  context: [32m&apos;Review and approve the generated PRD content.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: {
+    reviewContent: [32m&apos;This is the content to be reviewed.\n&apos;[39m +
+      [32m&apos;\n&apos;[39m +
+      [32m&apos;**Important:** Please check all details.&apos;[39m
+  }
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UButton
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-review-id&apos;[39m,
+  type: [32m&apos;review&apos;[39m,
+  question: [32m&apos;Please review the generated content&apos;[39m,
+  context: [32m&apos;Review and approve the generated PRD content.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: {
+    reviewContent: [32m&apos;This is the content to be reviewed.\n&apos;[39m +
+      [32m&apos;\n&apos;[39m +
+      [32m&apos;**Important:** Please check all details.&apos;[39m
+  }
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UTextarea
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-review-id&apos;[39m,
+  type: [32m&apos;review&apos;[39m,
+  question: [32m&apos;Please review the generated content&apos;[39m,
+  context: [32m&apos;Review and approve the generated PRD content.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: {
+    reviewContent: [32m&apos;This is the content to be reviewed.\n&apos;[39m +
+      [32m&apos;\n&apos;[39m +
+      [32m&apos;**Important:** Please check all details.&apos;[39m
+  }
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: URadioGroup
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-review-id&apos;[39m,
+  type: [32m&apos;review&apos;[39m,
+  question: [32m&apos;Please review the generated content&apos;[39m,
+  context: [32m&apos;Review and approve the generated PRD content.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: {
+    reviewContent: [32m&apos;This is the content to be reviewed.\n&apos;[39m +
+      [32m&apos;\n&apos;[39m +
+      [32m&apos;**Important:** Please check all details.&apos;[39m
+  }
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UCheckbox
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-review-id&apos;[39m,
+  type: [32m&apos;review&apos;[39m,
+  question: [32m&apos;Please review the generated content&apos;[39m,
+  context: [32m&apos;Review and approve the generated PRD content.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: {
+    reviewContent: [32m&apos;This is the content to be reviewed.\n&apos;[39m +
+      [32m&apos;\n&apos;[39m +
+      [32m&apos;**Important:** Please check all details.&apos;[39m
+  }
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+
+            </system-err>
+            <failure message="ref is not defined" type="ReferenceError">
+ReferenceError: ref is not defined
+ ❯ setup components/conversation/ValidationPrompt.vue:197:22
+ ❯ callWithErrorHandling ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:200:19
+ ❯ setupStatefulComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:7936:25
+ ❯ setupComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:7897:36
+ ❯ mountComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5227:7
+ ❯ processComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5193:9
+ ❯ patch ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:4720:11
+ ❯ ReactiveEffect.componentUpdateFn [as fn] ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5339:11
+ ❯ ReactiveEffect.run ../../node_modules/.pnpm/@vue+reactivity@3.5.21/node_modules/@vue/reactivity/dist/reactivity.cjs.js:241:19
+ ❯ setupRenderEffect ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5467:5
+            </failure>
+        </testcase>
+        <testcase classname="tests/unit/components/ValidationPrompt.test.ts" name="ValidationPrompt &gt; Review Type Validation &gt; should show review content" time="0.004091464">
+            <system-err>
+[Vue warn]: Failed to resolve component: UIcon
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-review-id&apos;[39m,
+  type: [32m&apos;review&apos;[39m,
+  question: [32m&apos;Please review the generated content&apos;[39m,
+  context: [32m&apos;Review and approve the generated PRD content.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: {
+    reviewContent: [32m&apos;This is the content to be reviewed.\n&apos;[39m +
+      [32m&apos;\n&apos;[39m +
+      [32m&apos;**Important:** Please check all details.&apos;[39m
+  }
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UButton
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-review-id&apos;[39m,
+  type: [32m&apos;review&apos;[39m,
+  question: [32m&apos;Please review the generated content&apos;[39m,
+  context: [32m&apos;Review and approve the generated PRD content.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: {
+    reviewContent: [32m&apos;This is the content to be reviewed.\n&apos;[39m +
+      [32m&apos;\n&apos;[39m +
+      [32m&apos;**Important:** Please check all details.&apos;[39m
+  }
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UTextarea
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-review-id&apos;[39m,
+  type: [32m&apos;review&apos;[39m,
+  question: [32m&apos;Please review the generated content&apos;[39m,
+  context: [32m&apos;Review and approve the generated PRD content.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: {
+    reviewContent: [32m&apos;This is the content to be reviewed.\n&apos;[39m +
+      [32m&apos;\n&apos;[39m +
+      [32m&apos;**Important:** Please check all details.&apos;[39m
+  }
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: URadioGroup
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-review-id&apos;[39m,
+  type: [32m&apos;review&apos;[39m,
+  question: [32m&apos;Please review the generated content&apos;[39m,
+  context: [32m&apos;Review and approve the generated PRD content.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: {
+    reviewContent: [32m&apos;This is the content to be reviewed.\n&apos;[39m +
+      [32m&apos;\n&apos;[39m +
+      [32m&apos;**Important:** Please check all details.&apos;[39m
+  }
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UCheckbox
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-review-id&apos;[39m,
+  type: [32m&apos;review&apos;[39m,
+  question: [32m&apos;Please review the generated content&apos;[39m,
+  context: [32m&apos;Review and approve the generated PRD content.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: {
+    reviewContent: [32m&apos;This is the content to be reviewed.\n&apos;[39m +
+      [32m&apos;\n&apos;[39m +
+      [32m&apos;**Important:** Please check all details.&apos;[39m
+  }
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+
+            </system-err>
+            <failure message="ref is not defined" type="ReferenceError">
+ReferenceError: ref is not defined
+ ❯ setup components/conversation/ValidationPrompt.vue:197:22
+ ❯ callWithErrorHandling ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:200:19
+ ❯ setupStatefulComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:7936:25
+ ❯ setupComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:7897:36
+ ❯ mountComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5227:7
+ ❯ processComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5193:9
+ ❯ patch ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:4720:11
+ ❯ ReactiveEffect.componentUpdateFn [as fn] ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5339:11
+ ❯ ReactiveEffect.run ../../node_modules/.pnpm/@vue+reactivity@3.5.21/node_modules/@vue/reactivity/dist/reactivity.cjs.js:241:19
+ ❯ setupRenderEffect ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5467:5
+            </failure>
+        </testcase>
+        <testcase classname="tests/unit/components/ValidationPrompt.test.ts" name="ValidationPrompt &gt; Review Type Validation &gt; should show review action buttons" time="0.004421793">
+            <system-err>
+[Vue warn]: Failed to resolve component: UIcon
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-review-id&apos;[39m,
+  type: [32m&apos;review&apos;[39m,
+  question: [32m&apos;Please review the generated content&apos;[39m,
+  context: [32m&apos;Review and approve the generated PRD content.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: {
+    reviewContent: [32m&apos;This is the content to be reviewed.\n&apos;[39m +
+      [32m&apos;\n&apos;[39m +
+      [32m&apos;**Important:** Please check all details.&apos;[39m
+  }
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UButton
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-review-id&apos;[39m,
+  type: [32m&apos;review&apos;[39m,
+  question: [32m&apos;Please review the generated content&apos;[39m,
+  context: [32m&apos;Review and approve the generated PRD content.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: {
+    reviewContent: [32m&apos;This is the content to be reviewed.\n&apos;[39m +
+      [32m&apos;\n&apos;[39m +
+      [32m&apos;**Important:** Please check all details.&apos;[39m
+  }
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UTextarea
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-review-id&apos;[39m,
+  type: [32m&apos;review&apos;[39m,
+  question: [32m&apos;Please review the generated content&apos;[39m,
+  context: [32m&apos;Review and approve the generated PRD content.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: {
+    reviewContent: [32m&apos;This is the content to be reviewed.\n&apos;[39m +
+      [32m&apos;\n&apos;[39m +
+      [32m&apos;**Important:** Please check all details.&apos;[39m
+  }
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: URadioGroup
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-review-id&apos;[39m,
+  type: [32m&apos;review&apos;[39m,
+  question: [32m&apos;Please review the generated content&apos;[39m,
+  context: [32m&apos;Review and approve the generated PRD content.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: {
+    reviewContent: [32m&apos;This is the content to be reviewed.\n&apos;[39m +
+      [32m&apos;\n&apos;[39m +
+      [32m&apos;**Important:** Please check all details.&apos;[39m
+  }
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UCheckbox
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-review-id&apos;[39m,
+  type: [32m&apos;review&apos;[39m,
+  question: [32m&apos;Please review the generated content&apos;[39m,
+  context: [32m&apos;Review and approve the generated PRD content.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: {
+    reviewContent: [32m&apos;This is the content to be reviewed.\n&apos;[39m +
+      [32m&apos;\n&apos;[39m +
+      [32m&apos;**Important:** Please check all details.&apos;[39m
+  }
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+
+            </system-err>
+            <failure message="ref is not defined" type="ReferenceError">
+ReferenceError: ref is not defined
+ ❯ setup components/conversation/ValidationPrompt.vue:197:22
+ ❯ callWithErrorHandling ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:200:19
+ ❯ setupStatefulComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:7936:25
+ ❯ setupComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:7897:36
+ ❯ mountComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5227:7
+ ❯ processComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5193:9
+ ❯ patch ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:4720:11
+ ❯ ReactiveEffect.componentUpdateFn [as fn] ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5339:11
+ ❯ ReactiveEffect.run ../../node_modules/.pnpm/@vue+reactivity@3.5.21/node_modules/@vue/reactivity/dist/reactivity.cjs.js:241:19
+ ❯ setupRenderEffect ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5467:5
+            </failure>
+        </testcase>
+        <testcase classname="tests/unit/components/ValidationPrompt.test.ts" name="ValidationPrompt &gt; Review Type Validation &gt; should emit approve event for review approval" time="0.003896718">
+            <system-err>
+[Vue warn]: Failed to resolve component: UIcon
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-review-id&apos;[39m,
+  type: [32m&apos;review&apos;[39m,
+  question: [32m&apos;Please review the generated content&apos;[39m,
+  context: [32m&apos;Review and approve the generated PRD content.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: {
+    reviewContent: [32m&apos;This is the content to be reviewed.\n&apos;[39m +
+      [32m&apos;\n&apos;[39m +
+      [32m&apos;**Important:** Please check all details.&apos;[39m
+  }
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UButton
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-review-id&apos;[39m,
+  type: [32m&apos;review&apos;[39m,
+  question: [32m&apos;Please review the generated content&apos;[39m,
+  context: [32m&apos;Review and approve the generated PRD content.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: {
+    reviewContent: [32m&apos;This is the content to be reviewed.\n&apos;[39m +
+      [32m&apos;\n&apos;[39m +
+      [32m&apos;**Important:** Please check all details.&apos;[39m
+  }
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UTextarea
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-review-id&apos;[39m,
+  type: [32m&apos;review&apos;[39m,
+  question: [32m&apos;Please review the generated content&apos;[39m,
+  context: [32m&apos;Review and approve the generated PRD content.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: {
+    reviewContent: [32m&apos;This is the content to be reviewed.\n&apos;[39m +
+      [32m&apos;\n&apos;[39m +
+      [32m&apos;**Important:** Please check all details.&apos;[39m
+  }
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: URadioGroup
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-review-id&apos;[39m,
+  type: [32m&apos;review&apos;[39m,
+  question: [32m&apos;Please review the generated content&apos;[39m,
+  context: [32m&apos;Review and approve the generated PRD content.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: {
+    reviewContent: [32m&apos;This is the content to be reviewed.\n&apos;[39m +
+      [32m&apos;\n&apos;[39m +
+      [32m&apos;**Important:** Please check all details.&apos;[39m
+  }
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UCheckbox
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-review-id&apos;[39m,
+  type: [32m&apos;review&apos;[39m,
+  question: [32m&apos;Please review the generated content&apos;[39m,
+  context: [32m&apos;Review and approve the generated PRD content.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: {
+    reviewContent: [32m&apos;This is the content to be reviewed.\n&apos;[39m +
+      [32m&apos;\n&apos;[39m +
+      [32m&apos;**Important:** Please check all details.&apos;[39m
+  }
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+
+            </system-err>
+            <failure message="ref is not defined" type="ReferenceError">
+ReferenceError: ref is not defined
+ ❯ setup components/conversation/ValidationPrompt.vue:197:22
+ ❯ callWithErrorHandling ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:200:19
+ ❯ setupStatefulComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:7936:25
+ ❯ setupComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:7897:36
+ ❯ mountComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5227:7
+ ❯ processComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5193:9
+ ❯ patch ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:4720:11
+ ❯ ReactiveEffect.componentUpdateFn [as fn] ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5339:11
+ ❯ ReactiveEffect.run ../../node_modules/.pnpm/@vue+reactivity@3.5.21/node_modules/@vue/reactivity/dist/reactivity.cjs.js:241:19
+ ❯ setupRenderEffect ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5467:5
+            </failure>
+        </testcase>
+        <testcase classname="tests/unit/components/ValidationPrompt.test.ts" name="ValidationPrompt &gt; Review Type Validation &gt; should emit reject event for requesting changes" time="0.003416177">
+            <system-err>
+[Vue warn]: Failed to resolve component: UIcon
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-review-id&apos;[39m,
+  type: [32m&apos;review&apos;[39m,
+  question: [32m&apos;Please review the generated content&apos;[39m,
+  context: [32m&apos;Review and approve the generated PRD content.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: {
+    reviewContent: [32m&apos;This is the content to be reviewed.\n&apos;[39m +
+      [32m&apos;\n&apos;[39m +
+      [32m&apos;**Important:** Please check all details.&apos;[39m
+  }
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UButton
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-review-id&apos;[39m,
+  type: [32m&apos;review&apos;[39m,
+  question: [32m&apos;Please review the generated content&apos;[39m,
+  context: [32m&apos;Review and approve the generated PRD content.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: {
+    reviewContent: [32m&apos;This is the content to be reviewed.\n&apos;[39m +
+      [32m&apos;\n&apos;[39m +
+      [32m&apos;**Important:** Please check all details.&apos;[39m
+  }
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UTextarea
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-review-id&apos;[39m,
+  type: [32m&apos;review&apos;[39m,
+  question: [32m&apos;Please review the generated content&apos;[39m,
+  context: [32m&apos;Review and approve the generated PRD content.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: {
+    reviewContent: [32m&apos;This is the content to be reviewed.\n&apos;[39m +
+      [32m&apos;\n&apos;[39m +
+      [32m&apos;**Important:** Please check all details.&apos;[39m
+  }
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: URadioGroup
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-review-id&apos;[39m,
+  type: [32m&apos;review&apos;[39m,
+  question: [32m&apos;Please review the generated content&apos;[39m,
+  context: [32m&apos;Review and approve the generated PRD content.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: {
+    reviewContent: [32m&apos;This is the content to be reviewed.\n&apos;[39m +
+      [32m&apos;\n&apos;[39m +
+      [32m&apos;**Important:** Please check all details.&apos;[39m
+  }
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UCheckbox
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-review-id&apos;[39m,
+  type: [32m&apos;review&apos;[39m,
+  question: [32m&apos;Please review the generated content&apos;[39m,
+  context: [32m&apos;Review and approve the generated PRD content.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: {
+    reviewContent: [32m&apos;This is the content to be reviewed.\n&apos;[39m +
+      [32m&apos;\n&apos;[39m +
+      [32m&apos;**Important:** Please check all details.&apos;[39m
+  }
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+
+            </system-err>
+            <failure message="ref is not defined" type="ReferenceError">
+ReferenceError: ref is not defined
+ ❯ setup components/conversation/ValidationPrompt.vue:197:22
+ ❯ callWithErrorHandling ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:200:19
+ ❯ setupStatefulComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:7936:25
+ ❯ setupComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:7897:36
+ ❯ mountComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5227:7
+ ❯ processComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5193:9
+ ❯ patch ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:4720:11
+ ❯ ReactiveEffect.componentUpdateFn [as fn] ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5339:11
+ ❯ ReactiveEffect.run ../../node_modules/.pnpm/@vue+reactivity@3.5.21/node_modules/@vue/reactivity/dist/reactivity.cjs.js:241:19
+ ❯ setupRenderEffect ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5467:5
+            </failure>
+        </testcase>
+        <testcase classname="tests/unit/components/ValidationPrompt.test.ts" name="ValidationPrompt &gt; Confirmation Type Validation &gt; should render confirmation validation prompt correctly" time="0.002686699">
+            <system-err>
+[Vue warn]: Failed to resolve component: UIcon
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-confirmation-id&apos;[39m,
+  type: [32m&apos;confirmation&apos;[39m,
+  question: [32m&apos;I understand the implications of this action&apos;[39m,
+  context: [32m&apos;Please confirm you understand before proceeding.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UButton
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-confirmation-id&apos;[39m,
+  type: [32m&apos;confirmation&apos;[39m,
+  question: [32m&apos;I understand the implications of this action&apos;[39m,
+  context: [32m&apos;Please confirm you understand before proceeding.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UTextarea
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-confirmation-id&apos;[39m,
+  type: [32m&apos;confirmation&apos;[39m,
+  question: [32m&apos;I understand the implications of this action&apos;[39m,
+  context: [32m&apos;Please confirm you understand before proceeding.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: URadioGroup
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-confirmation-id&apos;[39m,
+  type: [32m&apos;confirmation&apos;[39m,
+  question: [32m&apos;I understand the implications of this action&apos;[39m,
+  context: [32m&apos;Please confirm you understand before proceeding.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UCheckbox
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-confirmation-id&apos;[39m,
+  type: [32m&apos;confirmation&apos;[39m,
+  question: [32m&apos;I understand the implications of this action&apos;[39m,
+  context: [32m&apos;Please confirm you understand before proceeding.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+
+            </system-err>
+            <failure message="ref is not defined" type="ReferenceError">
+ReferenceError: ref is not defined
+ ❯ setup components/conversation/ValidationPrompt.vue:197:22
+ ❯ callWithErrorHandling ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:200:19
+ ❯ setupStatefulComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:7936:25
+ ❯ setupComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:7897:36
+ ❯ mountComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5227:7
+ ❯ processComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5193:9
+ ❯ patch ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:4720:11
+ ❯ ReactiveEffect.componentUpdateFn [as fn] ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5339:11
+ ❯ ReactiveEffect.run ../../node_modules/.pnpm/@vue+reactivity@3.5.21/node_modules/@vue/reactivity/dist/reactivity.cjs.js:241:19
+ ❯ setupRenderEffect ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5467:5
+            </failure>
+        </testcase>
+        <testcase classname="tests/unit/components/ValidationPrompt.test.ts" name="ValidationPrompt &gt; Confirmation Type Validation &gt; should show checkbox for confirmation" time="0.001859998">
+            <system-err>
+[Vue warn]: Failed to resolve component: UIcon
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-confirmation-id&apos;[39m,
+  type: [32m&apos;confirmation&apos;[39m,
+  question: [32m&apos;I understand the implications of this action&apos;[39m,
+  context: [32m&apos;Please confirm you understand before proceeding.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UButton
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-confirmation-id&apos;[39m,
+  type: [32m&apos;confirmation&apos;[39m,
+  question: [32m&apos;I understand the implications of this action&apos;[39m,
+  context: [32m&apos;Please confirm you understand before proceeding.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UTextarea
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-confirmation-id&apos;[39m,
+  type: [32m&apos;confirmation&apos;[39m,
+  question: [32m&apos;I understand the implications of this action&apos;[39m,
+  context: [32m&apos;Please confirm you understand before proceeding.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: URadioGroup
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-confirmation-id&apos;[39m,
+  type: [32m&apos;confirmation&apos;[39m,
+  question: [32m&apos;I understand the implications of this action&apos;[39m,
+  context: [32m&apos;Please confirm you understand before proceeding.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UCheckbox
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-confirmation-id&apos;[39m,
+  type: [32m&apos;confirmation&apos;[39m,
+  question: [32m&apos;I understand the implications of this action&apos;[39m,
+  context: [32m&apos;Please confirm you understand before proceeding.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+
+            </system-err>
+            <failure message="ref is not defined" type="ReferenceError">
+ReferenceError: ref is not defined
+ ❯ setup components/conversation/ValidationPrompt.vue:197:22
+ ❯ callWithErrorHandling ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:200:19
+ ❯ setupStatefulComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:7936:25
+ ❯ setupComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:7897:36
+ ❯ mountComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5227:7
+ ❯ processComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5193:9
+ ❯ patch ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:4720:11
+ ❯ ReactiveEffect.componentUpdateFn [as fn] ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5339:11
+ ❯ ReactiveEffect.run ../../node_modules/.pnpm/@vue+reactivity@3.5.21/node_modules/@vue/reactivity/dist/reactivity.cjs.js:241:19
+ ❯ setupRenderEffect ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5467:5
+            </failure>
+        </testcase>
+        <testcase classname="tests/unit/components/ValidationPrompt.test.ts" name="ValidationPrompt &gt; Confirmation Type Validation &gt; should show confirm and cancel buttons" time="0.001670854">
+            <system-err>
+[Vue warn]: Failed to resolve component: UIcon
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-confirmation-id&apos;[39m,
+  type: [32m&apos;confirmation&apos;[39m,
+  question: [32m&apos;I understand the implications of this action&apos;[39m,
+  context: [32m&apos;Please confirm you understand before proceeding.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UButton
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-confirmation-id&apos;[39m,
+  type: [32m&apos;confirmation&apos;[39m,
+  question: [32m&apos;I understand the implications of this action&apos;[39m,
+  context: [32m&apos;Please confirm you understand before proceeding.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UTextarea
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-confirmation-id&apos;[39m,
+  type: [32m&apos;confirmation&apos;[39m,
+  question: [32m&apos;I understand the implications of this action&apos;[39m,
+  context: [32m&apos;Please confirm you understand before proceeding.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: URadioGroup
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-confirmation-id&apos;[39m,
+  type: [32m&apos;confirmation&apos;[39m,
+  question: [32m&apos;I understand the implications of this action&apos;[39m,
+  context: [32m&apos;Please confirm you understand before proceeding.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UCheckbox
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-confirmation-id&apos;[39m,
+  type: [32m&apos;confirmation&apos;[39m,
+  question: [32m&apos;I understand the implications of this action&apos;[39m,
+  context: [32m&apos;Please confirm you understand before proceeding.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+
+            </system-err>
+            <failure message="ref is not defined" type="ReferenceError">
+ReferenceError: ref is not defined
+ ❯ setup components/conversation/ValidationPrompt.vue:197:22
+ ❯ callWithErrorHandling ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:200:19
+ ❯ setupStatefulComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:7936:25
+ ❯ setupComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:7897:36
+ ❯ mountComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5227:7
+ ❯ processComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5193:9
+ ❯ patch ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:4720:11
+ ❯ ReactiveEffect.componentUpdateFn [as fn] ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5339:11
+ ❯ ReactiveEffect.run ../../node_modules/.pnpm/@vue+reactivity@3.5.21/node_modules/@vue/reactivity/dist/reactivity.cjs.js:241:19
+ ❯ setupRenderEffect ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5467:5
+            </failure>
+        </testcase>
+        <testcase classname="tests/unit/components/ValidationPrompt.test.ts" name="ValidationPrompt &gt; Confirmation Type Validation &gt; should disable confirm button until checkbox is checked" time="0.001815264">
+            <system-err>
+[Vue warn]: Failed to resolve component: UIcon
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-confirmation-id&apos;[39m,
+  type: [32m&apos;confirmation&apos;[39m,
+  question: [32m&apos;I understand the implications of this action&apos;[39m,
+  context: [32m&apos;Please confirm you understand before proceeding.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UButton
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-confirmation-id&apos;[39m,
+  type: [32m&apos;confirmation&apos;[39m,
+  question: [32m&apos;I understand the implications of this action&apos;[39m,
+  context: [32m&apos;Please confirm you understand before proceeding.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UTextarea
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-confirmation-id&apos;[39m,
+  type: [32m&apos;confirmation&apos;[39m,
+  question: [32m&apos;I understand the implications of this action&apos;[39m,
+  context: [32m&apos;Please confirm you understand before proceeding.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: URadioGroup
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-confirmation-id&apos;[39m,
+  type: [32m&apos;confirmation&apos;[39m,
+  question: [32m&apos;I understand the implications of this action&apos;[39m,
+  context: [32m&apos;Please confirm you understand before proceeding.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UCheckbox
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-confirmation-id&apos;[39m,
+  type: [32m&apos;confirmation&apos;[39m,
+  question: [32m&apos;I understand the implications of this action&apos;[39m,
+  context: [32m&apos;Please confirm you understand before proceeding.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+
+            </system-err>
+            <failure message="ref is not defined" type="ReferenceError">
+ReferenceError: ref is not defined
+ ❯ setup components/conversation/ValidationPrompt.vue:197:22
+ ❯ callWithErrorHandling ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:200:19
+ ❯ setupStatefulComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:7936:25
+ ❯ setupComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:7897:36
+ ❯ mountComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5227:7
+ ❯ processComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5193:9
+ ❯ patch ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:4720:11
+ ❯ ReactiveEffect.componentUpdateFn [as fn] ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5339:11
+ ❯ ReactiveEffect.run ../../node_modules/.pnpm/@vue+reactivity@3.5.21/node_modules/@vue/reactivity/dist/reactivity.cjs.js:241:19
+ ❯ setupRenderEffect ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5467:5
+            </failure>
+        </testcase>
+        <testcase classname="tests/unit/components/ValidationPrompt.test.ts" name="ValidationPrompt &gt; Timeout Handling &gt; should display timeout countdown when timeout is set" time="0.002207339">
+            <system-err>
+[Vue warn]: Failed to resolve component: UIcon
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-approval-id&apos;[39m,
+  type: [32m&apos;approval&apos;[39m,
+  question: [32m&apos;Do you approve this approach?&apos;[39m,
+  context: [32m&apos;We are implementing a new feature that requires user approval.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UButton
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-approval-id&apos;[39m,
+  type: [32m&apos;approval&apos;[39m,
+  question: [32m&apos;Do you approve this approach?&apos;[39m,
+  context: [32m&apos;We are implementing a new feature that requires user approval.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UTextarea
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-approval-id&apos;[39m,
+  type: [32m&apos;approval&apos;[39m,
+  question: [32m&apos;Do you approve this approach?&apos;[39m,
+  context: [32m&apos;We are implementing a new feature that requires user approval.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: URadioGroup
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-approval-id&apos;[39m,
+  type: [32m&apos;approval&apos;[39m,
+  question: [32m&apos;Do you approve this approach?&apos;[39m,
+  context: [32m&apos;We are implementing a new feature that requires user approval.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UCheckbox
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-approval-id&apos;[39m,
+  type: [32m&apos;approval&apos;[39m,
+  question: [32m&apos;Do you approve this approach?&apos;[39m,
+  context: [32m&apos;We are implementing a new feature that requires user approval.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+
+            </system-err>
+            <failure message="ref is not defined" type="ReferenceError">
+ReferenceError: ref is not defined
+ ❯ setup components/conversation/ValidationPrompt.vue:197:22
+ ❯ callWithErrorHandling ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:200:19
+ ❯ setupStatefulComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:7936:25
+ ❯ setupComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:7897:36
+ ❯ mountComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5227:7
+ ❯ processComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5193:9
+ ❯ patch ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:4720:11
+ ❯ ReactiveEffect.componentUpdateFn [as fn] ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5339:11
+ ❯ ReactiveEffect.run ../../node_modules/.pnpm/@vue+reactivity@3.5.21/node_modules/@vue/reactivity/dist/reactivity.cjs.js:241:19
+ ❯ setupRenderEffect ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5467:5
+            </failure>
+        </testcase>
+        <testcase classname="tests/unit/components/ValidationPrompt.test.ts" name="ValidationPrompt &gt; Timeout Handling &gt; should start timeout when component is mounted" time="0.004682431">
+            <system-err>
+[Vue warn]: Failed to resolve component: UIcon
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-approval-id&apos;[39m,
+  type: [32m&apos;approval&apos;[39m,
+  question: [32m&apos;Do you approve this approach?&apos;[39m,
+  context: [32m&apos;We are implementing a new feature that requires user approval.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m1000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UButton
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-approval-id&apos;[39m,
+  type: [32m&apos;approval&apos;[39m,
+  question: [32m&apos;Do you approve this approach?&apos;[39m,
+  context: [32m&apos;We are implementing a new feature that requires user approval.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m1000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UTextarea
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-approval-id&apos;[39m,
+  type: [32m&apos;approval&apos;[39m,
+  question: [32m&apos;Do you approve this approach?&apos;[39m,
+  context: [32m&apos;We are implementing a new feature that requires user approval.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m1000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: URadioGroup
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-approval-id&apos;[39m,
+  type: [32m&apos;approval&apos;[39m,
+  question: [32m&apos;Do you approve this approach?&apos;[39m,
+  context: [32m&apos;We are implementing a new feature that requires user approval.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m1000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UCheckbox
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-approval-id&apos;[39m,
+  type: [32m&apos;approval&apos;[39m,
+  question: [32m&apos;Do you approve this approach?&apos;[39m,
+  context: [32m&apos;We are implementing a new feature that requires user approval.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m1000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+
+            </system-err>
+            <failure message="ref is not defined" type="ReferenceError">
+ReferenceError: ref is not defined
+ ❯ setup components/conversation/ValidationPrompt.vue:197:22
+ ❯ callWithErrorHandling ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:200:19
+ ❯ setupStatefulComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:7936:25
+ ❯ setupComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:7897:36
+ ❯ mountComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5227:7
+ ❯ processComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5193:9
+ ❯ patch ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:4720:11
+ ❯ ReactiveEffect.componentUpdateFn [as fn] ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5339:11
+ ❯ ReactiveEffect.run ../../node_modules/.pnpm/@vue+reactivity@3.5.21/node_modules/@vue/reactivity/dist/reactivity.cjs.js:241:19
+ ❯ setupRenderEffect ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5467:5
+            </failure>
+        </testcase>
+        <testcase classname="tests/unit/components/ValidationPrompt.test.ts" name="ValidationPrompt &gt; Timeout Handling &gt; should clear timeout when component is unmounted" time="0.002241925">
+            <system-err>
+[Vue warn]: Failed to resolve component: UIcon
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-approval-id&apos;[39m,
+  type: [32m&apos;approval&apos;[39m,
+  question: [32m&apos;Do you approve this approach?&apos;[39m,
+  context: [32m&apos;We are implementing a new feature that requires user approval.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UButton
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-approval-id&apos;[39m,
+  type: [32m&apos;approval&apos;[39m,
+  question: [32m&apos;Do you approve this approach?&apos;[39m,
+  context: [32m&apos;We are implementing a new feature that requires user approval.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UTextarea
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-approval-id&apos;[39m,
+  type: [32m&apos;approval&apos;[39m,
+  question: [32m&apos;Do you approve this approach?&apos;[39m,
+  context: [32m&apos;We are implementing a new feature that requires user approval.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: URadioGroup
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-approval-id&apos;[39m,
+  type: [32m&apos;approval&apos;[39m,
+  question: [32m&apos;Do you approve this approach?&apos;[39m,
+  context: [32m&apos;We are implementing a new feature that requires user approval.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UCheckbox
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-approval-id&apos;[39m,
+  type: [32m&apos;approval&apos;[39m,
+  question: [32m&apos;Do you approve this approach?&apos;[39m,
+  context: [32m&apos;We are implementing a new feature that requires user approval.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+
+            </system-err>
+            <failure message="ref is not defined" type="ReferenceError">
+ReferenceError: ref is not defined
+ ❯ setup components/conversation/ValidationPrompt.vue:197:22
+ ❯ callWithErrorHandling ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:200:19
+ ❯ setupStatefulComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:7936:25
+ ❯ setupComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:7897:36
+ ❯ mountComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5227:7
+ ❯ processComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5193:9
+ ❯ patch ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:4720:11
+ ❯ ReactiveEffect.componentUpdateFn [as fn] ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5339:11
+ ❯ ReactiveEffect.run ../../node_modules/.pnpm/@vue+reactivity@3.5.21/node_modules/@vue/reactivity/dist/reactivity.cjs.js:241:19
+ ❯ setupRenderEffect ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5467:5
+            </failure>
+        </testcase>
+        <testcase classname="tests/unit/components/ValidationPrompt.test.ts" name="ValidationPrompt &gt; Component State Management &gt; should reset state when prompt changes" time="0.00205309">
+            <system-err>
+[Vue warn]: Failed to resolve component: UIcon
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-approval-id&apos;[39m,
+  type: [32m&apos;approval&apos;[39m,
+  question: [32m&apos;Do you approve this approach?&apos;[39m,
+  context: [32m&apos;We are implementing a new feature that requires user approval.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UButton
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-approval-id&apos;[39m,
+  type: [32m&apos;approval&apos;[39m,
+  question: [32m&apos;Do you approve this approach?&apos;[39m,
+  context: [32m&apos;We are implementing a new feature that requires user approval.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UTextarea
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-approval-id&apos;[39m,
+  type: [32m&apos;approval&apos;[39m,
+  question: [32m&apos;Do you approve this approach?&apos;[39m,
+  context: [32m&apos;We are implementing a new feature that requires user approval.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: URadioGroup
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-approval-id&apos;[39m,
+  type: [32m&apos;approval&apos;[39m,
+  question: [32m&apos;Do you approve this approach?&apos;[39m,
+  context: [32m&apos;We are implementing a new feature that requires user approval.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UCheckbox
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-approval-id&apos;[39m,
+  type: [32m&apos;approval&apos;[39m,
+  question: [32m&apos;Do you approve this approach?&apos;[39m,
+  context: [32m&apos;We are implementing a new feature that requires user approval.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+
+            </system-err>
+            <failure message="ref is not defined" type="ReferenceError">
+ReferenceError: ref is not defined
+ ❯ setup components/conversation/ValidationPrompt.vue:197:22
+ ❯ callWithErrorHandling ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:200:19
+ ❯ setupStatefulComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:7936:25
+ ❯ setupComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:7897:36
+ ❯ mountComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5227:7
+ ❯ processComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5193:9
+ ❯ patch ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:4720:11
+ ❯ ReactiveEffect.componentUpdateFn [as fn] ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5339:11
+ ❯ ReactiveEffect.run ../../node_modules/.pnpm/@vue+reactivity@3.5.21/node_modules/@vue/reactivity/dist/reactivity.cjs.js:241:19
+ ❯ setupRenderEffect ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5467:5
+            </failure>
+        </testcase>
+        <testcase classname="tests/unit/components/ValidationPrompt.test.ts" name="ValidationPrompt &gt; Component State Management &gt; should show loading state during submission" time="0.001652129">
+            <system-err>
+[Vue warn]: Failed to resolve component: UIcon
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-approval-id&apos;[39m,
+  type: [32m&apos;approval&apos;[39m,
+  question: [32m&apos;Do you approve this approach?&apos;[39m,
+  context: [32m&apos;We are implementing a new feature that requires user approval.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UButton
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-approval-id&apos;[39m,
+  type: [32m&apos;approval&apos;[39m,
+  question: [32m&apos;Do you approve this approach?&apos;[39m,
+  context: [32m&apos;We are implementing a new feature that requires user approval.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UTextarea
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-approval-id&apos;[39m,
+  type: [32m&apos;approval&apos;[39m,
+  question: [32m&apos;Do you approve this approach?&apos;[39m,
+  context: [32m&apos;We are implementing a new feature that requires user approval.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: URadioGroup
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-approval-id&apos;[39m,
+  type: [32m&apos;approval&apos;[39m,
+  question: [32m&apos;Do you approve this approach?&apos;[39m,
+  context: [32m&apos;We are implementing a new feature that requires user approval.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UCheckbox
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-approval-id&apos;[39m,
+  type: [32m&apos;approval&apos;[39m,
+  question: [32m&apos;Do you approve this approach?&apos;[39m,
+  context: [32m&apos;We are implementing a new feature that requires user approval.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+
+            </system-err>
+            <failure message="ref is not defined" type="ReferenceError">
+ReferenceError: ref is not defined
+ ❯ setup components/conversation/ValidationPrompt.vue:197:22
+ ❯ callWithErrorHandling ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:200:19
+ ❯ setupStatefulComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:7936:25
+ ❯ setupComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:7897:36
+ ❯ mountComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5227:7
+ ❯ processComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5193:9
+ ❯ patch ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:4720:11
+ ❯ ReactiveEffect.componentUpdateFn [as fn] ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5339:11
+ ❯ ReactiveEffect.run ../../node_modules/.pnpm/@vue+reactivity@3.5.21/node_modules/@vue/reactivity/dist/reactivity.cjs.js:241:19
+ ❯ setupRenderEffect ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5467:5
+            </failure>
+        </testcase>
+        <testcase classname="tests/unit/components/ValidationPrompt.test.ts" name="ValidationPrompt &gt; Content Formatting &gt; should format review content with basic markdown" time="0.001211481">
+            <failure message="Cannot read properties of undefined (reading &apos;vm&apos;)" type="TypeError">
+TypeError: Cannot read properties of undefined (reading &apos;vm&apos;)
+ ❯ tests/unit/components/ValidationPrompt.test.ts:388:33
+            </failure>
+        </testcase>
+        <testcase classname="tests/unit/components/ValidationPrompt.test.ts" name="ValidationPrompt &gt; Content Formatting &gt; should format time remaining correctly" time="0.000240482">
+            <failure message="Cannot read properties of undefined (reading &apos;vm&apos;)" type="TypeError">
+TypeError: Cannot read properties of undefined (reading &apos;vm&apos;)
+ ❯ tests/unit/components/ValidationPrompt.test.ts:396:22
+            </failure>
+        </testcase>
+        <testcase classname="tests/unit/components/ValidationPrompt.test.ts" name="ValidationPrompt &gt; Error Handling &gt; should handle submission errors gracefully" time="0.002074762">
+            <system-err>
+[Vue warn]: Failed to resolve component: UIcon
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-approval-id&apos;[39m,
+  type: [32m&apos;approval&apos;[39m,
+  question: [32m&apos;Do you approve this approach?&apos;[39m,
+  context: [32m&apos;We are implementing a new feature that requires user approval.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UButton
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-approval-id&apos;[39m,
+  type: [32m&apos;approval&apos;[39m,
+  question: [32m&apos;Do you approve this approach?&apos;[39m,
+  context: [32m&apos;We are implementing a new feature that requires user approval.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UTextarea
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-approval-id&apos;[39m,
+  type: [32m&apos;approval&apos;[39m,
+  question: [32m&apos;Do you approve this approach?&apos;[39m,
+  context: [32m&apos;We are implementing a new feature that requires user approval.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: URadioGroup
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-approval-id&apos;[39m,
+  type: [32m&apos;approval&apos;[39m,
+  question: [32m&apos;Do you approve this approach?&apos;[39m,
+  context: [32m&apos;We are implementing a new feature that requires user approval.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UCheckbox
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-approval-id&apos;[39m,
+  type: [32m&apos;approval&apos;[39m,
+  question: [32m&apos;Do you approve this approach?&apos;[39m,
+  context: [32m&apos;We are implementing a new feature that requires user approval.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+
+            </system-err>
+            <failure message="ref is not defined" type="ReferenceError">
+ReferenceError: ref is not defined
+ ❯ setup components/conversation/ValidationPrompt.vue:197:22
+ ❯ callWithErrorHandling ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:200:19
+ ❯ setupStatefulComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:7936:25
+ ❯ setupComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:7897:36
+ ❯ mountComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5227:7
+ ❯ processComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5193:9
+ ❯ patch ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:4720:11
+ ❯ ReactiveEffect.componentUpdateFn [as fn] ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5339:11
+ ❯ ReactiveEffect.run ../../node_modules/.pnpm/@vue+reactivity@3.5.21/node_modules/@vue/reactivity/dist/reactivity.cjs.js:241:19
+ ❯ setupRenderEffect ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5467:5
+            </failure>
+        </testcase>
+        <testcase classname="tests/unit/components/ValidationPrompt.test.ts" name="ValidationPrompt &gt; Accessibility &gt; should have proper ARIA labels and roles" time="0.001685201">
+            <system-err>
+[Vue warn]: Failed to resolve component: UIcon
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-approval-id&apos;[39m,
+  type: [32m&apos;approval&apos;[39m,
+  question: [32m&apos;Do you approve this approach?&apos;[39m,
+  context: [32m&apos;We are implementing a new feature that requires user approval.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UButton
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-approval-id&apos;[39m,
+  type: [32m&apos;approval&apos;[39m,
+  question: [32m&apos;Do you approve this approach?&apos;[39m,
+  context: [32m&apos;We are implementing a new feature that requires user approval.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UTextarea
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-approval-id&apos;[39m,
+  type: [32m&apos;approval&apos;[39m,
+  question: [32m&apos;Do you approve this approach?&apos;[39m,
+  context: [32m&apos;We are implementing a new feature that requires user approval.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: URadioGroup
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-approval-id&apos;[39m,
+  type: [32m&apos;approval&apos;[39m,
+  question: [32m&apos;Do you approve this approach?&apos;[39m,
+  context: [32m&apos;We are implementing a new feature that requires user approval.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+[Vue warn]: Failed to resolve component: UCheckbox
+If this is a native custom element, make sure to exclude it from component resolution via compilerOptions.isCustomElement. 
+  at &lt;ValidationPrompt prompt= {
+  id: [32m&apos;test-approval-id&apos;[39m,
+  type: [32m&apos;approval&apos;[39m,
+  question: [32m&apos;Do you approve this approach?&apos;[39m,
+  context: [32m&apos;We are implementing a new feature that requires user approval.&apos;[39m,
+  required: [33mtrue[39m,
+  timeout: [33m30000[39m,
+  options: [90mundefined[39m,
+  metadata: [90mundefined[39m
+} ref=&quot;VTU_COMPONENT&quot; &gt; 
+  at &lt;VTUROOT&gt;
+
+            </system-err>
+            <failure message="ref is not defined" type="ReferenceError">
+ReferenceError: ref is not defined
+ ❯ setup components/conversation/ValidationPrompt.vue:197:22
+ ❯ callWithErrorHandling ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:200:19
+ ❯ setupStatefulComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:7936:25
+ ❯ setupComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:7897:36
+ ❯ mountComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5227:7
+ ❯ processComponent ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5193:9
+ ❯ patch ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:4720:11
+ ❯ ReactiveEffect.componentUpdateFn [as fn] ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5339:11
+ ❯ ReactiveEffect.run ../../node_modules/.pnpm/@vue+reactivity@3.5.21/node_modules/@vue/reactivity/dist/reactivity.cjs.js:241:19
+ ❯ setupRenderEffect ../../node_modules/.pnpm/@vue+runtime-core@3.5.21/node_modules/@vue/runtime-core/dist/runtime-core.cjs.js:5467:5
+            </failure>
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/unit/composables/useAuth.test.ts" timestamp="2025-09-06T01:53:29.407Z" hostname="k305.tailfffca.ts.net" tests="4" failures="4" errors="0" skipped="0" time="0.007892661">
+        <testcase classname="tests/unit/composables/useAuth.test.ts" name="useAuth &gt; should initialize with unauthenticated state" time="0.005136853">
+            <failure message="useRuntimeConfig is not defined" type="ReferenceError">
+ReferenceError: useRuntimeConfig is not defined
+ ❯ Module.useAuth composables/useAuth.ts:14:18
+ ❯ tests/unit/composables/useAuth.test.ts:42:39
+            </failure>
+        </testcase>
+        <testcase classname="tests/unit/composables/useAuth.test.ts" name="useAuth &gt; should login successfully with valid credentials" time="0.000756208">
+            <failure message="useRuntimeConfig is not defined" type="ReferenceError">
+ReferenceError: useRuntimeConfig is not defined
+ ❯ Module.useAuth composables/useAuth.ts:14:18
+ ❯ tests/unit/composables/useAuth.test.ts:57:46
+            </failure>
+        </testcase>
+        <testcase classname="tests/unit/composables/useAuth.test.ts" name="useAuth &gt; should handle login failure" time="0.000365686">
+            <failure message="useRuntimeConfig is not defined" type="ReferenceError">
+ReferenceError: useRuntimeConfig is not defined
+ ❯ Module.useAuth composables/useAuth.ts:14:18
+ ❯ tests/unit/composables/useAuth.test.ts:72:23
+            </failure>
+        </testcase>
+        <testcase classname="tests/unit/composables/useAuth.test.ts" name="useAuth &gt; should logout and clear state" time="0.00049559">
+            <failure message="useRuntimeConfig is not defined" type="ReferenceError">
+ReferenceError: useRuntimeConfig is not defined
+ ❯ Module.useAuth composables/useAuth.ts:14:18
+ ❯ tests/unit/composables/useAuth.test.ts:83:47
+            </failure>
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/unit/stores/conversation.test.ts" timestamp="2025-09-06T01:53:29.408Z" hostname="k305.tailfffca.ts.net" tests="1" failures="1" errors="0" skipped="0" time="0">
+        <testcase classname="tests/unit/stores/conversation.test.ts" name="tests/unit/stores/conversation.test.ts" time="0">
+            <failure message="persistedState is not defined" type="ReferenceError">
+ReferenceError: persistedState is not defined
+ ❯ stores/conversation.ts:284:14
+ ❯ tests/unit/stores/conversation.test.ts:3:1
+            </failure>
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/unit/stores/persistence-security.test.ts" timestamp="2025-09-06T01:53:29.408Z" hostname="k305.tailfffca.ts.net" tests="12" failures="5" errors="0" skipped="0" time="0.030841781">
+        <testcase classname="tests/unit/stores/persistence-security.test.ts" name="Pinia Persistence Security Tests &gt; Auth Store Security &gt; should use sessionStorage for auth data" time="0.013440427">
+            <failure message="expected false to be true // Object.is equality" type="AssertionError">
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/unit/stores/persistence-security.test.ts:77:61
+            </failure>
+        </testcase>
+        <testcase classname="tests/unit/stores/persistence-security.test.ts" name="Pinia Persistence Security Tests &gt; Auth Store Security &gt; should not persist sensitive tokens" time="0.001031906">
+        </testcase>
+        <testcase classname="tests/unit/stores/persistence-security.test.ts" name="Pinia Persistence Security Tests &gt; Auth Store Security &gt; should clear auth data on reset" time="0.000621194">
+        </testcase>
+        <testcase classname="tests/unit/stores/persistence-security.test.ts" name="Pinia Persistence Security Tests &gt; PRD Store Security &gt; should use localStorage for PRD data" time="0.001374849">
+            <failure message="expected false to be true // Object.is equality" type="AssertionError">
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/unit/stores/persistence-security.test.ts:154:58
+            </failure>
+        </testcase>
+        <testcase classname="tests/unit/stores/persistence-security.test.ts" name="Pinia Persistence Security Tests &gt; PRD Store Security &gt; should not persist loading states" time="0.000718287">
+        </testcase>
+        <testcase classname="tests/unit/stores/persistence-security.test.ts" name="Pinia Persistence Security Tests &gt; Projects Store Security &gt; should use localStorage for project data" time="0.001318272">
+            <failure message="expected false to be true // Object.is equality" type="AssertionError">
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/unit/stores/persistence-security.test.ts:199:63
+            </failure>
+        </testcase>
+        <testcase classname="tests/unit/stores/persistence-security.test.ts" name="Pinia Persistence Security Tests &gt; Projects Store Security &gt; should persist user preferences" time="0.001273357">
+            <failure message="expected &apos;&apos; to contain &apos;&quot;sortBy&quot;:&quot;name&quot;&apos;" type="AssertionError">
+AssertionError: expected &apos;&apos; to contain &apos;&quot;sortBy&quot;:&quot;name&quot;&apos;
+
+- Expected
++ Received
+
+- &quot;sortBy&quot;:&quot;name&quot;
+
+ ❯ tests/unit/stores/persistence-security.test.ts:212:26
+            </failure>
+        </testcase>
+        <testcase classname="tests/unit/stores/persistence-security.test.ts" name="Pinia Persistence Security Tests &gt; Projects Store Security &gt; should not persist error states" time="0.000750818">
+        </testcase>
+        <testcase classname="tests/unit/stores/persistence-security.test.ts" name="Pinia Persistence Security Tests &gt; Cross-Store Security &gt; should isolate data between stores" time="0.002520999">
+            <failure message="expected false to be true // Object.is equality" type="AssertionError">
+AssertionError: expected false to be true // Object.is equality
+
+- Expected
++ Received
+
+- true
++ false
+
+ ❯ tests/unit/stores/persistence-security.test.ts:287:61
+            </failure>
+        </testcase>
+        <testcase classname="tests/unit/stores/persistence-security.test.ts" name="Pinia Persistence Security Tests &gt; Cross-Store Security &gt; should handle storage quota exceeded gracefully" time="0.003149267">
+        </testcase>
+        <testcase classname="tests/unit/stores/persistence-security.test.ts" name="Pinia Persistence Security Tests &gt; Data Validation &gt; should validate data types before persistence" time="0.000695204">
+        </testcase>
+        <testcase classname="tests/unit/stores/persistence-security.test.ts" name="Pinia Persistence Security Tests &gt; Data Validation &gt; should sanitize data before storage" time="0.001104452">
+        </testcase>
+    </testsuite>
+</testsuites>

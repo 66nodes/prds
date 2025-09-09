@@ -2,7 +2,8 @@
 
 ## 🎯 Overview
 
-This runbook provides comprehensive instructions for deploying and maintaining the AI Agent Platform in production using Docker Swarm. The platform includes:
+This runbook provides comprehensive instructions for deploying and maintaining the AI Agent Platform
+in production using Docker Swarm. The platform includes:
 
 - **Frontend**: Nuxt.js application
 - **Backend**: FastAPI with PydanticAI agents
@@ -14,12 +15,12 @@ This runbook provides comprehensive instructions for deploying and maintaining t
 
 ### Infrastructure Requirements
 
-| Component | CPU | RAM | Storage | Notes |
-|-----------|-----|-----|---------|-------|
-| Manager Node | 4 vCPU | 8 GB | 100 GB SSD | Docker Swarm manager |
-| Worker Nodes | 8 vCPU | 16 GB | 200 GB SSD | Application workloads |
-| Database Node | 4 vCPU | 32 GB | 500 GB SSD | Dedicated for databases |
-| **Total Min** | **16 vCPU** | **56 GB** | **800 GB** | 3-node cluster |
+| Component     | CPU         | RAM       | Storage    | Notes                   |
+| ------------- | ----------- | --------- | ---------- | ----------------------- |
+| Manager Node  | 4 vCPU      | 8 GB      | 100 GB SSD | Docker Swarm manager    |
+| Worker Nodes  | 8 vCPU      | 16 GB     | 200 GB SSD | Application workloads   |
+| Database Node | 4 vCPU      | 32 GB     | 500 GB SSD | Dedicated for databases |
+| **Total Min** | **16 vCPU** | **56 GB** | **800 GB** | 3-node cluster          |
 
 ### Software Requirements
 
@@ -161,13 +162,13 @@ curl -I https://your-domain.com
 
 ### Key Metrics to Monitor
 
-| Metric | Threshold | Action |
-|--------|-----------|---------|
-| API Response Time | > 2s | Scale backend |
-| Error Rate | > 5% | Investigate logs |
-| Memory Usage | > 85% | Add resources |
-| Disk Space | < 15% | Clean up/expand |
-| Hallucination Rate | > 2% | Review AI models |
+| Metric             | Threshold | Action           |
+| ------------------ | --------- | ---------------- |
+| API Response Time  | > 2s      | Scale backend    |
+| Error Rate         | > 5%      | Investigate logs |
+| Memory Usage       | > 85%     | Add resources    |
+| Disk Space         | < 15%     | Clean up/expand  |
+| Hallucination Rate | > 2%      | Review AI models |
 
 ### Alert Configuration
 
@@ -185,7 +186,7 @@ Alerts are configured in `monitoring/prometheus/alerts.yml`:
 # Update backend service
 docker service update --image ghcr.io/your-org/backend:v1.2.0 aiplatform_backend
 
-# Update frontend service  
+# Update frontend service
 docker service update --image ghcr.io/your-org/frontend:v1.2.0 aiplatform_frontend
 
 # Monitor rollout
@@ -390,12 +391,12 @@ echo 'net.core.wmem_max = 134217728' >> /etc/sysctl.conf
 
 ## 📞 Support Contacts
 
-| Role | Contact | Availability |
-|------|---------|--------------|
-| Platform Team | platform@company.com | 24/7 |
-| DevOps Engineer | devops@company.com | Business hours |
-| Database Admin | dba@company.com | On-call rotation |
-| Security Team | security@company.com | 24/7 |
+| Role            | Contact              | Availability     |
+| --------------- | -------------------- | ---------------- |
+| Platform Team   | platform@company.com | 24/7             |
+| DevOps Engineer | devops@company.com   | Business hours   |
+| Database Admin  | dba@company.com      | On-call rotation |
+| Security Team   | security@company.com | 24/7             |
 
 ## 📚 Additional Resources
 

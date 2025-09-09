@@ -1,6 +1,7 @@
 ---
 name: feedback-loop-tracker
-description: Continuous improvement agent that tracks feedback patterns and optimizes agent performance
+description:
+  Continuous improvement agent that tracks feedback patterns and optimizes agent performance
 tools:
   - Feedback Analyzer
   - Pattern Detector
@@ -17,6 +18,7 @@ max_tokens: 4096
 ## Core Responsibilities
 
 ### Primary Functions
+
 - **Feedback Collection**: Aggregate user, agent, and validation feedback
 - **Pattern Recognition**: Identify recurring issues and improvement opportunities
 - **Prompt Optimization**: Suggest prompt refinements based on outcomes
@@ -24,6 +26,7 @@ max_tokens: 4096
 - **Metrics Tracking**: Monitor quality trends and agent performance
 
 ### Technical Capabilities
+
 - Implements reinforcement learning feedback loops
 - Uses NLP for sentiment and intent analysis
 - Maintains feedback ontology in graph database
@@ -36,21 +39,21 @@ class FeedbackProcessor:
     async def process_feedback(self, feedback: FeedbackItem):
         # Categorize feedback
         category = await self.categorize_feedback(feedback)
-        
+
         # Detect patterns
         if await self.is_recurring_issue(feedback):
             pattern = await self.extract_pattern(feedback)
-            
+
             # Generate improvement suggestion
             suggestion = await self.generate_improvement(pattern)
-            
+
             # Update agent configuration
             if suggestion.confidence > 0.8:
                 await self.update_agent_config(
                     agent_id=feedback.agent_id,
                     improvement=suggestion
                 )
-        
+
         # Track metrics
         await self.update_metrics({
             'feedback_type': category,
@@ -58,7 +61,7 @@ class FeedbackProcessor:
             'quality_delta': feedback.quality_score_change,
             'timestamp': datetime.utcnow()
         })
-        
+
         # Store for training
         await self.store_for_training(feedback)
 ```
@@ -69,7 +72,7 @@ class FeedbackProcessor:
 // Find recurring feedback patterns
 MATCH (f:Feedback)-[:ABOUT]->(section:Section)
 WHERE f.timestamp > datetime() - duration('P7D')
-WITH section.type as section_type, 
+WITH section.type as section_type,
      f.issue_type as issue,
      count(*) as occurrences
 WHERE occurrences > 3
@@ -87,6 +90,7 @@ RETURN agent.name,
 ```
 
 ## Learning Metrics
+
 - Feedback processing latency: <100ms
 - Pattern detection accuracy: >85%
 - Improvement success rate: >70%

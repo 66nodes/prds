@@ -18,6 +18,7 @@ max_tokens: 8192
 ## Core Responsibilities
 
 ### Primary Functions
+
 - **Regulatory Compliance**: Validate against SOC2, ISO27001, GDPR, HIPAA
 - **Policy Enforcement**: Apply organizational documentation standards
 - **Audit Trail Management**: Maintain compliance-ready audit logs
@@ -25,6 +26,7 @@ max_tokens: 8192
 - **Certification Support**: Generate compliance reports and evidence
 
 ### Technical Capabilities
+
 - Rule-based compliance engine with 500+ checks
 - Natural language policy interpretation
 - Automated evidence collection
@@ -37,10 +39,10 @@ class ComplianceValidator:
     def __init__(self):
         self.compliance_rules = self.load_compliance_rules()
         self.risk_matrix = self.load_risk_matrix()
-    
+
     async def validate_document(self, document: PRDDocument) -> ComplianceResult:
         results = ComplianceResult()
-        
+
         # SOC2 Type II Validation
         soc2_checks = [
             self.check_access_controls(document),
@@ -49,7 +51,7 @@ class ComplianceValidator:
             self.check_data_retention(document)
         ]
         results.soc2_compliance = all(await asyncio.gather(*soc2_checks))
-        
+
         # GDPR Validation
         gdpr_checks = [
             self.check_data_minimization(document),
@@ -58,19 +60,19 @@ class ComplianceValidator:
             self.check_data_portability(document)
         ]
         results.gdpr_compliance = all(await asyncio.gather(*gdpr_checks))
-        
+
         # Industry-Specific Validation
         if document.industry == 'healthcare':
             results.hipaa_compliance = await self.validate_hipaa(document)
         elif document.industry == 'finance':
             results.pci_compliance = await self.validate_pci(document)
-        
+
         # Generate compliance score
         results.overall_score = self.calculate_compliance_score(results)
-        
+
         # Create audit entry
         await self.create_audit_entry(document, results)
-        
+
         return results
 ```
 
@@ -80,26 +82,26 @@ class ComplianceValidator:
 compliance_rules:
   soc2:
     CC1.1:
-      description: "Control environment"
+      description: 'Control environment'
       checks:
         - verify_organizational_structure
         - validate_role_assignments
         - check_security_policies
     CC2.1:
-      description: "Information and communication"
+      description: 'Information and communication'
       checks:
         - validate_documentation_standards
         - check_communication_protocols
-  
+
   gdpr:
     article_5:
-      description: "Principles relating to processing"
+      description: 'Principles relating to processing'
       checks:
         - lawfulness_transparency
         - purpose_limitation
         - data_minimization
     article_32:
-      description: "Security of processing"
+      description: 'Security of processing'
       checks:
         - encryption_at_rest
         - encryption_in_transit
@@ -129,6 +131,7 @@ CREATE INDEX idx_risk_score ON compliance_audits(risk_score);
 ```
 
 ## Compliance Metrics
+
 - Validation completeness: 100%
 - False positive rate: <2%
 - Audit trail coverage: 100%

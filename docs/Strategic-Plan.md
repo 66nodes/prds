@@ -2,9 +2,13 @@ Strategic Implementation Guide
 
 ## **What:** Core Architecture Overview
 
-PlanExe is an **AI-powered strategic planning engine** that transforms vague descriptions into comprehensive, actionable project plans. Think of it as automated management consulting that generates 50+ page strategic documents complete with work breakdown structures, risk assessments, and implementation timelines.
+PlanExe is an **AI-powered strategic planning engine** that transforms vague descriptions into
+comprehensive, actionable project plans. Think of it as automated management consulting that
+generates 50+ page strategic documents complete with work breakdown structures, risk assessments,
+and implementation timelines.
 
-**Key Value Proposition:** Input a two-sentence idea, output enterprise-grade project documentation that typically requires weeks of consulting work.
+**Key Value Proposition:** Input a two-sentence idea, output enterprise-grade project documentation
+that typically requires weeks of consulting work.
 
 ## **Core Components:**
 
@@ -18,9 +22,9 @@ PlanExe is an **AI-powered strategic planning engine** that transforms vague des
 ### 2. **LLM Factory (`llm_factory.py`)**
 
 - **Provider-agnostic AI integration** supporting:
-    - OpenRouter (cloud-based, recommended for production)
-    - Ollama (local deployment)
-    - LM Studio, OpenAI, Groq, MistralAI
+  - OpenRouter (cloud-based, recommended for production)
+  - Ollama (local deployment)
+  - LM Studio, OpenAI, Groq, MistralAI
 - **Smart fallback mechanisms** with priority-based model selection
 
 ### 3. **Expert Modules (`planexe/expert/`, `planexe/governance/`)**
@@ -41,7 +45,8 @@ This architecture addresses **three critical enterprise pain points:**
 2. **Consistency Gaps:** Standardizes planning methodology across projects
 3. **Resource Optimization:** Automates high-value but repetitive analytical work
 
-**Market Positioning:** Positioned as an internal productivity multiplier rather than client-facing solution—similar to how your team uses AI for proposal generation or technical documentation.
+**Market Positioning:** Positioned as an internal productivity multiplier rather than client-facing
+solution—similar to how your team uses AI for proposal generation or technical documentation.
 
 ## **How:** Implementation Strategy
 
@@ -60,14 +65,16 @@ pip install '.[gradio-ui]'
 # Launch: python -m planexe.plan.app_text2plan
 ```
 
-**Why OpenRouter:** Cost-effective, reliable, no infrastructure overhead. Perfect for validating use cases before deeper investment.
+**Why OpenRouter:** Cost-effective, reliable, no infrastructure overhead. Perfect for validating use
+cases before deeper investment.
 
 ### **Phase 2: Enterprise Integration (Week 3-4)**
 
 **Customization Priorities:**
 
 1. **Industry-Specific Prompts** → Modify `planexe/prompt/` for your domain expertise
-2. **Client Template Integration** → Extend document generation for your standard deliverable formats
+2. **Client Template Integration** → Extend document generation for your standard deliverable
+   formats
 3. **CRM/Project Management Hooks** → API integration points already exist in the FastAPI structure
 
 ### **Phase 3: Scale & Operationalize (Month 2)**
@@ -75,7 +82,8 @@ pip install '.[gradio-ui]'
 **Production Considerations:**
 
 - **Multi-user deployment** → Already supports HuggingFace Spaces architecture
-- **Model Selection Strategy** → Priority-based fallback system handles availability/cost optimization
+- **Model Selection Strategy** → Priority-based fallback system handles availability/cost
+  optimization
 - **Output Standardization** → Leverage existing WBS framework for consistent deliverable quality
 
 ## **Go-to-Market Application for Onix**
@@ -88,7 +96,8 @@ pip install '.[gradio-ui]'
 
 ### **Client Engagement:**
 
-- **Discovery Workshop Enhancement:** Generate structured implementation roadmaps during client sessions
+- **Discovery Workshop Enhancement:** Generate structured implementation roadmaps during client
+  sessions
 - **Proof-of-Concept Planning:** Rapid prototyping of project frameworks for client presentations
 - **Change Management Planning:** Systematic approach to organizational transformation initiatives
 
@@ -99,4 +108,6 @@ pip install '.[gradio-ui]'
 3. **Identify highest-impact use cases** within your current sales process
 4. **Pilot with one client engagement** to validate commercial viability
 
-**Bottom Line:** This is a force multiplier for strategic planning workflows. The 5-10 minute generation time transforms what used to be days of analytical work into rapid, consistent output that enhances rather than replaces your strategic expertise.
+**Bottom Line:** This is a force multiplier for strategic planning workflows. The 5-10 minute
+generation time transforms what used to be days of analytical work into rapid, consistent output
+that enhances rather than replaces your strategic expertise.

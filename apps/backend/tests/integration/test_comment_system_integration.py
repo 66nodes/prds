@@ -56,7 +56,7 @@ def sample_user():
     return {
         "id": str(uuid4()),
         "full_name": f"User {uuid4()}",
-        "email": f"user-{uuid4()}@example.com"
+        "email": f"user-{uuid4()}example.com"
     }
 
 

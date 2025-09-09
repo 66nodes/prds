@@ -4,7 +4,8 @@ Arguments: $ARGUMENTS (PRD file path)
 
 ## Research-Enhanced Parsing
 
-Uses the research AI provider (typically Perplexity) for more comprehensive task generation with current best practices.
+Uses the research AI provider (typically Perplexity) for more comprehensive task generation with
+current best practices.
 
 ## Execution
 
@@ -35,6 +36,7 @@ task-master parse-prd --input=$ARGUMENTS --research
 ## Enhanced Output
 
 Research mode typically:
+
 - Generates more detailed tasks
 - Includes industry standards
 - Adds compliance considerations

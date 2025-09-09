@@ -2,7 +2,7 @@ name: Technical Debt Analysis
 
 on:
   schedule:
-    - cron: '0 9 * * 1'  # Weekly on Monday morning
+    - cron: '0 9 * * 1' # Weekly on Monday morning
   workflow_dispatch:
     inputs:
       analysis-scope:
@@ -12,7 +12,7 @@ on:
         type: choice
         options:
           - full
-          - incremental  
+          - incremental
           - specific-path
       target-path:
         description: 'Specific path to analyze (when scope is specific-path)'
@@ -64,13 +64,13 @@ jobs:
             echo "config-valid=false" >> $GITHUB_OUTPUT
             exit 1
           fi
-          
+
           # Validate YAML structure
           python3 << 'EOF'
           import yaml
           import sys
           import json
-          
+
           try:
               with open('${{ env.CONFIG_PATH }}', 'r') as f:
                   config = yaml.safe_load(f)
@@ -89,7 +89,7 @@ jobs:
               print(f'❌ Configuration validation failed: {e}')
               sys.exit(1)
           EOF
-          
+
           echo "config-valid=true" >> $GITHUB_OUTPUT
 
       - name: Load configuration
@@ -100,10 +100,10 @@ jobs:
           import yaml
           import json
           import os
-          
+
           with open('${{ env.CONFIG_PATH }}', 'r') as f:
               config = yaml.safe_load(f)
-          
+
           # Set as output for other jobs
           config_json = json.dumps(config, separators=(',', ':'))
           with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
@@ -147,14 +147,14 @@ jobs:
         continue-on-error: true
         run: |
           mkdir -p ../../analysis-results
-          
+
           # Run ESLint with JSON output
           npx eslint . --ext .ts,.js,.vue --format json --output-file ../../analysis-results/eslint-report.json || true
-          
+
           # Count issues by severity
           ERRORS=$(cat ../../analysis-results/eslint-report.json | jq '[.[].messages[] | select(.severity == 2)] | length')
           WARNINGS=$(cat ../../analysis-results/eslint-report.json | jq '[.[].messages[] | select(.severity == 1)] | length')
-          
+
           echo "errors=$ERRORS" >> $GITHUB_OUTPUT  
           echo "warnings=$WARNINGS" >> $GITHUB_OUTPUT
           echo "✅ ESLint analysis completed: $ERRORS errors, $WARNINGS warnings"
@@ -166,7 +166,7 @@ jobs:
         run: |
           # Run TypeScript compiler for type checking
           npx tsc --noEmit --skipLibCheck > ../../analysis-results/typescript-report.txt 2>&1 || true
-          
+
           # Count TypeScript errors
           TS_ERRORS=$(grep -c "error TS" ../../analysis-results/typescript-report.txt || echo "0")
           echo "typescript-errors=$TS_ERRORS" >> $GITHUB_OUTPUT
@@ -178,7 +178,7 @@ jobs:
         run: |
           # Analyze code duplication
           npx jscpd strategic-planning-platform/frontend/src --reporters json --output analysis-results/duplication-report.json || true
-          
+
           if [ -f "analysis-results/duplication-report.json" ]; then
             DUPLICATION=$(cat analysis-results/duplication-report.json | jq '.statistics.total.percentage' || echo "0")
             echo "duplication-percentage=$DUPLICATION" >> $GITHUB_OUTPUT
@@ -195,14 +195,14 @@ jobs:
           import json
           import os
           from datetime import datetime, timedelta
-          
+
           # Load configuration
           config = json.loads(os.environ['CONFIG'])
           debt_categories = config['debt-categories']
-          
+
           # Load analysis results
           debt_items = []
-          
+
           # Process ESLint results
           try:
               with open('analysis-results/eslint-report.json', 'r') as f:
@@ -227,7 +227,7 @@ jobs:
                       debt_items.append(debt_item)
           except Exception as e:
               print(f"Error processing ESLint results: {e}")
-          
+
           # Process TypeScript results
           try:
               with open('analysis-results/typescript-report.txt', 'r') as f:
@@ -247,7 +247,7 @@ jobs:
                   debt_items.append(debt_item)
           except Exception as e:
               print(f"Error processing TypeScript results: {e}")
-          
+
           # Process duplication results
           try:
               duplication_pct = float('${{ steps.duplication.outputs.duplication-percentage }}' or '0')
@@ -266,7 +266,7 @@ jobs:
                   debt_items.append(debt_item)
           except Exception as e:
               print(f"Error processing duplication results: {e}")
-          
+
           # Output results
           output = {
               'timestamp': datetime.now().isoformat(),
@@ -274,15 +274,15 @@ jobs:
               'total_items': len(debt_items),
               'items': debt_items[:50]  # Limit for GitHub Actions
           }
-          
+
           with open('analysis-results/frontend-debt.json', 'w') as f:
               json.dump(output, f, indent=2)
-          
+
           # Set GitHub output
           output_json = json.dumps(output, separators=(',', ':'))
           with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
               f.write(f"debt-items={output_json}\n")
-          
+
           print(f"✅ Frontend analysis completed: {len(debt_items)} debt items found")
           EOF
 
@@ -326,10 +326,10 @@ jobs:
         continue-on-error: true
         run: |
           mkdir -p ../../analysis-results
-          
+
           # Run Bandit security analysis
           bandit -r . -f json -o ../../analysis-results/bandit-report.json || true
-          
+
           if [ -f "../../analysis-results/bandit-report.json" ]; then
             SECURITY_ISSUES=$(cat ../../analysis-results/bandit-report.json | jq '.results | length')
             echo "security-issues=$SECURITY_ISSUES" >> $GITHUB_OUTPUT
@@ -344,7 +344,7 @@ jobs:
         run: |
           # Run Pylint analysis
           pylint . --output-format=json --reports=no > ../../analysis-results/pylint-report.json 2>/dev/null || true
-          
+
           if [ -f "../../analysis-results/pylint-report.json" ]; then
             PYLINT_ISSUES=$(cat ../../analysis-results/pylint-report.json | jq 'length')
             echo "quality-issues=$PYLINT_ISSUES" >> $GITHUB_OUTPUT
@@ -359,7 +359,7 @@ jobs:
         run: |
           # Run MyPy type checking
           mypy . --json-report ../../analysis-results/mypy-report || true
-          
+
           if [ -f "../../analysis-results/mypy-report/index.txt" ]; then
             TYPE_ERRORS=$(grep -c "error:" ../../analysis-results/mypy-report/index.txt || echo "0")
             echo "type-errors=$TYPE_ERRORS" >> $GITHUB_OUTPUT
@@ -374,7 +374,7 @@ jobs:
         run: |
           # Run Radon complexity analysis
           radon cc . --json > ../../analysis-results/complexity-report.json || true
-          
+
           if [ -f "../../analysis-results/complexity-report.json" ]; then
             # Count high complexity functions
             HIGH_COMPLEXITY=$(cat ../../analysis-results/complexity-report.json | jq '[.. | .complexity? | select(. != null and . > 10)] | length')
@@ -392,13 +392,13 @@ jobs:
           import json
           import os
           from datetime import datetime, timedelta
-          
+
           # Load configuration
           config = json.loads(os.environ['CONFIG'])
           debt_categories = config['debt-categories']
-          
+
           debt_items = []
-          
+
           # Process Bandit (security) results
           try:
               with open('analysis-results/bandit-report.json', 'r') as f:
@@ -426,7 +426,7 @@ jobs:
                   debt_items.append(debt_item)
           except Exception as e:
               print(f"Error processing Bandit results: {e}")
-          
+
           # Process Pylint results
           try:
               with open('analysis-results/pylint-report.json', 'r') as f:
@@ -450,7 +450,7 @@ jobs:
                   debt_items.append(debt_item)
           except Exception as e:
               print(f"Error processing Pylint results: {e}")
-          
+
           # Process complexity results
           try:
               high_complexity = int('${{ steps.complexity.outputs.high-complexity-functions }}' or '0')
@@ -469,7 +469,7 @@ jobs:
                   debt_items.append(debt_item)
           except Exception as e:
               print(f"Error processing complexity results: {e}")
-          
+
           # Output results
           output = {
               'timestamp': datetime.now().isoformat(),
@@ -477,15 +477,15 @@ jobs:
               'total_items': len(debt_items),
               'items': debt_items[:50]  # Limit for GitHub Actions
           }
-          
+
           with open('analysis-results/backend-debt.json', 'w') as f:
               json.dump(output, f, indent=2)
-          
+
           # Set GitHub output
           output_json = json.dumps(output, separators=(',', ':'))
           with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
               f.write(f"debt-items={output_json}\n")
-          
+
           print(f"✅ Backend analysis completed: {len(debt_items)} debt items found")
           EOF
 
@@ -519,38 +519,38 @@ jobs:
           import os
           from datetime import datetime
           from collections import defaultdict
-          
+
           # Load configuration
           config = json.loads(os.environ['CONFIG'])
-          
+
           # Combine all debt items
           all_debt_items = []
-          
+
           # Load frontend results
           try:
               frontend_data = json.loads('${{ needs.frontend-analysis.outputs.debt-items }}')
               all_debt_items.extend(frontend_data['items'])
           except Exception as e:
               print(f"Error loading frontend data: {e}")
-          
+
           # Load backend results  
           try:
               backend_data = json.loads('${{ needs.backend-analysis.outputs.debt-items }}')
               all_debt_items.extend(backend_data['items'])
           except Exception as e:
               print(f"Error loading backend data: {e}")
-          
+
           # Categorize and analyze
           category_counts = defaultdict(int)
           critical_items = []
-          
+
           for item in all_debt_items:
               category = item.get('category', 'low')
               category_counts[category] += 1
               
               if category == 'critical':
                   critical_items.append(item)
-          
+
           # Generate comprehensive report
           report = {
               'timestamp': datetime.now().isoformat(),
@@ -569,30 +569,30 @@ jobs:
               },
               'debt_items': all_debt_items[:100]  # Limit for performance
           }
-          
+
           # Save consolidated report
           with open('consolidated-debt-report.json', 'w') as f:
               json.dump(report, f, indent=2)
-          
+
           # Generate summary for GitHub Actions
           summary = f"""
           ## Technical Debt Analysis Summary
-          
+
           **Total Items**: {report['total_items']}
           **Critical**: {category_counts['critical']}
           **High**: {category_counts['high']}
           **Medium**: {category_counts['medium']}
           **Low**: {category_counts['low']}
-          
+
           **Estimated Effort**: {report['summary']['total_estimated_effort']} points
           """
-          
+
           # Set outputs
           with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
               f.write(f"total-debt-items={report['total_items']}\n")
               f.write(f"critical-items={category_counts['critical']}\n")
               f.write(f"report-summary={summary.strip()}\n")
-          
+
           print(f"✅ Consolidation completed: {report['total_items']} total debt items")
           EOF
 
@@ -621,13 +621,13 @@ jobs:
           script: |
             const fs = require('fs');
             const config = JSON.parse(process.env.CONFIG);
-            
+
             // Load consolidated report
             const report = JSON.parse(fs.readFileSync('consolidated-debt-report.json', 'utf8'));
-            
+
             // Create issues for critical items
             const criticalItems = report.critical_items || [];
-            
+
             for (const item of criticalItems.slice(0, 10)) { // Limit to 10 issues per run
               const title = `🚨 [Critical Debt] ${item.type}: ${item.message}`;
               
@@ -690,7 +690,14 @@ jobs:
             }
 
   workflow-summary:
-    needs: [validate-config, frontend-analysis, backend-analysis, consolidate-results, create-github-issues]
+    needs:
+      [
+        validate-config,
+        frontend-analysis,
+        backend-analysis,
+        consolidate-results,
+        create-github-issues,
+      ]
     if: always()
     runs-on: ubuntu-latest
     steps:
@@ -708,7 +715,7 @@ jobs:
           echo "- 📈 Consolidation: ${{ needs.consolidate-results.result }}" >> $GITHUB_STEP_SUMMARY
           echo "- 📝 Issue Creation: ${{ needs.create-github-issues.result }}" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          
+
           if [ "${{ needs.consolidate-results.outputs.total-debt-items }}" != "" ]; then
             echo "### 📊 Debt Metrics" >> $GITHUB_STEP_SUMMARY
             echo "- **Total Items**: ${{ needs.consolidate-results.outputs.total-debt-items }}" >> $GITHUB_STEP_SUMMARY

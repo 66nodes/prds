@@ -17,7 +17,7 @@ deployments:
     health_check:
       endpoint: /health
       interval: 30s
-      
+
   draft_agent:
     replicas: 5
     model: claude-3-sonnet
@@ -31,7 +31,7 @@ deployments:
     cache:
       enabled: true
       size: 10Gi
-      
+
   documentation_librarian:
     replicas: 2
     model: claude-3-sonnet
@@ -43,7 +43,7 @@ deployments:
       enabled: true
       backup_interval: 1h
       retention: 30d
-      
+
   rd_knowledge_engineer:
     replicas: 2
     model: claude-3-opus
@@ -53,8 +53,8 @@ deployments:
       gpu: required
     batch_processing:
       enabled: true
-      schedule: "0 2 * * *"
-      
+      schedule: '0 2 * * *'
+
   ai_workflow_designer:
     replicas: 2
     model: claude-3-opus
@@ -71,7 +71,7 @@ load_balancing:
   circuit_breaker:
     threshold: 5
     timeout: 60s
-    
+
 service_mesh:
   enabled: true
   mtls: required

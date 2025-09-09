@@ -46,10 +46,10 @@ analysis:
   python:
     enabled: true
     tools:
-      - bandit    # Security
-      - pylint    # Code quality
-      - mypy      # Type checking
-      - black     # Code formatting
+      - bandit # Security
+      - pylint # Code quality
+      - mypy # Type checking
+      - black # Code formatting
   docker:
     enabled: true
     security-scan: true
@@ -69,9 +69,9 @@ rate-limiting:
 
 notifications:
   slack-enabled: false
-  slack-webhook: ""
-  teams-enabled: false  
-  teams-webhook: ""
+  slack-webhook: ''
+  teams-enabled: false
+  teams-webhook: ''
   email-enabled: false
   email-recipients: []
 

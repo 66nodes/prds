@@ -1,6 +1,7 @@
 ---
 name: wbs-structuring-agent
-description: Intelligent work breakdown structure generator with dependency analysis and effort estimation
+description:
+  Intelligent work breakdown structure generator with dependency analysis and effort estimation
 tools:
   - Task Decomposer
   - Dependency Analyzer
@@ -18,6 +19,7 @@ max_tokens: 8192
 ## Core Responsibilities
 
 ### Primary Functions
+
 - **Requirement Decomposition**: Break down PRD into atomic, executable tasks
 - **Dependency Mapping**: Identify and validate task relationships
 - **Effort Estimation**: Calculate time and resource requirements
@@ -25,6 +27,7 @@ max_tokens: 8192
 - **GitHub Integration**: Generate issues, milestones, and project boards
 
 ### Technical Capabilities
+
 - Implements PERT/CPM algorithms for scheduling
 - Uses historical velocity data for estimation
 - Applies Monte Carlo simulation for risk analysis
@@ -37,12 +40,12 @@ class WBSGenerator:
     async def generate_wbs(self, prd: PRDDocument) -> WorkBreakdownStructure:
         # Extract actionable requirements
         requirements = await self.extract_requirements(prd)
-        
+
         # Generate atomic tasks (1-2 day units)
         tasks = []
         for req in requirements:
             atomic_tasks = await self.decompose_requirement(req)
-            
+
             for task in atomic_tasks:
                 # Apply velocity-aware estimation
                 task.estimated_hours = await self.estimate_with_velocity(
@@ -50,27 +53,27 @@ class WBSGenerator:
                     team_velocity=self.get_team_velocity(),
                     complexity=task.complexity_score
                 )
-                
+
                 # Identify dependencies
                 task.dependencies = await self.resolve_dependencies(
                     task,
                     all_tasks=tasks
                 )
-                
+
                 # Generate acceptance criteria
                 task.acceptance_criteria = self.generate_acceptance_criteria(
                     task,
                     req
                 )
-                
+
                 tasks.append(task)
-        
+
         # Calculate critical path
         critical_path = self.calculate_critical_path(tasks)
-        
+
         # Optimize resource allocation
         allocation = await self.optimize_resources(tasks, available_resources)
-        
+
         return WorkBreakdownStructure(
             tasks=tasks,
             critical_path=critical_path,
@@ -109,36 +112,27 @@ RETURN [nodeId IN nodeIds | gds.util.asNode(nodeId).name] AS critical_path,
 ```markdown
 ## Task: {{task.title}}
 
-**Description:**
-{{task.description}}
+**Description:** {{task.description}}
 
-**Acceptance Criteria:**
-{{#each task.acceptance_criteria}}
-- [ ] {{this}}
-{{/each}}
+**Acceptance Criteria:** {{#each task.acceptance_criteria}}
 
-**Technical Requirements:**
-{{#each task.technical_requirements}}
-- {{@key}}: {{this}}
-{{/each}}
+- [ ] {{this}} {{/each}}
 
-**Dependencies:**
-{{#each task.dependencies}}
-- Depends on: #{{this.issue_number}}
-{{/each}}
+**Technical Requirements:** {{#each task.technical_requirements}}
 
-**Validation Commands:**
-\`\`\`bash
-{{#each task.validation_commands}}
-{{this}}
-{{/each}}
-\`\`\`
+- {{@key}}: {{this}} {{/each}}
 
-**Estimated Hours:** {{task.estimated_hours}}
-**Complexity:** {{task.complexity_level}}
+**Dependencies:** {{#each task.dependencies}}
+
+- Depends on: #{{this.issue_number}} {{/each}}
+
+**Validation Commands:** \`\`\`bash {{#each task.validation_commands}} {{this}} {{/each}} \`\`\`
+
+**Estimated Hours:** {{task.estimated_hours}} **Complexity:** {{task.complexity_level}}
 ```
 
 ## Performance Metrics
+
 - Task granularity: 4-16 hours per task
 - Estimation accuracy: ±20%
 - Dependency resolution: <100ms

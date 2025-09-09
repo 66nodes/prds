@@ -15,37 +15,37 @@ spec:
         tier: specialized
     spec:
       nodeSelector:
-        gpu: "true"
+        gpu: 'true'
       containers:
-      - name: agent-container
-        image: ai-agents/ai-ml:latest
-        env:
-        - name: AGENT_CATEGORY
-          value: "ai-ml"
-        - name: MODEL_TYPE
-          value: "opus"
-        - name: GPU_ENABLED
-          value: "true"
-        - name: TENSOR_CORES
-          value: "true"
-        resources:
-          requests:
-            memory: "32Gi"
-            cpu: "8"
-            nvidia.com/gpu: "1"
-          limits:
-            memory: "64Gi"
-            cpu: "16"
-            nvidia.com/gpu: "2"
-        volumeMounts:
-        - name: model-cache
-          mountPath: /models
-        - name: datasets
-          mountPath: /data
+        - name: agent-container
+          image: ai-agents/ai-ml:latest
+          env:
+            - name: AGENT_CATEGORY
+              value: 'ai-ml'
+            - name: MODEL_TYPE
+              value: 'opus'
+            - name: GPU_ENABLED
+              value: 'true'
+            - name: TENSOR_CORES
+              value: 'true'
+          resources:
+            requests:
+              memory: '32Gi'
+              cpu: '8'
+              nvidia.com/gpu: '1'
+            limits:
+              memory: '64Gi'
+              cpu: '16'
+              nvidia.com/gpu: '2'
+          volumeMounts:
+            - name: model-cache
+              mountPath: /models
+            - name: datasets
+              mountPath: /data
       volumes:
-      - name: model-cache
-        persistentVolumeClaim:
-          claimName: model-cache-pvc
-      - name: datasets
-        persistentVolumeClaim:
-          claimName: datasets-pvc
+        - name: model-cache
+          persistentVolumeClaim:
+            claimName: model-cache-pvc
+        - name: datasets
+          persistentVolumeClaim:
+            claimName: datasets-pvc

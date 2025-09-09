@@ -4,39 +4,19 @@
 
 ```markdown
 # PROJECT: AI-Powered Strategic Planning Platform
+
 # TECH STACK: Nuxt.js 4 + FastAPI + Neo4j + GraphRAG
+
 # PURPOSE: Build hallucination-free PRD generation system
 
 ## Directory Structure to Create:
-strategic-planning-platform/
-├── frontend/                 # Nuxt.js 4 application
-│   ├── components/
-│   │   ├── auth/
-│   │   ├── dashboard/
-│   │   ├── prd/
-│   │   └── shared/
-│   ├── pages/
-│   ├── composables/
-│   ├── stores/
-│   ├── assets/
-│   └── server/
-├── backend/                  # Python FastAPI services
-│   ├── api/
-│   │   ├── endpoints/
-│   │   ├── middleware/
-│   │   └── dependencies/
-│   ├── services/
-│   │   ├── graphrag/
-│   │   ├── llm/
-│   │   └── document/
-│   ├── models/
-│   ├── schemas/
-│   └── core/
-├── infrastructure/
-│   ├── docker/
-│   ├── kubernetes/
-│   └── terraform/
-└── tests/
+
+strategic-planning-platform/ ├── frontend/ # Nuxt.js 4 application │ ├── components/ │ │ ├── auth/ │
+│ ├── dashboard/ │ │ ├── prd/ │ │ └── shared/ │ ├── pages/ │ ├── composables/ │ ├── stores/ │ ├──
+assets/ │ └── server/ ├── backend/ # Python FastAPI services │ ├── api/ │ │ ├── endpoints/ │ │ ├──
+middleware/ │ │ └── dependencies/ │ ├── services/ │ │ ├── graphrag/ │ │ ├── llm/ │ │ └── document/ │
+├── models/ │ ├── schemas/ │ └── core/ ├── infrastructure/ │ ├── docker/ │ ├── kubernetes/ │ └──
+terraform/ └── tests/
 ```
 
 ## Phase 1: Environment Setup (Day 1-2)
@@ -64,19 +44,19 @@ export default defineNuxtConfig({
     '@nuxtjs/tailwindcss',
     '@pinia/nuxt',
     '@vueuse/nuxt',
-    '@nuxtjs/google-fonts'
+    '@nuxtjs/google-fonts',
   ],
   devtools: { enabled: true },
   typescript: {
     strict: true,
-    typeCheck: true
+    typeCheck: true,
   },
   ui: {
     global: true,
-    icons: ['heroicons', 'lucide']
+    icons: ['heroicons', 'lucide'],
   },
-  css: ['~/assets/css/main.css', '~/assets/css/theme.css']
-})
+  css: ['~/assets/css/main.css', '~/assets/css/theme.css'],
+});
 ```
 
 ### Step 1.2: Configure Design System
@@ -97,7 +77,7 @@ export default defineNuxtConfig({
     --color-black-800: #383838;
     --color-black-900: #313131;
     --color-black-950: #1a1a1a;
-    
+
     /* Semantic colors */
     --color-primary: var(--color-black-700);
     --color-secondary: #6366f1;
@@ -106,7 +86,7 @@ export default defineNuxtConfig({
     --color-error: #f97316;
     --color-info: #0ea5e9;
   }
-  
+
   .dark {
     --color-primary: var(--color-black-600);
     --ui-bg: #0b0b0b;
@@ -117,7 +97,7 @@ export default defineNuxtConfig({
 
 ```typescript
 // frontend/tailwind.config.ts
-import type { Config } from 'tailwindcss'
+import type { Config } from 'tailwindcss';
 
 export default <Partial<Config>>{
   content: [],
@@ -135,12 +115,12 @@ export default <Partial<Config>>{
           700: 'var(--color-black-700)',
           800: 'var(--color-black-800)',
           900: 'var(--color-black-900)',
-          950: 'var(--color-black-950)'
-        }
-      }
-    }
-  }
-}
+          950: 'var(--color-black-950)',
+        },
+      },
+    },
+  },
+};
 ```
 
 ### Step 1.3: Initialize Backend (FastAPI)
@@ -198,7 +178,7 @@ services:
     image: supabase/postgres:15.1.0.117
     container_name: supabase-db
     ports:
-      - "5432:5432"
+      - '5432:5432'
     environment:
       POSTGRES_HOST: /var/run/postgresql
       POSTGRES_DB: postgres
@@ -220,7 +200,7 @@ services:
     depends_on:
       - supabase-db
     ports:
-      - "9999:9999"
+      - '9999:9999'
     environment:
       GOTRUE_API_HOST: 0.0.0.0
       GOTRUE_API_PORT: 9999
@@ -239,21 +219,21 @@ services:
     depends_on:
       - supabase-db
     ports:
-      - "4000:4000"
+      - '4000:4000'
     environment:
       DB_HOST: supabase-db
       DB_PORT: 5432
       DB_NAME: postgres
       DB_USER: postgres
       DB_PASSWORD: your-super-secret-password
-      DB_SSL: "false"
+      DB_SSL: 'false'
       PORT: 4000
       JWT_SECRET: your-super-secret-jwt-token
       REPLICATION_MODE: RLS
       REPLICATION_POLL_INTERVAL: 100
-      SECURE_CHANNELS: "true"
+      SECURE_CHANNELS: 'true'
       SLOT_NAME: supabase_realtime_rls
-      TEMPORARY_SLOT: "true"
+      TEMPORARY_SLOT: 'true'
 
   supabase-storage:
     image: supabase/storage-api:v0.43.11
@@ -261,7 +241,7 @@ services:
     depends_on:
       - supabase-db
     ports:
-      - "5000:5000"
+      - '5000:5000'
     environment:
       ANON_KEY: your-anon-key
       SERVICE_KEY: your-service-key
@@ -281,7 +261,7 @@ services:
     depends_on:
       - supabase-db
     ports:
-      - "3000:3000"
+      - '3000:3000'
     environment:
       PGRST_DB_URI: postgres://postgres:your-super-secret-password@supabase-db:5432/postgres
       PGRST_DB_SCHEMAS: public,storage,auth
@@ -293,8 +273,8 @@ services:
     image: neo4j:5.15-enterprise
     container_name: strategic-planning-neo4j
     ports:
-      - "7474:7474"  # HTTP
-      - "7687:7687"  # Bolt
+      - '7474:7474' # HTTP
+      - '7687:7687' # Bolt
     environment:
       - NEO4J_AUTH=neo4j/your-password-here
       - NEO4J_ACCEPT_LICENSE_AGREEMENT=yes
@@ -311,7 +291,7 @@ services:
     image: redis:7-alpine
     container_name: strategic-planning-redis
     ports:
-      - "6379:6379"
+      - '6379:6379'
     volumes:
       - redis_data:/data
 
@@ -390,14 +370,14 @@ load_dotenv()
 class Neo4jConnection:
     def __init__(self):
         self.driver: Optional[AsyncGraphDatabase.driver] = None
-    
+
     async def init(self):
         self.driver = AsyncGraphDatabase.driver(
             os.getenv("NEO4J_URI", "bolt://localhost:7687"),
             auth=(os.getenv("NEO4J_USER", "neo4j"), os.getenv("NEO4J_PASSWORD"))
         )
         await self.create_constraints()
-    
+
     async def create_constraints(self):
         async with self.driver.session() as session:
             constraints = [
@@ -408,7 +388,7 @@ class Neo4jConnection:
             ]
             for constraint in constraints:
                 await session.run(constraint)
-    
+
     async def close(self):
         if self.driver:
             await self.driver.close()
@@ -416,13 +396,13 @@ class Neo4jConnection:
 class SupabaseConnection:
     def __init__(self):
         self.client: Optional[Client] = None
-    
+
     async def init(self):
         # Initialize Supabase client
         supabase_url = os.getenv("SUPABASE_URL", "http://localhost:3000")
         supabase_key = os.getenv("SUPABASE_ANON_KEY", "your-anon-key")
         self.client = create_client(supabase_url, supabase_key)
-    
+
     def get_client(self) -> Client:
         return self.client
 
@@ -461,7 +441,7 @@ class GraphRAGService:
             password=os.getenv("NEO4J_PASSWORD")
         )
         openai.api_key = os.getenv("OPENAI_API_KEY")
-        
+
     async def validate_against_graph(self, content: str, context: Dict) -> Dict:
         """
         Multi-level validation against knowledge graph
@@ -469,20 +449,20 @@ class GraphRAGService:
         """
         # Entity-level validation
         entity_validation = await self._validate_entities(content)
-        
+
         # Community-level validation
         community_validation = await self._validate_communities(content)
-        
+
         # Global validation
         global_validation = await self._validate_global(content)
-        
+
         # Calculate weighted confidence
         confidence = (
             entity_validation['score'] * 0.5 +
             community_validation['score'] * 0.3 +
             global_validation['score'] * 0.2
         )
-        
+
         return {
             'confidence': confidence,
             'entity_validation': entity_validation,
@@ -490,7 +470,7 @@ class GraphRAGService:
             'global_validation': global_validation,
             'requires_correction': confidence < 0.8
         }
-    
+
     async def _validate_entities(self, content: str) -> Dict:
         # Implementation for entity validation
         query = """
@@ -501,17 +481,17 @@ class GraphRAGService:
         """
         # Execute and process
         return {'score': 0.9, 'matches': []}
-    
+
     async def retrieve_context(self, query: str, project_id: str) -> List[Dict]:
         """
         Hybrid retrieval combining vector search and graph traversal
         """
         # Vector similarity search
         vector_results = await self._vector_search(query)
-        
+
         # Graph traversal for relationships
         graph_results = await self._graph_traversal(query, project_id)
-        
+
         # Merge and rank results
         return self._merge_results(vector_results, graph_results)
 ```
@@ -542,22 +522,22 @@ async def initiate_prd(input: PRDPhase0Input):
     """Phase 0: Process initial project description"""
     graphrag = GraphRAGService()
     llm = LLMService()
-    
+
     # Extract concepts
     concepts = await llm.extract_concepts(input.initial_description)
-    
+
     # Find similar projects
     similar_projects = await graphrag.find_similar_projects(concepts)
-    
+
     # Generate clarifying questions
     questions = await llm.generate_clarifying_questions(
         input.initial_description,
         similar_projects
     )
-    
+
     # Create PRD session in Supabase
     prd_id = await create_prd_session(input.user_id, input.initial_description)
-    
+
     # Store in Supabase for user session management
     supabase_client = supabase_db.get_client()
     await supabase_client.table('prd_sessions').insert({
@@ -566,7 +546,7 @@ async def initiate_prd(input: PRDPhase0Input):
         'initial_description': input.initial_description,
         'status': 'phase0_complete'
     }).execute()
-    
+
     return {
         "prd_id": prd_id,
         "questions": questions,
@@ -577,7 +557,7 @@ async def initiate_prd(input: PRDPhase0Input):
 async def clarify_objectives(input: PRDPhase1Input):
     """Phase 1: Process clarification answers"""
     graphrag = GraphRAGService()
-    
+
     # Validate answers against graph
     validations = []
     for question_id, answer in input.answers.items():
@@ -587,10 +567,10 @@ async def clarify_objectives(input: PRDPhase1Input):
             "validation": validation,
             "confidence": validation['confidence']
         })
-    
+
     # Store validated answers in Supabase
     await store_phase1_answers(input.prd_id, input.answers, validations)
-    
+
     # Update PRD session status in Supabase
     supabase_client = supabase_db.get_client()
     await supabase_client.table('prd_sessions').update({
@@ -598,7 +578,7 @@ async def clarify_objectives(input: PRDPhase1Input):
         'validations': validations,
         'status': 'phase1_complete'
     }).eq('id', input.prd_id).execute()
-    
+
     return {
         "prd_id": input.prd_id,
         "validations": validations,
@@ -626,7 +606,7 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@vueuse/nuxt',
     '@nuxtjs/google-fonts',
-    '@nuxtjs/supabase'  // Add Supabase module
+    '@nuxtjs/supabase', // Add Supabase module
   ],
   supabase: {
     url: process.env.SUPABASE_URL,
@@ -634,47 +614,47 @@ export default defineNuxtConfig({
     redirectOptions: {
       login: '/auth/login',
       callback: '/auth/callback',
-      exclude: ['/auth/*']
-    }
+      exclude: ['/auth/*'],
+    },
   },
   // ... rest of config
-})
+});
 ```
 
 ```typescript
 // frontend/composables/useSupabaseAuth.ts
 export const useSupabaseAuth = () => {
-  const supabase = useSupabaseClient()
-  const user = useSupabaseUser()
+  const supabase = useSupabaseClient();
+  const user = useSupabaseUser();
 
   const signIn = async (email: string, password: string) => {
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
-    })
-    return { data, error }
-  }
+    });
+    return { data, error };
+  };
 
   const signUp = async (email: string, password: string) => {
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
-    })
-    return { data, error }
-  }
+    });
+    return { data, error };
+  };
 
   const signOut = async () => {
-    const { error } = await supabase.auth.signOut()
-    return { error }
-  }
+    const { error } = await supabase.auth.signOut();
+    return { error };
+  };
 
   return {
     user,
     signIn,
     signUp,
     signOut,
-  }
-}
+  };
+};
 ```
 
 ### Step 3.2: Authentication Components
@@ -684,75 +664,58 @@ export const useSupabaseAuth = () => {
 <template>
   <UCard class="w-full max-w-md">
     <template #header>
-      <h2 class="text-2xl font-bold text-black-900 dark:text-white">
-        Sign In
-      </h2>
+      <h2 class="text-2xl font-bold text-black-900 dark:text-white">Sign In</h2>
     </template>
-    
+
     <UForm :schema="schema" :state="state" @submit="onSubmit">
       <UFormGroup label="Email" name="email">
-        <UInput 
-          v-model="state.email" 
-          type="email"
-          placeholder="you@example.com"
-        />
+        <UInput v-model="state.email" type="email" placeholder="you@example.com" />
       </UFormGroup>
-      
+
       <UFormGroup label="Password" name="password">
-        <UInput 
-          v-model="state.password" 
-          type="password"
-          placeholder="••••••••"
-        />
+        <UInput v-model="state.password" type="password" placeholder="••••••••" />
       </UFormGroup>
-      
-      <UButton 
-        type="submit" 
-        block 
-        class="mt-4"
-        :loading="loading"
-      >
-        Sign In
-      </UButton>
+
+      <UButton type="submit" block class="mt-4" :loading="loading"> Sign In </UButton>
     </UForm>
   </UCard>
 </template>
 
 <script setup lang="ts">
-import { z } from 'zod'
-import type { FormSubmitEvent } from '#ui/types'
+import { z } from 'zod';
+import type { FormSubmitEvent } from '#ui/types';
 
 const schema = z.object({
   email: z.string().email('Invalid email'),
-  password: z.string().min(8, 'Must be at least 8 characters')
-})
+  password: z.string().min(8, 'Must be at least 8 characters'),
+});
 
-type Schema = z.output<typeof schema>
+type Schema = z.output<typeof schema>;
 
 const state = reactive({
   email: '',
-  password: ''
-})
+  password: '',
+});
 
-const loading = ref(false)
+const loading = ref(false);
 
-const { signIn } = useSupabaseAuth()
+const { signIn } = useSupabaseAuth();
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
-  loading.value = true
+  loading.value = true;
   try {
-    const { data, error } = await signIn(event.data.email, event.data.password)
-    
+    const { data, error } = await signIn(event.data.email, event.data.password);
+
     if (error) {
-      throw error
+      throw error;
     }
-    
+
     // Redirect to dashboard on successful login
-    await navigateTo('/dashboard')
+    await navigateTo('/dashboard');
   } catch (error) {
-    console.error('Login failed:', error)
+    console.error('Login failed:', error);
   } finally {
-    loading.value = false
+    loading.value = false;
   }
 }
 </script>
@@ -772,7 +735,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         Describe your project idea in a sentence or paragraph
       </p>
     </div>
-    
+
     <UCard>
       <UTextarea
         v-model="projectDescription"
@@ -780,7 +743,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         placeholder="e.g., Build a new mobile app for our loyalty program..."
         class="w-full"
       />
-      
+
       <div class="mt-6 flex justify-end">
         <UButton
           size="lg"
@@ -793,13 +756,13 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         </UButton>
       </div>
     </UCard>
-    
+
     <!-- Similar Projects Preview -->
     <div v-if="similarProjects.length > 0" class="mt-8">
       <h3 class="text-lg font-semibold mb-4">Similar Projects</h3>
       <div class="grid gap-4">
-        <UCard 
-          v-for="project in similarProjects" 
+        <UCard
+          v-for="project in similarProjects"
           :key="project.id"
           class="hover:shadow-lg transition-shadow"
         >
@@ -814,30 +777,30 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 </template>
 
 <script setup lang="ts">
-const projectDescription = ref('')
-const loading = ref(false)
-const similarProjects = ref([])
+const projectDescription = ref('');
+const loading = ref(false);
+const similarProjects = ref([]);
 
 async function handleSubmit() {
-  loading.value = true
+  loading.value = true;
   try {
     const { data } = await $fetch('/api/prd/phase0/initiate', {
       method: 'POST',
       body: {
         initial_description: projectDescription.value,
-        user_id: useAuthStore().user.id
-      }
-    })
-    
+        user_id: useAuthStore().user.id,
+      },
+    });
+
     // Store PRD ID and navigate to Phase 1
-    usePrdStore().setPrdId(data.prd_id)
-    usePrdStore().setQuestions(data.questions)
-    
-    await navigateTo('/prd/phase1')
+    usePrdStore().setPrdId(data.prd_id);
+    usePrdStore().setQuestions(data.questions);
+
+    await navigateTo('/prd/phase1');
   } catch (error) {
-    console.error('Failed to initiate PRD:', error)
+    console.error('Failed to initiate PRD:', error);
   } finally {
-    loading.value = false
+    loading.value = false;
   }
 }
 </script>
@@ -852,63 +815,49 @@ async function handleSubmit() {
     <!-- Header -->
     <div class="mb-8">
       <h1 class="text-3xl font-bold">Strategic Planning Dashboard</h1>
-      <p class="text-gray-600 mt-2">
-        Manage your PRDs and track progress
-      </p>
+      <p class="text-gray-600 mt-2">Manage your PRDs and track progress</p>
     </div>
-    
+
     <!-- Quick Actions -->
     <div class="mb-8">
-      <UButton 
-        size="lg" 
-        @click="navigateTo('/prd/create')"
-        icon="i-heroicons-plus"
-      >
+      <UButton size="lg" @click="navigateTo('/prd/create')" icon="i-heroicons-plus">
         Create New PRD
       </UButton>
     </div>
-    
+
     <!-- Metrics Cards -->
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
       <UCard>
         <div class="text-2xl font-bold">{{ metrics.active }}</div>
         <div class="text-gray-600">Active PRDs</div>
       </UCard>
-      
+
       <UCard>
         <div class="text-2xl font-bold">{{ metrics.completed }}</div>
         <div class="text-gray-600">Completed</div>
       </UCard>
-      
+
       <UCard>
         <div class="text-2xl font-bold">{{ metrics.quality }}%</div>
         <div class="text-gray-600">Avg Quality Score</div>
       </UCard>
-      
+
       <UCard>
         <div class="text-2xl font-bold">{{ metrics.time }}h</div>
         <div class="text-gray-600">Avg Time Saved</div>
       </UCard>
     </div>
-    
+
     <!-- PRD List -->
     <UCard>
       <template #header>
         <h2 class="text-xl font-semibold">Recent PRDs</h2>
       </template>
-      
-      <UTable 
-        :rows="prds" 
-        :columns="columns"
-        :loading="loading"
-      >
+
+      <UTable :rows="prds" :columns="columns" :loading="loading">
         <template #actions-data="{ row }">
           <UDropdown :items="getActions(row)">
-            <UButton 
-              color="gray" 
-              variant="ghost" 
-              icon="i-heroicons-ellipsis-horizontal-20-solid" 
-            />
+            <UButton color="gray" variant="ghost" icon="i-heroicons-ellipsis-horizontal-20-solid" />
           </UDropdown>
         </template>
       </UTable>
@@ -918,47 +867,61 @@ async function handleSubmit() {
 
 <script setup lang="ts">
 // Use Supabase for dashboard data with authentication
-const user = useSupabaseUser()
-const supabase = useSupabaseClient()
+const user = useSupabaseUser();
+const supabase = useSupabaseClient();
 
 const { data: metrics } = await useLazyAsyncData('dashboard-metrics', async () => {
-  if (!user.value) return null
-  const { data } = await supabase.from('dashboard_metrics').select('*').eq('user_id', user.value.id).single()
-  return data
-})
+  if (!user.value) return null;
+  const { data } = await supabase
+    .from('dashboard_metrics')
+    .select('*')
+    .eq('user_id', user.value.id)
+    .single();
+  return data;
+});
 
 const { data: prds, pending: loading } = await useLazyAsyncData('user-prds', async () => {
-  if (!user.value) return []
-  const { data } = await supabase.from('prd_sessions').select('*').eq('user_id', user.value.id).order('created_at', { ascending: false })
-  return data
-})
+  if (!user.value) return [];
+  const { data } = await supabase
+    .from('prd_sessions')
+    .select('*')
+    .eq('user_id', user.value.id)
+    .order('created_at', { ascending: false });
+  return data;
+});
 
 const columns = [
   { key: 'title', label: 'Title' },
   { key: 'status', label: 'Status' },
   { key: 'created_at', label: 'Created' },
   { key: 'quality_score', label: 'Quality' },
-  { key: 'actions', label: '' }
-]
+  { key: 'actions', label: '' },
+];
 
 function getActions(row: any) {
   return [
-    [{
-      label: 'View',
-      icon: 'i-heroicons-eye',
-      click: () => navigateTo(`/prd/${row.id}`)
-    }],
-    [{
-      label: 'Edit',
-      icon: 'i-heroicons-pencil',
-      click: () => navigateTo(`/prd/${row.id}/edit`)
-    }],
-    [{
-      label: 'Export',
-      icon: 'i-heroicons-arrow-down-tray',
-      click: () => exportPrd(row.id)
-    }]
-  ]
+    [
+      {
+        label: 'View',
+        icon: 'i-heroicons-eye',
+        click: () => navigateTo(`/prd/${row.id}`),
+      },
+    ],
+    [
+      {
+        label: 'Edit',
+        icon: 'i-heroicons-pencil',
+        click: () => navigateTo(`/prd/${row.id}/edit`),
+      },
+    ],
+    [
+      {
+        label: 'Export',
+        icon: 'i-heroicons-arrow-down-tray',
+        click: () => exportPrd(row.id),
+      },
+    ],
+  ];
 }
 </script>
 ```
@@ -985,7 +948,7 @@ async def init_graph_schema():
         os.getenv("NEO4J_URI"),
         auth=(os.getenv("NEO4J_USER"), os.getenv("NEO4J_PASSWORD"))
     )
-    
+
     async with driver.session() as session:
         # Create constraints
         constraints = [
@@ -995,11 +958,11 @@ async def init_graph_schema():
             "CREATE CONSTRAINT user_unique IF NOT EXISTS FOR (u:User) REQUIRE u.email IS UNIQUE",
             "CREATE CONSTRAINT objective_unique IF NOT EXISTS FOR (o:Objective) REQUIRE o.id IS UNIQUE"
         ]
-        
+
         for constraint in constraints:
             await session.run(constraint)
             print(f"Created: {constraint}")
-        
+
         # Create indexes
         indexes = [
             "CREATE INDEX req_embedding IF NOT EXISTS FOR (r:Requirement) ON (r.embedding)",
@@ -1007,11 +970,11 @@ async def init_graph_schema():
             "CREATE INDEX prd_created IF NOT EXISTS FOR (p:PRD) ON (p.created_at)",
             "CREATE INDEX task_status IF NOT EXISTS FOR (t:Task) ON (t.status)"
         ]
-        
+
         for index in indexes:
             await session.run(index)
             print(f"Created: {index}")
-    
+
     await driver.close()
     print("Graph schema initialized successfully!")
 
@@ -1030,30 +993,30 @@ class HallucinationPrevention:
     def __init__(self, neo4j_driver, confidence_threshold=0.8):
         self.driver = neo4j_driver
         self.confidence_threshold = confidence_threshold
-        
+
     async def validate_content(self, content: str, context: Dict) -> Dict:
         """
         Three-tier validation system
         """
         # Level 1: Entity validation (50% weight)
         entity_result = await self._entity_validation(content, context)
-        
+
         # Level 2: Community validation (30% weight)
         community_result = await self._community_validation(content, context)
-        
+
         # Level 3: Global validation (20% weight)
         global_result = await self._global_validation(content, context)
-        
+
         # Calculate weighted confidence
         confidence = (
             entity_result['confidence'] * 0.5 +
             community_result['confidence'] * 0.3 +
             global_result['confidence'] * 0.2
         )
-        
+
         # Determine if correction needed
         needs_correction = confidence < self.confidence_threshold
-        
+
         corrections = []
         if needs_correction:
             corrections = await self._generate_corrections(
@@ -1062,7 +1025,7 @@ class HallucinationPrevention:
                 community_result,
                 global_result
             )
-        
+
         return {
             'confidence': confidence,
             'valid': not needs_correction,
@@ -1071,27 +1034,27 @@ class HallucinationPrevention:
             'global_validation': global_result,
             'corrections': corrections
         }
-    
+
     async def _entity_validation(self, content: str, context: Dict) -> Dict:
         query = """
         MATCH (r:Requirement)
         WHERE r.project_id = $project_id
-        WITH r, 
+        WITH r,
              apoc.text.similarity(r.description, $content) as similarity
         WHERE similarity > 0.7
         RETURN r.id, r.description, similarity
         ORDER BY similarity DESC
         LIMIT 10
         """
-        
+
         async with self.driver.session() as session:
             result = await session.run(query, {
                 'project_id': context.get('project_id'),
                 'content': content
             })
-            
+
             matches = [record async for record in result]
-            
+
             if matches:
                 avg_similarity = np.mean([m['similarity'] for m in matches])
                 return {
@@ -1099,7 +1062,7 @@ class HallucinationPrevention:
                     'matches': matches,
                     'status': 'validated'
                 }
-            
+
             return {
                 'confidence': 0.0,
                 'matches': [],
@@ -1127,7 +1090,7 @@ async def test_phase0_initiation():
                 "user_id": "test-user-123"
             }
         )
-        
+
         assert response.status_code == 200
         data = response.json()
         assert "prd_id" in data
@@ -1137,15 +1100,15 @@ async def test_phase0_initiation():
 @pytest.mark.asyncio
 async def test_hallucination_prevention():
     from services.graphrag.hallucination_prevention import HallucinationPrevention
-    
+
     hp = HallucinationPrevention(driver, confidence_threshold=0.8)
-    
+
     # Test with known valid content
     result = await hp.validate_content(
         "Implement user authentication with OAuth 2.0",
         {"project_id": "test-project"}
     )
-    
+
     assert result['confidence'] > 0.7
     assert 'corrections' in result
 ```
@@ -1154,27 +1117,27 @@ async def test_hallucination_prevention():
 
 ```typescript
 // frontend/tests/components/Phase0.test.ts
-import { describe, it, expect } from 'vitest'
-import { mount } from '@vue/test-utils'
-import Phase0 from '~/components/prd/Phase0.vue'
+import { describe, it, expect } from 'vitest';
+import { mount } from '@vue/test-utils';
+import Phase0 from '~/components/prd/Phase0.vue';
 
 describe('Phase0 Component', () => {
   it('renders welcome message', () => {
-    const wrapper = mount(Phase0)
-    expect(wrapper.text()).toContain('Welcome to Strategic Planning')
-  })
-  
+    const wrapper = mount(Phase0);
+    expect(wrapper.text()).toContain('Welcome to Strategic Planning');
+  });
+
   it('enables continue button when text is entered', async () => {
-    const wrapper = mount(Phase0)
-    const textarea = wrapper.find('textarea')
-    const button = wrapper.find('button')
-    
-    expect(button.attributes('disabled')).toBe('true')
-    
-    await textarea.setValue('Test project description')
-    expect(button.attributes('disabled')).toBeUndefined()
-  })
-})
+    const wrapper = mount(Phase0);
+    const textarea = wrapper.find('textarea');
+    const button = wrapper.find('button');
+
+    expect(button.attributes('disabled')).toBe('true');
+
+    await textarea.setValue('Test project description');
+    expect(button.attributes('disabled')).toBeUndefined();
+  });
+});
 ```
 
 ## Phase 6: Deployment (Day 20)
@@ -1227,13 +1190,13 @@ spec:
         app: frontend
     spec:
       containers:
-      - name: frontend
-        image: strategic-planning/frontend:latest
-        ports:
-        - containerPort: 3000
-        env:
-        - name: NITRO_PORT
-          value: "3000"
+        - name: frontend
+          image: strategic-planning/frontend:latest
+          ports:
+            - containerPort: 3000
+          env:
+            - name: NITRO_PORT
+              value: '3000'
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -1250,16 +1213,16 @@ spec:
         app: backend
     spec:
       containers:
-      - name: backend
-        image: strategic-planning/backend:latest
-        ports:
-        - containerPort: 8000
-        env:
-        - name: NEO4J_URI
-          valueFrom:
-            secretKeyRef:
-              name: app-secrets
-              key: neo4j-uri
+        - name: backend
+          image: strategic-planning/backend:latest
+          ports:
+            - containerPort: 8000
+          env:
+            - name: NEO4J_URI
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: neo4j-uri
 ```
 
 ## Validation Checklist
@@ -1268,6 +1231,7 @@ spec:
 ## Pre-Deployment Validation
 
 ### Backend Checks
+
 - [ ] All API endpoints return correct status codes
 - [ ] GraphRAG validation achieves <2% hallucination rate
 - [ ] Response times <200ms for simple queries
@@ -1277,6 +1241,7 @@ spec:
 - [ ] Error handling comprehensive
 
 ### Frontend Checks
+
 - [ ] All phases of PRD workflow functional
 - [ ] Dark mode working correctly
 - [ ] Responsive design verified
@@ -1285,6 +1250,7 @@ spec:
 - [ ] Error messages user-friendly
 
 ### Integration Checks
+
 - [ ] Frontend successfully calls backend APIs
 - [ ] WebSocket connections stable
 - [ ] File uploads working
@@ -1292,6 +1258,7 @@ spec:
 - [ ] Real-time updates functioning
 
 ### Performance Checks
+
 - [ ] Page load time <2 seconds
 - [ ] API response time <200ms p95
 - [ ] Concurrent user testing (100+)
@@ -1299,6 +1266,7 @@ spec:
 - [ ] No memory leaks detected
 
 ### Security Checks
+
 - [ ] JWT tokens properly validated
 - [ ] SQL injection prevention verified
 - [ ] XSS protection in place
@@ -1308,6 +1276,7 @@ spec:
 ## Post-Deployment Monitoring
 
 ### Metrics to Track
+
 - Hallucination rate (target: <2%)
 - API response times
 - User session duration
@@ -1316,4 +1285,6 @@ spec:
 - Database query performance
 ```
 
-This runbook provides a complete, step-by-step implementation guide that can be followed sequentially to build the AI-Powered Strategic Planning Platform. Each section includes specific commands, code snippets, and validation steps to ensure successful implementation.
+This runbook provides a complete, step-by-step implementation guide that can be followed
+sequentially to build the AI-Powered Strategic Planning Platform. Each section includes specific
+commands, code snippets, and validation steps to ensure successful implementation.

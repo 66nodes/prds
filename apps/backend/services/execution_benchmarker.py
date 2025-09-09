@@ -374,7 +374,7 @@ class ExecutionBenchmarker:
         """Monitor execution metrics during benchmark."""
         start_time = time.time()
         last_task_count = 0
-        throughput_samples = []
+        throughput_enterprises = []
         
         try:
             while (time.time() - start_time) < duration_seconds:
@@ -389,7 +389,7 @@ class ExecutionBenchmarker:
                 # Calculate throughput
                 current_task_count = metrics.total_tasks_executed
                 throughput = current_task_count - last_task_count
-                throughput_samples.append(throughput)
+                throughput_enterprises.append(throughput)
                 last_task_count = current_task_count
                 
                 # Update peak throughput

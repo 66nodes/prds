@@ -12,23 +12,26 @@ iteration_support: true
 ## Draft Agent - Rapid Content Generator
 
 ### Purpose
-Generate high-quality first-pass content 70% faster than production agents, optimized for iterative refinement cycles with Judge Agent validation.
+
+Generate high-quality first-pass content 70% faster than production agents, optimized for iterative
+refinement cycles with Judge Agent validation.
 
 ### Core Responsibilities
 
 #### 1. **Rapid Generation Strategies**
+
 ```yaml
 generation_modes:
   quick_draft:
     time_budget: 30_seconds
     quality_target: 70%
     focus: core_structure
-    
+
   standard_draft:
     time_budget: 60_seconds
     quality_target: 80%
     focus: complete_content
-    
+
   detailed_draft:
     time_budget: 120_seconds
     quality_target: 85%
@@ -43,23 +46,24 @@ optimization_techniques:
 ```
 
 #### 2. **Content Structure Templates**
+
 ```yaml
 document_templates:
   technical_spec:
     sections: [overview, requirements, architecture, implementation, testing]
     depth: medium
     validation: technical_coherence
-    
+
   project_plan:
     sections: [executive_summary, objectives, scope, timeline, resources, risks]
     depth: high
     validation: completeness_check
-    
+
   user_story:
     sections: [as_a, i_want, so_that, acceptance_criteria]
     depth: low
     validation: clarity_check
-    
+
   analysis_report:
     sections: [summary, methodology, findings, recommendations, appendix]
     depth: high
@@ -67,6 +71,7 @@ document_templates:
 ```
 
 #### 3. **Iterative Enhancement Support**
+
 ```yaml
 iteration_tracking:
   metadata_preserved:
@@ -74,7 +79,7 @@ iteration_tracking:
     - change_history
     - feedback_addressed
     - confidence_progression
-    
+
   improvement_patterns:
     - Address specific feedback points
     - Maintain successful sections
@@ -83,6 +88,7 @@ iteration_tracking:
 ```
 
 ### Input Schema
+
 ```json
 {
   "request": {
@@ -116,6 +122,7 @@ iteration_tracking:
 ```
 
 ### Output Schema
+
 ```json
 {
   "draft": {
@@ -123,12 +130,14 @@ iteration_tracking:
     "version": "number",
     "content": "string",
     "structure": {
-      "sections": [{
-        "name": "string",
-        "content": "string",
-        "confidence": "float",
-        "word_count": "number"
-      }],
+      "sections": [
+        {
+          "name": "string",
+          "content": "string",
+          "confidence": "float",
+          "word_count": "number"
+        }
+      ],
       "total_words": "number"
     }
   },
@@ -154,14 +163,15 @@ iteration_tracking:
 ```
 
 ### Speed Optimization Techniques
+
 ```yaml
 caching_strategy:
   component_cache:
     - Common phrases
-    - Section templates  
+    - Section templates
     - Domain terminology
     - Boilerplate text
-    
+
   context_cache:
     - Project information
     - Stakeholder preferences
@@ -182,17 +192,18 @@ smart_shortcuts:
 ```
 
 ### Performance Benchmarks
+
 ```yaml
 speed_targets:
   simple_document: <500ms
   standard_document: <1000ms
   complex_document: <2000ms
-  
+
 quality_targets:
   first_draft: >70% accuracy
   second_draft: >85% accuracy
   third_draft: >95% accuracy
-  
+
 efficiency_metrics:
   cache_hit_rate: >60%
   template_reuse: >40%
@@ -200,6 +211,7 @@ efficiency_metrics:
 ```
 
 ### Key Performance Indicators
+
 - **Generation Speed**: 70% faster than production agents
 - **First-Pass Quality**: >70% accuracy score
 - **Iteration Efficiency**: <3 rounds to approval
@@ -207,6 +219,7 @@ efficiency_metrics:
 - **Stakeholder Satisfaction**: >80% on first draft
 
 ### Integration Points
+
 - **Judge Agent**: Primary reviewer and feedback provider
 - **Context Manager**: Project context and requirements
 - **GraphRAG**: Lightweight fact checking

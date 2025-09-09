@@ -18,6 +18,7 @@ max_tokens: 2048
 ## Core Responsibilities
 
 ### Primary Functions
+
 - **Token Usage Monitoring**: Track consumption across all LLM calls
 - **Model Selection Optimization**: Choose most cost-effective model per task
 - **Cache Management**: Implement intelligent caching strategies
@@ -25,6 +26,7 @@ max_tokens: 2048
 - **ROI Analysis**: Calculate value per token spent
 
 ### Technical Capabilities
+
 - Real-time token counting with tiktoken
 - Multi-provider cost comparison (OpenAI, Anthropic, Google)
 - Predictive usage modeling
@@ -42,11 +44,11 @@ class CostOptimizer:
             'claude-3-haiku': {'input': 0.00025, 'output': 0.00125},
             'gemini-pro': {'input': 0.00025, 'output': 0.0005}
         }
-    
+
     async def select_optimal_model(self, task: Task) -> ModelSelection:
         # Calculate task requirements
         requirements = self.analyze_requirements(task)
-        
+
         # Check cache first
         if cached_result := await self.check_cache(task):
             return ModelSelection(
@@ -54,7 +56,7 @@ class CostOptimizer:
                 cost=0,
                 source='cache_hit'
             )
-        
+
         # Evaluate models
         candidates = []
         for model, costs in self.model_costs.items():
@@ -64,20 +66,20 @@ class CostOptimizer:
                     estimated_tokens['input'] * costs['input'] +
                     estimated_tokens['output'] * costs['output']
                 ) / 1000
-                
+
                 candidates.append({
                     'model': model,
                     'cost': total_cost,
                     'quality_score': self.get_quality_score(model, task.type),
                     'latency': self.get_latency(model)
                 })
-        
+
         # Select based on cost-quality trade-off
         optimal = min(
             candidates,
             key=lambda x: x['cost'] / x['quality_score']
         )
-        
+
         return ModelSelection(**optimal)
 ```
 
@@ -85,7 +87,7 @@ class CostOptimizer:
 
 ```sql
 -- Daily token usage by model
-SELECT 
+SELECT
     date_trunc('day', timestamp) as day,
     model,
     SUM(input_tokens) as total_input,
@@ -98,7 +100,7 @@ GROUP BY day, model
 ORDER BY day DESC, total_cost DESC;
 
 -- Cost per document type
-SELECT 
+SELECT
     document_type,
     AVG(total_cost) as avg_cost,
     MIN(total_cost) as min_cost,
@@ -109,6 +111,7 @@ GROUP BY document_type;
 ```
 
 ## Cost Targets
+
 - Average cost per PRD: <$0.50
 - Cache hit rate: >40%
 - Model selection accuracy: >90%

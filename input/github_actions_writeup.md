@@ -1,5 +1,7 @@
 ## GITHUB ACTIONS
-Here's a GitHub Actions workflow that integrates DeepSeek API for code reviews, along with improvements for the workflow:
+
+Here's a GitHub Actions workflow that integrates DeepSeek API for code reviews, along with
+improvements for the workflow:
 
 ```yaml
 name: DeepSeek Code Review
@@ -12,25 +14,25 @@ jobs:
   code-review:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.10'
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
 
-    - name: Install dependencies
-      run: pip install requests python-dotenv
+      - name: Install dependencies
+        run: pip install requests python-dotenv
 
-    - name: Run DeepSeek Code Review
-      env:
-        DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        PR_NUMBER: ${{ github.event.pull_request.number }}
-      run: python scripts/deepseek_review.py
+      - name: Run DeepSeek Code Review
+        env:
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: python scripts/deepseek_review.py
 ```
 
 Create `scripts/deepseek_review.py`:
@@ -57,7 +59,7 @@ def analyze_with_deepseek(diff_content):
         "Authorization": f"Bearer {os.getenv('DEEPSEEK_API_KEY')}",
         "Content-Type": "application/json"
     }
-    
+
     with open('Code_Reviewer.md', 'r') as f:
         system_prompt = f.read()
 
@@ -77,7 +79,7 @@ def post_comment(review):
     g = Github(os.getenv('GITHUB_TOKEN'))
     repo = g.get_repo(os.getenv('GITHUB_REPOSITORY'))
     pr = repo.get_pull(int(os.getenv('PR_NUMBER')))
-    
+
     pr.create_issue_comment(
         f"## 🤖 DeepSeek Code Review\n\n{review}"
     )
@@ -85,11 +87,11 @@ def post_comment(review):
 if __name__ == "__main__":
     files = get_diff()
     all_reviews = []
-    
+
     for file in files:
         review = analyze_with_deepseek(file.patch)
         all_reviews.append(f"### 📄 {file.filename}\n\n{review['choices'][0]['message']['content']}")
-    
+
     post_comment("\n\n".join(all_reviews))
 ```
 
@@ -98,7 +100,7 @@ Create `Code_Reviewer.md`:
 ```markdown
 You are an expert code reviewer. Analyze code for:
 
-1. **Code Quality**: 
+1. **Code Quality**:
    - SOLID principles adherence
    - Clean code practices
    - Readability and maintainability
@@ -121,7 +123,9 @@ You are an expert code reviewer. Analyze code for:
    - Testing coverage
    - Documentation
 
-Provide specific, actionable feedback with code examples when appropriate. Rate severity of issues as:
+Provide specific, actionable feedback with code examples when appropriate. Rate severity of issues
+as:
+
 - 🔴 Critical
 - 🟡 Warning
 - 🔵 Suggestion
@@ -154,14 +158,18 @@ jobs:
   copilot-review:
     runs-on: ubuntu-latest
     steps:
-    - uses: github/copilot-action@v0.4.0
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        style: "codeReview"
-        temperature: "0.1"
-        prompt: "Please review this code for quality, security, and performance issues following our standards in Code_Reviewer.md"
+      - uses: github/copilot-action@v0.4.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          style: 'codeReview'
+          temperature: '0.1'
+          prompt:
+            'Please review this code for quality, security, and performance issues following our
+            standards in Code_Reviewer.md'
 ```
-Based on your requirements, I'll help you create GitHub Actions workflows that integrate Copilot for code reviews, dependency updates, and workflow debugging. Here's a comprehensive solution:
+
+Based on your requirements, I'll help you create GitHub Actions workflows that integrate Copilot for
+code reviews, dependency updates, and workflow debugging. Here's a comprehensive solution:
 
 ## 1. Copilot Development Environment Setup (`copilot-setup-steps.yml`)
 
@@ -225,8 +233,8 @@ jobs:
         uses: github/copilot-action@v0.4.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          style: "codeReview"
-          temperature: "0.1"
+          style: 'codeReview'
+          temperature: '0.1'
           prompt: |
             Please review this code changes for:
             1. Code quality and adherence to SOLID principles
@@ -250,7 +258,7 @@ Create `.github/workflows/dependency-updates.yml`:
 name: Dependency Updates
 on:
   schedule:
-    - cron: '0 10 * * *'  # Daily at 10 AM UTC
+    - cron: '0 10 * * *' # Daily at 10 AM UTC
   workflow_dispatch:
   issue_comment:
     types: [created]
@@ -293,7 +301,7 @@ Create `.github/workflows/debugging.yml`:
 name: Workflow Debugging Assistant
 on:
   workflow_run:
-    workflows: ["*"]
+    workflows: ['*']
     types: [completed]
 
 jobs:
@@ -343,31 +351,37 @@ Create `Code_Reviewer.md` to guide Copilot's review process:
 # Code Review Guidelines
 
 ## Security Checklist
+
 - [ ] SQL injection prevention
 - [ ] XSS vulnerability checks
 - [ ] Authentication/authorization validation
 - [ ] Data exposure risks
 
 ## Code Quality Standards
+
 - SOLID principles compliance
 - Clean code practices
 - Readability and maintainability
 - Error handling robustness
 
 ## Performance Considerations
+
 - Algorithm efficiency
 - Memory management
 - Database query optimization
 - Proper caching implementation
 
 ## Best Practices
+
 - Comprehensive testing coverage
 - Adequate documentation
 - Consistent coding style
 - Proper logging implementation
 
 ## Review Format
+
 Rate issues as:
+
 - 🔴 Critical: Must fix immediately
 - 🟡 Warning: Should address soon
 - 🔵 Suggestion: Optional improvement
@@ -413,27 +427,29 @@ runs:
 ## Usage Examples
 
 ### 1. Manual Trigger for Specific Review
+
 ```yaml
 - name: Run targeted security review
   uses: ./.github/actions/copilot-assistant
   with:
-    task-type: "security-scan"
-    prompt: "Focus on authentication vulnerabilities in the new auth module"
+    task-type: 'security-scan'
+    prompt: 'Focus on authentication vulnerabilities in the new auth module'
 ```
 
 ### 2. Dependency Update Trigger
+
 ```yaml
 - name: Process approved dependency updates
   if: contains(github.event.comment.body, '/approved')
   uses: ./.github/actions/copilot-assistant
   with:
-    task-type: "dependency-update"
+    task-type: 'dependency-update'
 ```
 
 ## Best Practices Implementation
 
 1. **Security Considerations**:
-   - Store API keys in GitHub Secrets 
+   - Store API keys in GitHub Secrets
    - Use least-privilege tokens for Copilot access
    - Regular audit of Copilot-generated code
 
@@ -447,19 +463,25 @@ runs:
    - Monitor dependency update success rates
    - Log all automated changes for audit purposes
 
-This implementation provides a comprehensive AI-assisted development workflow that combines DeepSeek/Copilot integration with automated dependency management and intelligent debugging capabilities.
+This implementation provides a comprehensive AI-assisted development workflow that combines
+DeepSeek/Copilot integration with automated dependency management and intelligent debugging
+capabilities.
 
 Remember to:
+
 1. Store your DeepSeek API key in GitHub Secrets as `DEEPSEEK_API_KEY`
 2. Adjust the Copilot instructions in `Code_Reviewer.md` to match your specific coding standards
 3. Regularly review and update the dependency update commands for your specific project needs
 4. Monitor the performance and accuracy of the AI reviews to continuously improve the system
 
-For additional debugging capabilities, consider integrating tools like `action-tmate` for SSH access to failed workflows  or using the official GitHub Actions VS Code extension for local testing.
+For additional debugging capabilities, consider integrating tools like `action-tmate` for SSH access
+to failed workflows or using the official GitHub Actions VS Code extension for local testing.
 
 # Enhanced Technical Debt Management with GitHub Actions
 
-Based on your thorough feedback, I've completely redesigned the technical debt management system with improved architecture, error handling, configuration management, and scalability. Here's the enhanced implementation:
+Based on your thorough feedback, I've completely redesigned the technical debt management system
+with improved architecture, error handling, configuration management, and scalability. Here's the
+enhanced implementation:
 
 ## 1. Centralized Configuration Management
 
@@ -521,7 +543,7 @@ Create `.github/workflows/tech-debt-analysis.yml`:
 name: Technical Debt Analysis
 on:
   schedule:
-    - cron: '0 9 * * 1'  # Weekly on Monday morning
+    - cron: '0 9 * * 1' # Weekly on Monday morning
   workflow_dispatch:
     inputs:
       analysis-scope:
@@ -553,7 +575,7 @@ jobs:
             echo "❌ Configuration file not found at $CONFIG_PATH"
             exit 1
           fi
-          
+
           # Validate YAML structure
           if ! python3 -c "
           import yaml, sys
@@ -595,10 +617,10 @@ jobs:
         run: |
           cd main-repo
           set +e  # Don't fail immediately on error
-          
+
           # Run analysis tools with timeout and error handling
           analysis_results="{}"
-          
+
           if [ "${{ fromJson(steps.load-config.outputs.config).analysis.sonarqube.enabled }}" = "true" ]; then
             timeout 15m sonar-scanner \
               -Dsonar.projectKey=${{ github.repository }} \
@@ -607,9 +629,9 @@ jobs:
             analysis_results=$(echo "$analysis_results" | jq '.sonarqube = {"status": "success"}') || \
             analysis_results=$(echo "$analysis_results" | jq '.sonarqube = {"status": "failed", "error": "Timeout or execution error"}')
           fi
-          
+
           # Additional analysis tools with similar error handling...
-          
+
           echo "::set-output name=results::$analysis_results"
 
       - name: Handle analysis failures
@@ -663,7 +685,7 @@ class DebtProcessor:
     def __init__(self, config_path: str):
         self.config = self.load_config(config_path)
         self.validation_errors = []
-        
+
     def load_config(self, config_path: str) -> Dict[str, Any]:
         """Load and validate configuration"""
         try:
@@ -674,44 +696,44 @@ class DebtProcessor:
         except Exception as e:
             logger.error(f"Failed to load config: {e}")
             raise
-            
+
     def validate_config(self, config: Dict[str, Any]) -> None:
         """Validate configuration structure"""
         required_sections = ['debt-categories', 'sprint-config', 'analysis']
         for section in required_sections:
             if section not in config:
                 self.validation_errors.append(f"Missing required section: {section}")
-                
+
         if self.validation_errors:
             raise ValueError(f"Configuration validation failed: {self.validation_errors}")
-    
+
     def process_results(self, results_json: str, output_path: str) -> None:
         """Process analysis results with comprehensive error handling"""
         try:
             results = json.loads(results_json)
             debt_items = self.categorize_findings(results)
             report = self.generate_report(debt_items)
-            
+
             with open(output_path, 'w') as f:
                 json.dump(report, f, indent=2)
-                
+
             logger.info(f"Successfully processed {len(debt_items)} debt items")
-            
+
         except Exception as e:
             logger.error(f"Failed to process results: {e}")
             # Generate fallback minimal report
             self.generate_fallback_report(output_path, str(e))
             raise
-    
+
     def categorize_findings(self, results: Dict[str, Any]) -> List[Dict[str, Any]]:
         """Categorize findings based on configuration"""
         debt_items = []
-        
+
         # Implementation for categorizing different types of findings
         # with proper error handling for each analysis tool
-        
+
         return debt_items
-    
+
     def generate_report(self, debt_items: List[Dict[str, Any]]) -> Dict[str, Any]:
         """Generate comprehensive debt report"""
         return {
@@ -724,7 +746,7 @@ class DebtProcessor:
                 "processing_time": datetime.utcnow().isoformat()
             }
         }
-    
+
     def generate_fallback_report(self, output_path: str, error_message: str) -> None:
         """Generate fallback report when processing fails"""
         fallback_report = {
@@ -733,7 +755,7 @@ class DebtProcessor:
             "error": error_message,
             "items": []
         }
-        
+
         with open(output_path, 'w') as f:
             json.dump(fallback_report, f, indent=2)
 
@@ -742,9 +764,9 @@ def main():
     parser.add_argument('--config', required=True, help='Path to config file')
     parser.add_argument('--results', required=True, help='Analysis results JSON')
     parser.add_argument('--output', required=True, help='Output file path')
-    
+
     args = parser.parse_args()
-    
+
     try:
         processor = DebtProcessor(args.config)
         processor.process_results(args.results, args.output)
@@ -765,7 +787,7 @@ Create `.github/workflows/sprint-debt-integration.yml`:
 name: Sprint Debt Integration
 on:
   schedule:
-    - cron: '0 8 * * 1'  # Monday before sprint planning
+    - cron: '0 8 * * 1' # Monday before sprint planning
   workflow_dispatch:
 
 jobs:
@@ -791,23 +813,24 @@ jobs:
           response=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             -H "Accept: application/vnd.github.v3+json" \
             https://api.github.com/rate_limit)
-          
+
           remaining=$(echo "$response" | jq -r '.rate.remaining')
           reset_time=$(echo "$response" | jq -r '.rate.reset')
-          
+
           if [ "$remaining" -lt 100 ]; then
             echo "❌ Insufficient API rate limit remaining: $remaining"
             echo "Rate limit resets at: $(date -d @$reset_time)"
             exit 1
           fi
-          
+
           echo "✅ API rate limit OK: $remaining requests remaining"
 
       - name: Process debt items in batches
         env:
           CONFIG: ${{ steps.load-config.outputs.config }}
           BATCH_SIZE: ${{ fromJson(steps.load-config.outputs.config).rate-limiting.batch-size }}
-          DELAY_MS: ${{ fromJson(steps.load-config.outputs.config).rate-limiting.delay-between-batches-ms }}
+          DELAY_MS:
+            ${{ fromJson(steps.load-config.outputs.config).rate-limiting.delay-between-batches-ms }}
         run: |
           python3 .github/scripts/process_debt_batches.py \
             --config <(echo "$CONFIG") \
@@ -826,7 +849,7 @@ jobs:
 
 Create `.github/scripts/error_handler.sh`:
 
-```bash
+````bash
 #!/bin/bash
 # Comprehensive error handling wrapper for GitHub Actions
 
@@ -837,17 +860,17 @@ handle_error() {
     local exit_code=$?
     local line_number=$1
     local command=$2
-    
+
     echo "❌ Error occurred at line $line_number: $command"
     echo "Exit code: $exit_code"
-    
+
     # Log error to workflow summary
     echo "## Error Summary" >> $GITHUB_STEP_SUMMARY
     echo "- **Time**: $(date -u)" >> $GITHUB_STEP_SUMMARY
     echo "- **Command**: $command" >> $GITHUB_STEP_SUMMARY
     echo "- **Exit Code**: $exit_code" >> $GITHUB_STEP_SUMMARY
     echo "- **Line Number**: $line_number" >> $GITHUB_STEP_SUMMARY
-    
+
     # Additional error context
     if [ -f "error_context.log" ]; then
         echo "### Context" >> $GITHUB_STEP_SUMMARY
@@ -855,7 +878,7 @@ handle_error() {
         cat error_context.log >> $GITHUB_STEP_SUMMARY
         echo '```' >> $GITHUB_STEP_SUMMARY
     fi
-    
+
     exit $exit_code
 }
 
@@ -866,7 +889,7 @@ trap 'handle_error ${LINENO} "${BASH_COMMAND}"' ERR
 # Example:
 # source .github/scripts/error_handler.sh
 # your_command here
-```
+````
 
 ## 6. Monitoring and Dashboard Workflow
 
@@ -876,7 +899,7 @@ Create `.github/workflows/debt-monitoring.yml`:
 name: Debt Monitoring Dashboard
 on:
   schedule:
-    - cron: '0 18 * * 5'  # Friday evening
+    - cron: '0 18 * * 5' # Friday evening
   workflow_dispatch:
 
 jobs:
@@ -890,10 +913,10 @@ jobs:
         run: |
           set -e
           source .github/scripts/error_handler.sh
-          
+
           # Load configuration
           CONFIG=$(cat .github/config/tech-debt-config.yml)
-          
+
           # Generate metrics with validation
           python3 .github/scripts/generate_metrics.py \
             --config <(echo "$CONFIG") \
@@ -909,11 +932,11 @@ jobs:
         run: |
           set -e
           source .github/scripts/error_handler.sh
-          
+
           # Create timestamped dashboard version
           TIMESTAMP=$(date -u +"%Y%m%d_%H%M%S")
           DASHBOARD_FILE="tech-debt-dashboard_${TIMESTAMP}.md"
-          
+
           # Generate dashboard content
           python3 .github/scripts/generate_dashboard.py \
             --metrics debt-metrics.json \
@@ -942,35 +965,44 @@ Create `TECHNICAL-DEBT-MANAGEMENT.md`:
 # Technical Debt Management System
 
 ## Overview
+
 Comprehensive GitHub Actions-based system for identifying, tracking, and managing technical debt.
 
 ## Configuration
+
 Edit `.github/config/tech-debt-config.yml` to customize:
+
 - Debt categorization criteria
 - Sprint allocation percentages
 - Analysis tool settings
 - Rate limiting parameters
 
 ## Error Handling
+
 The system includes comprehensive error handling:
+
 - Configuration validation
 - API rate limit checking
 - Fallback reporting
 - Automated retries
 
 ## Monitoring
+
 - Weekly debt metrics generation
 - Version-controlled dashboard updates
 - API rate limit monitoring
 
 ## Best Practices
+
 1. **Start Small**: Begin with critical debt categories only
 2. **Monitor Performance**: Watch API rate limits and workflow durations
 3. **Regular Reviews**: Schedule monthly configuration reviews
 4. **Team Training**: Ensure all team members understand the debt categorization system
 
 ## Troubleshooting
+
 Common issues and solutions:
+
 - **Rate limiting**: Reduce batch sizes or increase delays
 - **Analysis failures**: Check tool configurations and dependencies
 - **Configuration errors**: Validate YAML structure before committing
@@ -989,14 +1021,16 @@ Common issues and solutions:
 9. **Monitoring**: Built-in monitoring and alerting capabilities
 10. **Scalability**: Batch processing and performance considerations
 
-This enhanced implementation addresses all the critical feedback points while maintaining the comprehensive technical debt management capabilities of the original system.
-
+This enhanced implementation addresses all the critical feedback points while maintaining the
+comprehensive technical debt management capabilities of the original system.
 
 **Enhancements Considered**:
+
 1. Add review filtering (e.g., only review > 200 lines changed)
 2. Include cost estimation for API calls
 3. Add caching mechanism for previous reviews
 4. Integrate with PR labels/assignees
 5. Add fail-safes for large diffs (token limits)
 
-This workflow provides automated AI-assisted code reviews while maintaining security through GitHub Secrets and allowing customization through the review guidelines document.
+This workflow provides automated AI-assisted code reviews while maintaining security through GitHub
+Secrets and allowing customization through the review guidelines document.

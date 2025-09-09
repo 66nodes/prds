@@ -29,32 +29,32 @@ jobs:
       - uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          
+
       - name: Install Task Master
         run: |
           npm install -g @eyaltoledano/claude-task-master
-          
+
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
-          
+
       - name: Load Current State
         id: state
         run: |
           python scripts/load_state.py
           echo "current_task=$(cat .task_state/current_task.txt)" >> $GITHUB_OUTPUT
           echo "current_subtask=$(cat .task_state/current_subtask.txt)" >> $GITHUB_OUTPUT
-          
+
       - name: Validate Dependencies
         run: |
           python scripts/validate_dependencies.py ${{ steps.state.outputs.current_task }}
-          
+
       - name: Execute Task Action
         run: |
           if [ "${{ github.event.inputs.action }}" == "start-task" ]; then
@@ -66,11 +66,11 @@ jobs:
           else
             python scripts/generate_report.py
           fi
-          
+
       - name: Update State Files
         run: |
           python scripts/update_state.py
-          
+
       - name: Commit Changes
         if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
         run: |
@@ -79,11 +79,11 @@ jobs:
           git add workflow_state.md .taskmaster/tasks/*.txt
           git diff --quiet && git diff --staged --quiet || git commit -m "task: Update state for task ${{ steps.state.outputs.current_task }}"
           git push
-          
+
       - name: Create Progress Report
         run: |
           python scripts/create_report.py > progress_report.md
-          
+
       - name: Upload Progress Report
         uses: actions/upload-artifact@v3
         with:
